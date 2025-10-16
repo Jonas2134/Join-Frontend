@@ -1,26 +1,49 @@
+import { AuthLayout } from './layouts/AuthLayout';
+import { BoardLayout } from './layouts/BoardLayout';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
+import { Dashboard } from './pages/Dashboard';
+import { Board } from './pages/Board'
+
 import "./style.css";
-import typescriptLogo from "./typescript.svg";
-import viteLogo from "/vite.svg";
-import { setupCounter } from "./counter.ts";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <div>
-    <div class="flex">
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    </div>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`;
+const routes: Record<string, () => string> = {
+  '/': Login,
+  '/signup': Signup,
+  '/dashboard': Dashboard,
+  '/board': Board,
+};
 
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+const authRoutes = ['/', '/signup'];
+const boardRoutes = ['/dashboard', '/board'];
+
+function render(path: string) {
+  const app = document.querySelector('#app');
+  if (!app) return;
+
+  if (authRoutes.includes(path)) {
+    app.innerHTML = AuthLayout(routes[path]());
+  } else if (boardRoutes.includes(path)) {
+    app.innerHTML = BoardLayout(routes[path]());
+  } else {
+    app.innerHTML = `<h1>404 – Seite nicht gefunden</h1>`;
+  }
+}
+
+function navigate(path: string) {
+  window.history.pushState({}, '', path);
+  render(path);
+}
+
+document.addEventListener('click', (e) => {
+  const target = e.target as HTMLElement;
+  if (target.matches('[data-link]')) {
+    e.preventDefault();
+    const href = (target as HTMLAnchorElement).getAttribute('href');
+    if (href) navigate(href);
+  }
+});
+
+window.addEventListener('popstate', () => render(window.location.pathname));
+
+document.addEventListener('DOMContentLoaded', () => render(window.location.pathname));
