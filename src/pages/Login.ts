@@ -6,7 +6,10 @@ export function Login() {
           <legend class="text-4xl text-center font-semibold pb-4 mb-4 border-b-2 border-blue-500">Login</legend>
           <input type="email" placeholder="Email" />
           <input type="password" placeholder="Password" />
-          <button type="submit">Login</button>
+          <nav>
+            <button class="btn-blue transition-all" type="submit">Login</button>
+            <button class="btn-blue transition-all">Sign up</button>
+          </nav>
         </fieldset>
       </form>
       <a href="/signup" data-link>Sign up</a>
