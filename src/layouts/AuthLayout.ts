@@ -12,7 +12,7 @@ export function AuthLayout(content: string): string {
         <button class="btn-blue transition-all">Signup</button>
       </nav>
     </header>
-    <main class="flex justify-center items-center flex-col max-w-7xl h-dvh">
+    <main class="flex justify-center items-center flex-col h-dvh">
       ${content}
     </main>
     <footer class="fixed bottom-0 flex justify-center">

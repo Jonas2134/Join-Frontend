@@ -7,7 +7,7 @@ import { Board } from './pages/Board'
 
 import "./style.css";
 
-const routes: Record<string, () => string> = {
+const routes: Record<string, () => string | HTMLElement> = {
   '/': Login,
   '/signup': Signup,
   '/dashboard': Dashboard,
@@ -21,10 +21,18 @@ function render(path: string) {
   const app = document.querySelector('#app');
   if (!app) return;
 
+  const route = routes[path];
+  if (!route) {
+    app.innerHTML = `<h1>404 – Seite nicht gefunden</h1>`;
+  }
+
+  const content = route();
+  const htmlContent = typeof content === 'string' ? content : (content as HTMLElement).outerHTML;
+
   if (authRoutes.includes(path)) {
-    app.innerHTML = AuthLayout(routes[path]());
+    app.innerHTML = AuthLayout(htmlContent);
   } else if (boardRoutes.includes(path)) {
-    app.innerHTML = BoardLayout(routes[path]());
+    app.innerHTML = BoardLayout(htmlContent);
   } else {
     app.innerHTML = `<h1>404 – Seite nicht gefunden</h1>`;
   }

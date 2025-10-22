@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-btn-one: #4589FF;
-  --color-btn-one-hover: #005DFF;
+  --color-light-blue: #4589FF;
+  --color-dark-blue: #005DFF;
+  --color-light-gray: #D1D1D1;
+  --color-paceholder-gray: #A8A8A8;
+
+  --shadow-large: 0 0 10px 3px rgba(0, 0, 0, 0.20); 
 }
 
 @layer base {
@@ -32,10 +36,14 @@
     padding-block: calc(var(--spacing) * 2.5);
     font-size: var(--text-lg);
     color: var(--color-white);
-    background-color: var(--color-btn-one);
+    background-color: var(--color-light-blue);
     border-radius: var(--radius-lg);
     &:hover {
-      background-color: var(--color-btn-one-hover)
+      cursor: pointer;
+      background-color: var(--color-dark-blue);
+    }
+    &:active {
+      transform: scale(0.95);
     }
   }
 }
