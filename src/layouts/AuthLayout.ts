@@ -16,7 +16,6 @@ export function AuthLayout(
   return /*html*/ `
     <header class="fixed top-0 right-0 left-0 px-10 py-5 flex justify-between items-center">
       <div class="icon blue">${colorLogo}</div>
-      <h1>Hello</h1>
       <nav class="flex items-center gap-3">
         ${navHtml}
       </nav>
