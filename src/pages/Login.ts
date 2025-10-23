@@ -10,13 +10,12 @@ export function Login() {
       <form aria-label="Login form" class="w-full">
         <fieldset class="flex flex-col items-center w-full">
           <legend class="text-4xl w-full text-center font-semibold pb-2 mb-6 border-b-2 border-(--color-light-blue)">Login</legend>
-          <nav>
+          <nav class="flex gap-4">
             <button class="btn-blue transition-all" type="submit">Login</button>
-            <button class="btn-blue transition-all">Sign up</button>
+            <button class="btn-blue transition-all">Guast Login</button>
           </nav>
         </fieldset>
       </form>
-      <a href="/signup" data-link>Sign up</a>
     </section>
   `;
 

@@ -24,13 +24,15 @@ function render(path: string) {
   const route = routes[path];
   if (!route) {
     app.innerHTML = `<h1>404 – Seite nicht gefunden</h1>`;
+    return;
   }
 
   const content = route();
   const htmlContent = typeof content === 'string' ? content : (content as HTMLElement).outerHTML;
 
   if (authRoutes.includes(path)) {
-    app.innerHTML = AuthLayout(htmlContent);
+    const mode: "login" | "signup" = path === '/' ? "login" : "signup";
+    app.innerHTML = AuthLayout(htmlContent, mode);
   } else if (boardRoutes.includes(path)) {
     app.innerHTML = BoardLayout(htmlContent);
   } else {
