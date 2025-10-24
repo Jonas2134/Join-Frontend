@@ -3,6 +3,7 @@ export class Footer {
 
   constructor() {
     this.element = document.createElement('footer');
+    this.element.classList.add('fixed', 'bottom-0', 'right-0', 'left-0', 'px-10', 'py-5', 'flex', 'justify-center');
   }
 
   render() {

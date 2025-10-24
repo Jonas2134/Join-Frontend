@@ -28,8 +28,6 @@ export class AuthLayout {
 
 
 
-
-
 // import LogoRaw from "/logo.svg?raw";
 // export function AuthLayout(
 //   content: string,

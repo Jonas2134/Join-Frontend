@@ -2,6 +2,8 @@ import { initRouter } from './router';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 
+import "./style.css";
+
 const root = document.getElementById('app')!;
 
 const router = initRouter(root, [
