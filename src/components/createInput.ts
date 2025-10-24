@@ -16,6 +16,7 @@ export function createInput({
 
   const input = document.createElement("input");
   input.id = id;
+  input.name = id;
   input.type = type;
   input.placeholder = " ";
   input.className = "peer w-full border-b border-(--color-light-gray) placeholder-transparent focus:outline-none focus:ring-0";
