@@ -1,5 +1,9 @@
 import { AuthLayout } from '../layouts/AuthLayout';
 import { router } from '../router';
+import { InputField } from '../components/InputField';
+
+import Email from "../assets/icons/email.svg?raw";
+import LockOn from "../assets/icons/lock-on.svg?raw";
 
 export class LoginPage {
   private layout: AuthLayout;
@@ -10,14 +14,71 @@ export class LoginPage {
 
   render() {
     const content = document.createElement('section');
-    content.innerHTML = `
-      <h2>Login</h2>
-      <form id="loginForm">
-        <input type="text" placeholder="Username" required />
-        <input type="password" placeholder="Password" required />
-        <button type="submit">Login</button>
-      </form>
+    content.classList.add('px-28', 'py-12', 'rounded-4xl', 'shadow-large', 'max-w-4xl', 'w-full');
+    const form = document.createElement('form');
+    form.id = 'loginForm';
+    form.classList.add('w-full');
+
+    const fieldset = document.createElement('fieldset');
+    fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
+
+    const legend = document.createElement('legend');
+    legend.classList.add(
+      'text-4xl',
+      'w-full',
+      'text-center',
+      'font-semibold',
+      'pb-2',
+      'mb-6',
+      'border-b-2',
+      'border-(--color-light-blue)'
+    );
+    legend.textContent = 'Login';
+    fieldset.appendChild(legend);
+
+    const emailField = new InputField({
+      type: 'email',
+      placeholder: 'Email',
+      icon: Email,
+      required: true,
+    });
+    const passwordField = new InputField({
+      type: 'password',
+      placeholder: 'Password',
+      icon: LockOn,
+      required: true,
+    });
+
+    fieldset.append(emailField.render(), passwordField.render());
+
+    const checkboxWrapper = document.createElement('label');
+    checkboxWrapper.classList.add('checkboxItem', 'my-3');
+    checkboxWrapper.innerHTML = `
+      <input type="checkbox" name="checkbox" value="Remember me" class="checkbox" />
+      Remember me
     `;
+    fieldset.appendChild(checkboxWrapper);
+
+    const nav = document.createElement('nav');
+    nav.classList.add('flex', 'gap-4');
+
+    const loginBtn = document.createElement('button');
+    loginBtn.type = 'submit';
+    loginBtn.classList.add('btn-blue', 'transition-all');
+    loginBtn.textContent = 'Login';
+
+    const guestBtn = document.createElement('button');
+    guestBtn.type = 'button';
+    guestBtn.classList.add('btn-blue', 'transition-all');
+    guestBtn.textContent = 'Guest Login';
+    guestBtn.addEventListener('click', () => router.navigate('/board'));
+
+    nav.append(loginBtn, guestBtn);
+    fieldset.append(nav);
+
+    form.append(fieldset);
+    content.append(form);
+
     this.layout.setContent(content);
     return this.layout.render();
   }
@@ -26,8 +87,15 @@ export class LoginPage {
     const form = document.querySelector('#loginForm') as HTMLFormElement;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      // hier würde dein echtes Login passieren
-      console.log('User logged in!');
+
+      const inputs = form.querySelectorAll('input[type!="checkbox"]');
+      if (inputs) {
+
+        inputs.forEach((input) => {
+          console.log(`${input}`);
+        });
+      }
+
       router.navigate('/board');
     });
   }

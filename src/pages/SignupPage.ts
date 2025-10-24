@@ -1,4 +1,10 @@
 import { AuthLayout } from '../layouts/AuthLayout';
+import { router } from '../router';
+import { InputField } from '../components/InputField';
+
+import User from "../assets/icons/user.svg?raw";
+import Email from "../assets/icons/email.svg?raw";
+import LockOn from "../assets/icons/lock-on.svg?raw";
 
 export class SignupPage {
   private layout: AuthLayout;
@@ -9,15 +15,73 @@ export class SignupPage {
 
   render() {
     const content = document.createElement('section');
-    content.innerHTML = `
-      <h2>Sign Up</h2>
-      <form>
-        <input type="text" placeholder="Username" />
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-        <button type="submit">Create Account</button>
-      </form>
+    content.classList.add('px-28', 'py-12', 'rounded-4xl', 'shadow-large', 'max-w-4xl', 'w-full');
+    const form = document.createElement('form');
+    form.classList.add('w-full');
+
+    const fieldset = document.createElement('fieldset');
+    fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
+
+    const legend = document.createElement('legend');
+    legend.classList.add(
+      'text-4xl',
+      'w-full',
+      'text-center',
+      'font-semibold',
+      'pb-2',
+      'mb-6',
+      'border-b-2',
+      'border-(--color-light-blue)'
+    );
+    legend.textContent = 'Signup';
+    fieldset.appendChild(legend);
+
+
+    const usernameField = new InputField({
+      type: 'text',
+      placeholder: 'Username',
+      icon: User,
+      required: true,
+    });
+    const emailField = new InputField({
+      type: 'email',
+      placeholder: 'Email',
+      icon: Email,
+      required: true,
+    });
+    const passwordField = new InputField({
+      type: 'password',
+      placeholder: 'Password',
+      icon: LockOn,
+      required: true,
+    });
+    const confPasswordField = new InputField({
+      type: 'password',
+      placeholder: 'Confirm Password',
+      icon: LockOn,
+      required: true,
+    });
+
+    fieldset.append(usernameField.render(), emailField.render(), passwordField.render(), confPasswordField.render());
+
+    const checkboxWrapper = document.createElement('label');
+    checkboxWrapper.classList.add('checkboxItem', 'my-3');
+    checkboxWrapper.innerHTML = `
+      <input type="checkbox" name="checkbox" value="Remember me" class="checkbox" />
+      Remember me
     `;
+    fieldset.appendChild(checkboxWrapper);
+
+    const signupBtn = document.createElement('button');
+    signupBtn.type = 'submit';
+    signupBtn.classList.add('btn-blue', 'transition-all');
+    signupBtn.textContent = 'Signup';
+    signupBtn.addEventListener('click', () => router.navigate('/'));
+
+    fieldset.append(signupBtn);
+    form.append(fieldset);
+    content.append(form);
+
     this.layout.setContent(content);
     return this.layout.render();
   }
