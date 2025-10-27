@@ -25,7 +25,7 @@ export class Header {
   render(): HTMLElement {
     this.element.innerHTML = /*html*/ `
       <nav>
-        <a href="/" data-link>Login</a>
+        <a href="/login" data-link>Login</a>
         <a href="/signup" data-link>Signup</a>
       </nav>
     `;

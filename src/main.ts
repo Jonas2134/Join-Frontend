@@ -1,4 +1,5 @@
 import { initRouter } from './router';
+import { StartPage } from './pages/StartPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 
@@ -7,7 +8,8 @@ import "./style.css";
 const root = document.getElementById('app')!;
 
 const router = initRouter(root, [
-  { path: '/', component: LoginPage },
+  { path: '/', component: StartPage },
+  { path: '/login', component: LoginPage },
   { path: '/signup', component: SignupPage },
 ]);
 

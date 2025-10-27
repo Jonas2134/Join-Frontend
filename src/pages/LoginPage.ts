@@ -40,12 +40,14 @@ export class LoginPage {
       type: 'email',
       placeholder: 'Email',
       icon: Email,
+      name: 'email',
       required: true,
     });
     const passwordField = new InputField({
       type: 'password',
       placeholder: 'Password',
       icon: LockOn,
+      name: 'password',
       required: true,
     });
 
@@ -84,17 +86,9 @@ export class LoginPage {
   }
 
   mount() {
-    const form = document.querySelector('#loginForm') as HTMLFormElement;
+    const form = document.getElementById('loginForm') as HTMLFormElement;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-
-      const inputs = form.querySelectorAll('input[type!="checkbox"]');
-      if (inputs) {
-
-        inputs.forEach((input) => {
-          console.log(`${input}`);
-        });
-      }
 
       router.navigate('/board');
     });

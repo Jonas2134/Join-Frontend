@@ -3,12 +3,10 @@ type Component = {
   mount?(): void;
   unmount?(): void;
 };
-
 type Route = {
   path: string;
   component: new () => Component;
 };
-
 
 export let router: Router;
 

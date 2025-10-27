@@ -17,6 +17,7 @@ export class SignupPage {
     const content = document.createElement('section');
     content.classList.add('px-28', 'py-12', 'rounded-4xl', 'shadow-large', 'max-w-4xl', 'w-full');
     const form = document.createElement('form');
+    form.id = 'signupForm';
     form.classList.add('w-full');
 
     const fieldset = document.createElement('fieldset');
@@ -36,29 +37,32 @@ export class SignupPage {
     legend.textContent = 'Signup';
     fieldset.appendChild(legend);
 
-
     const usernameField = new InputField({
       type: 'text',
       placeholder: 'Username',
       icon: User,
+      name: 'username',
       required: true,
     });
     const emailField = new InputField({
       type: 'email',
       placeholder: 'Email',
       icon: Email,
+      name: 'email',
       required: true,
     });
     const passwordField = new InputField({
       type: 'password',
       placeholder: 'Password',
       icon: LockOn,
+      name: 'password',
       required: true,
     });
     const confPasswordField = new InputField({
       type: 'password',
       placeholder: 'Confirm Password',
       icon: LockOn,
+      name: 'confpassword',
       required: true,
     });
 
@@ -76,7 +80,6 @@ export class SignupPage {
     signupBtn.type = 'submit';
     signupBtn.classList.add('btn-blue', 'transition-all');
     signupBtn.textContent = 'Signup';
-    signupBtn.addEventListener('click', () => router.navigate('/'));
 
     fieldset.append(signupBtn);
     form.append(fieldset);
@@ -84,6 +87,15 @@ export class SignupPage {
 
     this.layout.setContent(content);
     return this.layout.render();
+  }
+
+  mount() {
+    const form = document.getElementById('signupForm') as HTMLFormElement;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      router.navigate('/login');
+    });
   }
 }
 
