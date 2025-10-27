@@ -17,14 +17,12 @@ export class InputField {
 
   private createElement(): HTMLElement {
     const wrapper = document.createElement('div');
-    wrapper.classList.add('input-field', 'flex', 'items-center', 'gap-2', 'w-full', 'mb-4');
+    wrapper.classList.add('input-field');
 
     const input = document.createElement('input');
     input.type = this.options.type;
     input.placeholder = this.options.placeholder;
-    input.name =
-      this.options.name ??
-      this.options.placeholder.toLowerCase().replace(/\s+/g, '-');
+    if (this.options.name) input.name = this.options.name;
     if (this.options.required) input.required = true;
 
     if (this.options.icon) {
