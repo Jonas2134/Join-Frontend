@@ -1,8 +1,10 @@
+import { BasePage } from '../core/BasePage';
 
-export class StartPage {
+export class StartPage extends BasePage {
   private element: HTMLElement;
 
   constructor() {
+    super();
     this.element = document.createElement('div');
     this.element.classList.add('start-page');
   }

@@ -1,11 +1,8 @@
-type Component = {
-  render(): HTMLElement;
-  mount?(): void;
-  unmount?(): void;
-};
+import type { BasePage } from './BasePage';
+
 type Route = {
   path: string;
-  component: new () => Component;
+  component: new () => BasePage;
 };
 
 export let router: Router;
@@ -13,7 +10,7 @@ export let router: Router;
 export class Router {
   private routes: Route[];
   private root: HTMLElement;
-  private currentPage: Component | null = null;
+  private currentPage: BasePage | null = null;
 
   constructor(root: HTMLElement, routes: Route[]) {
     this.routes = routes;
@@ -32,14 +29,9 @@ export class Router {
       this.root.innerHTML = "<h1>404 Not Found</h1>";
       return;
     }
-
     this.currentPage?.unmount?.();
-
     const page = new route.component();
-    this.root.innerHTML = "";
-    this.root.appendChild(page.render());
-    page.mount?.();
-
+    page.attachTo(this.root);
     this.currentPage = page;
   }
 }

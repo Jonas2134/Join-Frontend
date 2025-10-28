@@ -1,16 +1,15 @@
 import { AuthLayout } from '../layouts/AuthLayout';
-import { router } from '../router';
+import { router } from '../core/router';
 import { InputField } from '../components/InputField';
+import { BasePage } from '../core/BasePage';
 
 import User from "../assets/icons/user.svg?raw";
 import Email from "../assets/icons/email.svg?raw";
 import LockOn from "../assets/icons/lock-on.svg?raw";
 
-export class SignupPage {
-  private layout: AuthLayout;
-
+export class SignupPage extends BasePage {
   constructor() {
-    this.layout = new AuthLayout();
+    super(new AuthLayout());
   }
 
   render() {
@@ -85,17 +84,21 @@ export class SignupPage {
     form.append(fieldset);
     content.append(form);
 
-    this.layout.setContent(content);
-    return this.layout.render();
+    return this.wrapWithLayout(content);
   }
 
   mount() {
     const form = document.getElementById('signupForm') as HTMLFormElement;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-
+      console.log('Signup!');
       router.navigate('/login');
     });
+  }
+
+  unmount() {
+    const form = document.getElementById('signupForm');
+    if (form) form.replaceWith(form.cloneNode(true));
   }
 }
 
