@@ -72,7 +72,7 @@ export class LoginPage extends BasePage {
     guestBtn.type = 'button';
     guestBtn.classList.add('btn-blue', 'transition-all');
     guestBtn.textContent = 'Guest Login';
-    guestBtn.addEventListener('click', () => router.navigate('/board'));
+    guestBtn.addEventListener('click', () => router.navigate('/dashboard'));
 
     nav.append(loginBtn, guestBtn);
     fieldset.append(nav);
@@ -88,7 +88,7 @@ export class LoginPage extends BasePage {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       console.log('Logged in!');
-      router.navigate('/board');
+      router.navigate('/dashboard');
     });
   }
 

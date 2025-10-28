@@ -1,19 +1,17 @@
-import { AuthHeader } from '../components/AuthHeader';
-import { AuthFooter } from '../components/AuthFooter';
+import { AppHeader } from "../components/AppHeader";
 
-export class AuthLayout {
+export class AppLayout {
   private element: HTMLElement;
   private main: HTMLElement;
 
   constructor() {
     this.element = document.createElement('div');
-    this.element.classList.add('auth-layout');
+    this.element.classList.add('board-layout');
 
-    const header = new AuthHeader();
+    const header = new AppHeader();
     this.main = document.createElement('main');
-    const footer = new AuthFooter();
 
-    this.element.append(header.render(), this.main, footer.render());
+    this.element.append(header.render(), this.main);
   }
 
   setContent(content: HTMLElement) {

@@ -1,4 +1,4 @@
-export class Footer {
+export class AuthFooter {
   private element: HTMLElement;
 
   constructor() {

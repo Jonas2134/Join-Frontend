@@ -1,6 +1,6 @@
 import LogoRaw from "/logo.svg?raw";
 
-export class Header {
+export class AppHeader {
   private element: HTMLElement;
   private colorLogo?: HTMLElement;
 
@@ -25,13 +25,12 @@ export class Header {
   render(): HTMLElement {
     this.element.innerHTML = /*html*/ `
       <nav>
-        <a href="/login" data-link>Login</a>
-        <a href="/signup" data-link>Signup</a>
+        <a href="/dashboard" data-link>Dashboard</a>
+        <a href="/board" data-link>Board</a>
       </nav>
     `;
 
     if (this.colorLogo) this.element.prepend(this.colorLogo);
-
     return this.element;
   }
 }
