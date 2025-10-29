@@ -18,7 +18,7 @@ export class AuthHeader {
     logo.querySelectorAll('[fill]').forEach((el) => {
       el.setAttribute('fill', 'currentColor');
     });
-    logo.classList.add('icon', 'blue');
+    logo.classList.add('w-[95px]', 'text-(--color-light-blue)');
     return logo;
   };
 

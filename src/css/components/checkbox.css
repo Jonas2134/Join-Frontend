@@ -1,0 +1,22 @@
+@layer components {
+  .checkboxItem {
+    @apply flex items-center gap-1 w-fit leading-none cursor-pointer;
+
+    &:not(:last-of-type) {
+      @apply mb-4;
+    }
+  }
+
+  .checkbox {
+    @apply appearance-none relative w-5 h-5 border border-(--color-light-blue) rounded-sm cursor-pointer;
+
+    &:checked {
+      @apply bg-(--color-light-blue);
+    }
+
+    &:checked::after {
+      content: "";
+      @apply absolute top-[5px] left-[3px] w-[12px] h-[6px] border-b-2 border-l-2 border-white rotate-[-45deg];
+    }
+  }
+}

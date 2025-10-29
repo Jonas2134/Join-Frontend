@@ -1,0 +1,13 @@
+@layer components {
+  .btn-blue {
+    @apply px-6 py-2.5 text-lg text-white bg-(--color-light-blue) rounded-lg transition-all;
+  
+    &:hover {
+      @apply cursor-pointer bg-(--color-dark-blue);
+    }
+  
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}

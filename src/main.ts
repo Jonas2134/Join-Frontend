@@ -5,7 +5,7 @@ import { SignupPage } from './pages/SignupPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { BoardPage } from './pages/BoardPage';
 
-import "./style.css";
+import "./css/main.css";
 
 const app = document.getElementById('app')!;
 
