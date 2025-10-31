@@ -2,15 +2,14 @@ import { AppLayout } from "../layouts/AppLayout";
 import { BasePage } from "../core/BasePage";
 
 export class BoardPage extends BasePage {
-  private element: HTMLElement;
 
   constructor() {
     super(new AppLayout());
-    this.element = document.createElement("main");
   }
 
   render() {
-    this.element.innerHTML = /*html*/ `
+    const element = document.createElement('section');
+    element.innerHTML = /*html*/ `
       <h1>Board</h1>
       <section>
         <div>Task 1</div>
@@ -19,6 +18,6 @@ export class BoardPage extends BasePage {
       </section>
     `;
 
-    return this.wrapWithLayout(this.element);
+    return this.wrapWithLayout(element);
   }
 }

@@ -1,0 +1,15 @@
+@layer components {
+  .app-layout {
+		header {
+			@apply fixed top-0 right-0 left-0 px-10 py-5 flex justify-between items-center bg-(--color-light-blue) shadow-xl/10 z-10;
+		}
+
+		/* main {
+			@apply 
+		} */
+		
+		aside {
+			@apply fixed top-0 bottom-0 px-10 py-5 left-0 flex justify-center items-center border-r-1 border-(--color-light-gray) z-5;
+		}
+	}
+}

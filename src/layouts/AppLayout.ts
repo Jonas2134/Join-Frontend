@@ -1,4 +1,5 @@
 import { AppHeader } from "../components/AppHeader";
+import { AppSidebar } from "../components/AppSidebar";
 
 export class AppLayout {
   private element: HTMLElement;
@@ -6,12 +7,13 @@ export class AppLayout {
 
   constructor() {
     this.element = document.createElement('div');
-    this.element.classList.add('board-layout');
+    this.element.classList.add('app-layout');
 
     const header = new AppHeader();
     this.main = document.createElement('main');
+    const sidebar = new AppSidebar();
 
-    this.element.append(header.render(), this.main);
+    this.element.append(header.render(), this.main, sidebar.render());
   }
 
   setContent(content: HTMLElement) {

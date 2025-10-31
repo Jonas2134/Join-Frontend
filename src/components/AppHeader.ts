@@ -6,7 +6,6 @@ export class AppHeader {
 
   constructor() {
     this.element = document.createElement('header');
-    this.element.classList.add('fixed', 'top-0', 'right-0', 'left-0', 'px-10', 'py-5', 'flex', 'justify-between', 'items-center');
     this.colorLogo = this.createLogo();
   }
 
@@ -18,15 +17,15 @@ export class AppHeader {
     logo.querySelectorAll('[fill]').forEach((el) => {
       el.setAttribute('fill', 'currentColor');
     });
-    logo.classList.add('icon', 'blue');
+    logo.classList.add('w-[55px]', 'text-white');
     return logo;
   };
 
   render(): HTMLElement {
     this.element.innerHTML = /*html*/ `
-      <nav>
-        <a href="/dashboard" data-link>Dashboard</a>
-        <a href="/board" data-link>Board</a>
+      <nav class="flex gap-3">
+        <a class="text-white" href="/dashboard" data-link>Dashboard</a>
+        <a class="text-white" href="/board" data-link>Board</a>
       </nav>
     `;
 
