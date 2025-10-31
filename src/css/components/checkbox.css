@@ -8,10 +8,18 @@
   }
 
   .checkbox {
-    @apply appearance-none relative w-5 h-5 border border-(--color-light-blue) rounded-sm cursor-pointer;
+    @apply appearance-none relative w-5 h-5 border border-(--color-light-blue) rounded-sm cursor-pointer transition-all;
+
+    &:hover {
+      @apply border-(--color-dark-blue) shadow-md;
+    }
 
     &:checked {
       @apply bg-(--color-light-blue);
+
+      &:hover {
+        @apply bg-(--color-dark-blue);
+      }
     }
 
     &:checked::after {

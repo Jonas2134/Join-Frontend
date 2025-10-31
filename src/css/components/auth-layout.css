@@ -1,0 +1,19 @@
+@layer components {
+  .auth-layout {
+		header {
+			@apply fixed top-0 right-0 left-0 px-10 py-5 flex justify-between items-center;
+		}
+
+		main {
+			@apply px-28 py-12 rounded-3xl shadow-large max-w-4xl w-full;
+		}
+
+		footer {
+			@apply fixed bottom-0 right-0 left-0 px-10 py-5 flex justify-center;
+		}
+	}
+
+	.auth-legend {
+		@apply text-4xl w-full text-center font-semibold pb-2 mb-6 border-b-2 border-(--color-light-blue);
+	}
+}

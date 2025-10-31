@@ -13,8 +13,6 @@ export class SignupPage extends BasePage {
   }
 
   render() {
-    const content = document.createElement('section');
-    content.classList.add('px-28', 'py-12', 'rounded-4xl', 'shadow-large', 'max-w-4xl', 'w-full');
     const form = document.createElement('form');
     form.id = 'signupForm';
     form.classList.add('w-full');
@@ -23,16 +21,7 @@ export class SignupPage extends BasePage {
     fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
 
     const legend = document.createElement('legend');
-    legend.classList.add(
-      'text-4xl',
-      'w-full',
-      'text-center',
-      'font-semibold',
-      'pb-2',
-      'mb-6',
-      'border-b-2',
-      'border-(--color-light-blue)'
-    );
+    legend.classList.add('auth-legend');
     legend.textContent = 'Signup';
     fieldset.appendChild(legend);
 
@@ -71,20 +60,19 @@ export class SignupPage extends BasePage {
     checkboxWrapper.classList.add('checkboxItem', 'my-3');
     checkboxWrapper.innerHTML = `
       <input type="checkbox" name="checkbox" value="Remember me" class="checkbox" />
-      Remember me
+      I accept the
+      <a href="/privacy" data-link"> Privacy policy</a>
     `;
     fieldset.appendChild(checkboxWrapper);
 
     const signupBtn = document.createElement('button');
     signupBtn.type = 'submit';
-    signupBtn.classList.add('btn-blue', 'transition-all');
+    signupBtn.classList.add('btn-blue');
     signupBtn.textContent = 'Signup';
 
     fieldset.append(signupBtn);
     form.append(fieldset);
-    content.append(form);
-
-    return this.wrapWithLayout(content);
+    return this.wrapWithLayout(form);
   }
 
   mount() {

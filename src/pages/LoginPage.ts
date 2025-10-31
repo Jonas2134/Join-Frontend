@@ -12,8 +12,6 @@ export class LoginPage extends BasePage {
   }
 
   render() {
-    const content = document.createElement('section');
-    content.classList.add('px-28', 'py-12', 'rounded-4xl', 'shadow-large', 'max-w-4xl', 'w-full');
     const form = document.createElement('form');
     form.id = 'loginForm';
     form.classList.add('w-full');
@@ -22,16 +20,7 @@ export class LoginPage extends BasePage {
     fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
 
     const legend = document.createElement('legend');
-    legend.classList.add(
-      'text-4xl',
-      'w-full',
-      'text-center',
-      'font-semibold',
-      'pb-2',
-      'mb-6',
-      'border-b-2',
-      'border-(--color-light-blue)'
-    );
+    legend.classList.add('auth-legend');
     legend.textContent = 'Login';
     fieldset.appendChild(legend);
 
@@ -78,9 +67,8 @@ export class LoginPage extends BasePage {
     fieldset.append(nav);
 
     form.append(fieldset);
-    content.append(form);
 
-    return this.wrapWithLayout(content);
+    return this.wrapWithLayout(form);
   }
 
   mount() {

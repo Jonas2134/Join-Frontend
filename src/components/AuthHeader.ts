@@ -6,7 +6,6 @@ export class AuthHeader {
 
   constructor() {
     this.element = document.createElement('header');
-    this.element.classList.add('fixed', 'top-0', 'right-0', 'left-0', 'px-10', 'py-5', 'flex', 'justify-between', 'items-center');
     this.colorLogo = this.createLogo();
   }
 
@@ -24,7 +23,7 @@ export class AuthHeader {
 
   render(): HTMLElement {
     this.element.innerHTML = /*html*/ `
-      <nav>
+      <nav class="flex gap-3">
         <a href="/login" data-link>Login</a>
         <a href="/signup" data-link>Signup</a>
       </nav>
