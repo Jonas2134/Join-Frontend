@@ -10,10 +10,10 @@ export class AppLayout {
     this.element.classList.add('app-layout');
 
     const header = new AppHeader();
-    this.main = document.createElement('main');
     const sidebar = new AppSidebar();
+    this.main = document.createElement('main');
 
-    this.element.append(header.render(), this.main, sidebar.render());
+    this.element.append(header.render(), sidebar.render(), this.main);
   }
 
   setContent(content: HTMLElement) {

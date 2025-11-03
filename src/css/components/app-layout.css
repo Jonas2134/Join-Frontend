@@ -1,15 +1,17 @@
 @layer components {
   .app-layout {
+    @apply grid grid-cols-[190px_1fr] grid-rows-[110px_1fr] w-screen h-screen;
+
 		header {
-			@apply fixed top-0 right-0 left-0 px-10 py-5 flex justify-between items-center bg-(--color-light-blue) shadow-xl/10 z-10;
+			@apply col-span-full row-span-1 flex justify-between items-center left-0 px-10 py-5  bg-(--color-light-blue) shadow-xl/10 z-10;
 		}
 
-		/* main {
-			@apply 
-		} */
-		
 		aside {
-			@apply fixed top-0 bottom-0 px-10 py-5 left-0 flex justify-center items-center border-r-1 border-(--color-light-gray) z-5;
+      @apply col-span-1 row-start-2 row-span-1 flex flex-col justify-between px-10 py-50 border-r-1 border-(--color-light-gray) z-5;
 		}
+
+    main {
+      @apply col-start-2 row-start-2 row-span-1 p-5 overflow-auto;
+    }
 	}
 }
