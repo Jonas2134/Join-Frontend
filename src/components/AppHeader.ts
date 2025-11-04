@@ -24,8 +24,7 @@ export class AppHeader {
   render(): HTMLElement {
     this.element.innerHTML = /*html*/ `
       <nav class="flex gap-3">
-        <a class="text-white" href="/dashboard" data-link>Dashboard</a>
-        <a class="text-white" href="/board" data-link>Board</a>
+        <span class="text-white">Burger menu</span>
       </nav>
     `;
 
