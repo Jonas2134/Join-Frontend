@@ -1,36 +1,76 @@
 import { AppLayout } from "../layouts/AppLayout";
 import { BasePage } from "../core/BasePage";
-import { SummaryButton } from "../components/SummaryButton";
-// import { router } from '../core/router';
+import { BoardCard } from "../components/BoardCard";
+import { appStore } from "../store/AppStore";
+import { router } from "../core/router";
 
 export class DashboardPage extends BasePage {
   constructor() {
     super(new AppLayout());
   }
 
-  render() {
-    const element = document.createElement("section");
+  renderheader() {
+    const header = document.createElement('div');
+    header.classList.add('flex', 'items-center', 'justify-between');
+    header.innerHTML = `
+      <h1 class="text-(--color-light-blue) underline">My Boards</h1>
+      <button id="createBoardBtn" class="btn-blue">+ Create Board</button>
+    `;
+    return header;
+  }
 
-    const grid = document.createElement("section");
-    grid.className = "grid grid-cols-4 grid-rows-2 gap-2";
+  renderOpenBoardsSection() {
+    const openBoardsSection = document.createElement('section');
+    openBoardsSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Open Boards</h2>`;
+    const openBoardsGrid = document.createElement('div');
+    openBoardsGrid.classList.add('grid', 'grid-cols-3', 'gap-4');
+    const openBoards = appStore.getBoardsByStatus('open');
+    openBoards.forEach((board) => {
+      const card = new BoardCard(board, () => {
+        router.navigate(`/board/${board.id}`);
+      });
+      openBoardsGrid.appendChild(card.render());
+    });
+    openBoardsSection.appendChild(openBoardsGrid);
+    return openBoardsSection;
+  }
 
-    const buttonsData = [
-      { label: "Urgent Tasks", image: "/assets/icons/urgent.svg", route: "/summary", query: { filter: "urgent" }, classes: "col-span-3" },
-      { label: "All open Boards", image: "/assets/icons/boards.svg", route: "/summary", query: { filter: "open" } },
-      { label: "Task To-Do", image: "/assets/icons/todo.svg", route: "/summary", query: { filter: "todo" } },
-      { label: "Tasks in Progress", image: "/assets/icons/inprogress.svg", route: "/summary", query: { filter: "progress" } },
-      { label: "Awaiting Feedback", image: "/assets/icons/feedback.svg", route: "/summary", query: { filter: "feedback" } },
-      { label: "All Boards", image: "/assets/icons/all.svg", route: "/summary" },
-    ];
+  renderClosedBoardsSection() {
+    const closedBoardsSection = document.createElement('section');
+    closedBoardsSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Closed Boards</h2>`;
+    const closedBoardsGrid = document.createElement('div');
+    closedBoardsGrid.classList.add('grid', 'grid-cols-3', 'gap-4');
 
-    buttonsData.forEach((btn) => {
-      const summaryButton = new SummaryButton(btn);
-      grid.appendChild(summaryButton.render());
+    const closedBoards = appStore.getBoardsByStatus('closed');
+    closedBoards.forEach((board) => {
+      const card = new BoardCard(board, () => {
+        router.navigate(`/board/${board.id}`);
+      });
+      closedBoardsGrid.appendChild(card.render());
     });
 
-    element.innerHTML = `<h1 class="text-(--color-light-blue) underline mb-4">My Dashboard</h1>`;
-    element.appendChild(grid);
+    closedBoardsSection.appendChild(closedBoardsGrid);
+    return closedBoardsSection;
+  }
 
-    return this.wrapWithLayout(element);
+  render() {
+    const container = document.createElement('section');
+    container.classList.add('p-6', 'space-y-8');
+
+    const header = this.renderheader();
+    const openBoardsSection = this.renderOpenBoardsSection();
+    const closedBoardsSection = this.renderClosedBoardsSection();
+
+    container.appendChild(header);
+    container.appendChild(openBoardsSection);
+    container.appendChild(closedBoardsSection);
+
+    return this.wrapWithLayout(container);
+  }
+
+  mount(): void {
+    document.getElementById('createBoardBtn')?.addEventListener('click', () => {
+      router.navigate('/board/create');
+    });
   }
 }

@@ -1,0 +1,28 @@
+import type { Board } from "../interfaces/Board";
+
+export class BoardCard {
+  private element!: HTMLButtonElement;
+  private board: Board;
+  private onClick;
+
+  constructor(board: Board, onClick: () => void) {
+    this.board = board;
+    this.onClick = onClick;
+    this.element = document.createElement('button');
+  }
+
+  render() {
+    this.element.classList.add(
+      'p-4', 'rounded-2xl', 'shadow-sm', 'hover:shadow-md',
+      'transition-shadow', 'border', 'border-gray-200', 'bg-white',
+      'text-left'
+    );
+    this.element.innerHTML = `
+      <h3 class="font-semibold text-lg text-gray-800">${this.board.name}</h3>
+      <p class="text-sm text-gray-500">${this.board.description || ''}</p>
+    `;
+
+    this.element.addEventListener('click', this.onClick);
+    return this.element;
+  }
+}
