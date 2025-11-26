@@ -1,9 +1,10 @@
 import { AuthLayout } from '../layouts/AuthLayout';
 import { router } from '../core/router';
+import { authStore } from '../store/AuthStore';
 import { InputField } from '../components/InputField';
 import { BasePage } from '../core/BasePage';
 
-import Email from "../assets/icons/email.svg?raw";
+import User from "../assets/icons/user.svg?raw";
 import LockOn from "../assets/icons/lock-on.svg?raw";
 
 export class LoginPage extends BasePage {
@@ -24,11 +25,11 @@ export class LoginPage extends BasePage {
     legend.textContent = 'Login';
     fieldset.appendChild(legend);
 
-    const emailField = new InputField({
-      type: 'email',
-      placeholder: 'Email',
-      icon: Email,
-      name: 'email',
+    const usernameField = new InputField({
+      type: 'text',
+      placeholder: 'Username',
+      icon: User,
+      name: 'username',
       required: true,
     });
     const passwordField = new InputField({
@@ -39,7 +40,7 @@ export class LoginPage extends BasePage {
       required: true,
     });
 
-    fieldset.append(emailField.render(), passwordField.render());
+    fieldset.append(usernameField.render(), passwordField.render());
 
     const checkboxWrapper = document.createElement('label');
     checkboxWrapper.classList.add('checkboxItem', 'my-3');
@@ -73,10 +74,20 @@ export class LoginPage extends BasePage {
 
   mount() {
     const form = document.getElementById('loginForm') as HTMLFormElement;
-    form.addEventListener('submit', (e) => {
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log('Logged in!');
-      router.navigate('/dashboard');
+
+      const formData = new FormData(form);
+      const username = formData.get("username") as string;
+      const password = formData.get("password") as string;
+
+      try {
+        await authStore.login(username, password);
+        router.navigate('/dashboard');
+      } catch (err: any) {
+        alert("Login failed: " + err.message);
+      }
     });
   }
 
