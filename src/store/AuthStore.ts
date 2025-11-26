@@ -8,6 +8,10 @@ export class AuthStore {
     this.client.setUnauthorizedHandler(this.handleUnauthorized.bind(this));
   }
 
+  async register(username: string, email: string, password: string, repeated_password: string) {
+    await this.client.post("/register/", { username, email, password, repeated_password });
+  }
+
   async login(username:string, password:string) {
     await this.client.post("/login/", { username, password });
   }

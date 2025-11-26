@@ -1,5 +1,6 @@
 import { AuthLayout } from '../layouts/AuthLayout';
 import { router } from '../core/router';
+import { authStore } from '../store/AuthStore';
 import { InputField } from '../components/InputField';
 import { BasePage } from '../core/BasePage';
 
@@ -77,10 +78,21 @@ export class SignupPage extends BasePage {
 
   mount() {
     const form = document.getElementById('signupForm') as HTMLFormElement;
-    form.addEventListener('submit', (e) => {
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log('Signup!');
-      router.navigate('/login');
+
+      const formData = new FormData(form);
+      const username = formData.get("username") as string;
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+      const repeated_password = formData.get("confpassword") as string;
+      try {
+        await authStore.register(username, email, password, repeated_password);
+        router.navigate('/login');
+      } catch (err: any) {
+        alert("Registration failed: " + err.message);
+      }
     });
   }
 

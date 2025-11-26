@@ -81,7 +81,6 @@ export class LoginPage extends BasePage {
       const formData = new FormData(form);
       const username = formData.get("username") as string;
       const password = formData.get("password") as string;
-
       try {
         await authStore.login(username, password);
         router.navigate('/dashboard');
