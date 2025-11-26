@@ -18,8 +18,7 @@ export class BoardCard {
       'text-left'
     );
     this.element.innerHTML = `
-      <h3 class="font-semibold text-lg text-gray-800">${this.board.name}</h3>
-      <p class="text-sm text-gray-500">${this.board.description || ''}</p>
+      <h3 class="font-semibold text-lg text-gray-800">${this.board.title}</h3>
     `;
 
     this.element.addEventListener('click', this.onClick);

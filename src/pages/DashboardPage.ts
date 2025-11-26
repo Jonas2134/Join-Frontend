@@ -19,56 +19,80 @@ export class DashboardPage extends BasePage {
     return header;
   }
 
-  renderOpenBoardsSection() {
-    const openBoardsSection = document.createElement('section');
-    openBoardsSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Open Boards</h2>`;
-    const openBoardsGrid = document.createElement('div');
-    openBoardsGrid.classList.add('grid', 'grid-cols-3', 'gap-4');
-    const openBoards = appStore.getBoardsByStatus('open');
-    openBoards.forEach((board) => {
-      const card = new BoardCard(board, () => {
-        router.navigate(`/board/${board.id}`);
-      });
-      openBoardsGrid.appendChild(card.render());
-    });
-    openBoardsSection.appendChild(openBoardsGrid);
-    return openBoardsSection;
+  renderDashboard() {
+    const section = document.createElement('section');
+    section.id = "dashboardsection";
+    section.classList.add("space-y-8");
+    return section;
   }
 
-  renderClosedBoardsSection() {
-    const closedBoardsSection = document.createElement('section');
-    closedBoardsSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Closed Boards</h2>`;
-    const closedBoardsGrid = document.createElement('div');
-    closedBoardsGrid.classList.add('grid', 'grid-cols-3', 'gap-4');
+  updateDashboardUI() {
+    const container = document.getElementById("dashboardsection");
+    if (!container) return;
 
-    const closedBoards = appStore.getBoardsByStatus('closed');
-    closedBoards.forEach((board) => {
-      const card = new BoardCard(board, () => {
-        router.navigate(`/board/${board.id}`);
+    container.innerHTML = "";
+    const boards = appStore.boards;
+
+    const openBoards = boards.filter(b => b.is_active === true);
+    console.log(openBoards);
+    const openSection = document.createElement("section");
+    openSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Open Boards</h2>`;
+    if (openBoards) {
+      const openGrid = document.createElement("div");
+      openGrid.classList.add("grid", "grid-cols-3", "gap-4");
+      openBoards.forEach(board => {
+        const card = new BoardCard(board, () => {
+          router.navigate(`/board/${board.id}`);
+        });
+        openGrid.appendChild(card.render());
       });
-      closedBoardsGrid.appendChild(card.render());
-    });
+      openSection.appendChild(openGrid);
+      container.appendChild(openSection);
+    } else {
+      const noBoards = document.createElement("div");
+      noBoards.innerHTML = `<h2>No Boards</h2>`;
+      openSection.appendChild(noBoards);
+      container.appendChild(openSection);
+    }
 
-    closedBoardsSection.appendChild(closedBoardsGrid);
-    return closedBoardsSection;
+    const closedBoards = boards.filter(b => b.is_active === false);
+    console.log(closedBoards);
+    const closedSection = document.createElement("section");
+    closedSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Closed Boards</h2>`;
+    if (closedBoards) {
+      const closedGrid = document.createElement("div");
+      closedGrid.classList.add("grid", "grid-cols-3", "gap-4");
+      closedBoards.forEach(board => {
+        const card = new BoardCard(board, () => {
+          router.navigate(`/board/${board.id}`);
+        });
+        closedGrid.appendChild(card.render());
+      });
+      closedSection.appendChild(closedGrid);
+      container.appendChild(closedSection);
+    } else {
+      const noBoards = document.createElement("div");
+      noBoards.innerHTML = `<h2>No Boards</h2>`;
+      closedSection.appendChild(noBoards);
+      container.appendChild(closedSection);
+    }
   }
 
   render() {
     const container = document.createElement('section');
     container.classList.add('p-6', 'space-y-8');
 
-    const header = this.renderheader();
-    const openBoardsSection = this.renderOpenBoardsSection();
-    const closedBoardsSection = this.renderClosedBoardsSection();
-
-    container.appendChild(header);
-    container.appendChild(openBoardsSection);
-    container.appendChild(closedBoardsSection);
+    container.appendChild(this.renderheader());
+    container.appendChild(this.renderDashboard());
 
     return this.wrapWithLayout(container);
   }
 
-  mount(): void {
+  async mount() {
+    await appStore.loadDashboard();
+
+    this.updateDashboardUI();
+
     document.getElementById('createBoardBtn')?.addEventListener('click', () => {
       router.navigate('/board/create');
     });

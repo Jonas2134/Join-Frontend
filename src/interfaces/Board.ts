@@ -1,10 +1,8 @@
 export interface Board {
   id: string;
-  name: string;
+  title: string;
   description?: string;
-  status: BoardStatus;
+  is_active: boolean;
   createdAt: string;
   updatedAt: string;
 }
-
-export type BoardStatus = 'open' | 'closed';

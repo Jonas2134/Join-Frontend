@@ -1,7 +1,7 @@
 import { http } from "../api/HttpClient";
 
 export class AuthStore {
-  private client= http;
+  private client = http;
   private isRefreshing = false;
 
   constructor() {
