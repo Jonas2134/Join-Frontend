@@ -3,8 +3,12 @@ import { BasePage } from "../core/BasePage";
 import { BoardCard } from "../components/BoardCard";
 import { appStore } from "../store/AppStore";
 import { router } from "../core/router";
+import { BoardCreateDialog } from "../components/BoardCreateDialoge";
+import type { Board } from "../interfaces/BoardInterface";
 
 export class DashboardPage extends BasePage {
+  dialog: BoardCreateDialog | null = null;
+
   constructor() {
     super(new AppLayout());
   }
@@ -26,18 +30,12 @@ export class DashboardPage extends BasePage {
     return section;
   }
 
-  updateDashboardUI() {
-    const container = document.getElementById("dashboardsection");
-    if (!container) return;
-
-    container.innerHTML = "";
-    const boards = appStore.boards;
-
+  renderOpenBoardsSection(container: HTMLElement, boards: Board[]) {
     const openBoards = boards.filter(b => b.is_active === true);
     console.log(openBoards);
     const openSection = document.createElement("section");
     openSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Open Boards</h2>`;
-    if (openBoards) {
+    if (openBoards.length > 0) {
       const openGrid = document.createElement("div");
       openGrid.classList.add("grid", "grid-cols-3", "gap-4");
       openBoards.forEach(board => {
@@ -54,12 +52,14 @@ export class DashboardPage extends BasePage {
       openSection.appendChild(noBoards);
       container.appendChild(openSection);
     }
+  }
 
+  renderClosedBoardsSection(container: HTMLElement, boards: Board[]) {
     const closedBoards = boards.filter(b => b.is_active === false);
     console.log(closedBoards);
-    const closedSection = document.createElement("section");
-    closedSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Closed Boards</h2>`;
-    if (closedBoards) {
+    if (closedBoards.length > 0) {
+      const closedSection = document.createElement("section");
+      closedSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Closed Boards</h2>`;
       const closedGrid = document.createElement("div");
       closedGrid.classList.add("grid", "grid-cols-3", "gap-4");
       closedBoards.forEach(board => {
@@ -70,12 +70,18 @@ export class DashboardPage extends BasePage {
       });
       closedSection.appendChild(closedGrid);
       container.appendChild(closedSection);
-    } else {
-      const noBoards = document.createElement("div");
-      noBoards.innerHTML = `<h2>No Boards</h2>`;
-      closedSection.appendChild(noBoards);
-      container.appendChild(closedSection);
     }
+  }
+
+  updateDashboardUI() {
+    const container = document.getElementById("dashboardsection");
+    if (!container) return;
+
+    container.innerHTML = "";
+    const boards = appStore.boards;
+
+    this.renderOpenBoardsSection(container, boards);
+    this.renderClosedBoardsSection(container, boards);
   }
 
   render() {
@@ -90,11 +96,23 @@ export class DashboardPage extends BasePage {
 
   async mount() {
     await appStore.loadDashboard();
-
     this.updateDashboardUI();
 
-    document.getElementById('createBoardBtn')?.addEventListener('click', () => {
-      router.navigate('/board/create');
+    this.dialog = new BoardCreateDialog();
+    document.body.appendChild(this.dialog.render());
+
+    document.getElementById('createBoardBtn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.dialog?.open();
     });
+
+    window.addEventListener("board:created", async () => {
+      await appStore.loadDashboard();
+      this.updateDashboardUI();
+    });
+  }
+
+  unmount(): void {
+    window.removeEventListener("board:created", this.updateDashboardUI);
   }
 }

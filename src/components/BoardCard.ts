@@ -1,4 +1,4 @@
-import type { Board } from "../interfaces/Board";
+import type { Board } from "../interfaces/BoardInterface";
 
 export class BoardCard {
   private element!: HTMLButtonElement;

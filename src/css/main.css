@@ -4,5 +4,6 @@
 @import "./components/buttons.css";
 @import "./components/inputs.css";
 @import "./components/checkbox.css";
+@import "./components/dialog.css";
 @import "./components/auth-layout.css";
 @import "./components/app-layout.css";
