@@ -1,10 +1,10 @@
 export class EventManager {
   private listeners: Array<() => void> = [];
 
-  on<T extends keyof HTMLElementEventMap>(
+  on(
     el: HTMLElement | Document | Window,
-    event: T,
-    handler: (this: HTMLElement, ev: HTMLElementEventMap[T]) => any
+    event: string,
+    handler: EventListenerOrEventListenerObject
   ) {
     el.addEventListener(event, handler as EventListener);
     this.listeners.push(() => el.removeEventListener(event, handler as EventListener));

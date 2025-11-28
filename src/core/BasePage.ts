@@ -1,3 +1,5 @@
+import { EventManager } from "./EventManager";
+
 export interface Layout {
   render(): HTMLElement;
   setContent(content: HTMLElement): void;
@@ -6,6 +8,7 @@ export interface Layout {
 export abstract class BasePage {
   protected layout?: Layout;
   private mounted = false;
+  protected events = new EventManager();
 
   constructor(layout?: Layout) {
     this.layout = layout;
@@ -26,8 +29,8 @@ export abstract class BasePage {
   public attachTo(root: HTMLElement): void {
     if (this.mounted) {
       this.unmount?.();
+      this.events.clearAll();
     }
-
     const pageElement = this.render();
     root.innerHTML = '';
     root.appendChild(pageElement);

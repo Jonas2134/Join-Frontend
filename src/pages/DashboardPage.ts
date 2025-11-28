@@ -14,8 +14,8 @@ export class DashboardPage extends BasePage {
   }
 
   renderheader() {
-    const header = document.createElement('div');
-    header.classList.add('flex', 'items-center', 'justify-between');
+    const header = document.createElement("div");
+    header.classList.add("flex", "items-center", "justify-between");
     header.innerHTML = `
       <h1 class="text-(--color-light-blue) underline">My Boards</h1>
       <button id="createBoardBtn" class="btn-blue">+ Create Board</button>
@@ -24,21 +24,21 @@ export class DashboardPage extends BasePage {
   }
 
   renderDashboard() {
-    const section = document.createElement('section');
+    const section = document.createElement("section");
     section.id = "dashboardsection";
     section.classList.add("space-y-8");
     return section;
   }
 
   renderOpenBoardsSection(container: HTMLElement, boards: Board[]) {
-    const openBoards = boards.filter(b => b.is_active === true);
+    const openBoards = boards.filter((b) => b.is_active === true);
     console.log(openBoards);
     const openSection = document.createElement("section");
     openSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Open Boards</h2>`;
     if (openBoards.length > 0) {
       const openGrid = document.createElement("div");
       openGrid.classList.add("grid", "grid-cols-3", "gap-4");
-      openBoards.forEach(board => {
+      openBoards.forEach((board) => {
         const card = new BoardCard(board, () => {
           router.navigate(`/board/${board.id}`);
         });
@@ -55,14 +55,14 @@ export class DashboardPage extends BasePage {
   }
 
   renderClosedBoardsSection(container: HTMLElement, boards: Board[]) {
-    const closedBoards = boards.filter(b => b.is_active === false);
+    const closedBoards = boards.filter((b) => b.is_active === false);
     console.log(closedBoards);
     if (closedBoards.length > 0) {
       const closedSection = document.createElement("section");
       closedSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Closed Boards</h2>`;
       const closedGrid = document.createElement("div");
       closedGrid.classList.add("grid", "grid-cols-3", "gap-4");
-      closedBoards.forEach(board => {
+      closedBoards.forEach((board) => {
         const card = new BoardCard(board, () => {
           router.navigate(`/board/${board.id}`);
         });
@@ -85,8 +85,8 @@ export class DashboardPage extends BasePage {
   }
 
   render() {
-    const container = document.createElement('section');
-    container.classList.add('p-6', 'space-y-8');
+    const container = document.createElement("section");
+    container.classList.add("p-6", "space-y-8");
 
     container.appendChild(this.renderheader());
     container.appendChild(this.renderDashboard());
@@ -101,18 +101,14 @@ export class DashboardPage extends BasePage {
     this.dialog = new BoardCreateDialog();
     document.body.appendChild(this.dialog.render());
 
-    document.getElementById('createBoardBtn')?.addEventListener('click', (e) => {
+    this.events.on(document.getElementById("createBoardBtn")!, "click", (e) => {
       e.preventDefault();
       this.dialog?.open();
     });
 
-    window.addEventListener("board:created", async () => {
+    this.events.on(window, "board:created", async () => {
       await appStore.loadDashboard();
       this.updateDashboardUI();
     });
-  }
-
-  unmount(): void {
-    window.removeEventListener("board:created", this.updateDashboardUI);
   }
 }
