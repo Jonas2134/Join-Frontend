@@ -1,7 +1,9 @@
 import { appStore } from "../store/AppStore";
 import { InputField } from "./InputField";
+import { Textarea } from "./textarea";
 
 import User from "../assets/icons/user.svg?raw";
+import Textareaicon from "../assets/icons/textarea.svg?raw";
 
 export class BoardCreateDialog {
   dialog: HTMLDialogElement;
@@ -38,9 +40,12 @@ export class BoardCreateDialog {
       required: true,
     });
 
-    const descriptionTextfield = document.createElement("textarea");
-    descriptionTextfield.placeholder = "Write your description."
-    descriptionTextfield.name = "description";
+
+    const descriptionTextfield = new Textarea({
+      nameId: 'description',
+      placeholder: 'Write your description.',
+      icon: Textareaicon,
+    });
 
     const menu = document.createElement("menu");
     menu.classList.add('flex', 'gap-6')
@@ -49,7 +54,7 @@ export class BoardCreateDialog {
       <button class="btn-blue transition-all" type="button" id="cancel-btn">Cancel</button>
     `;
 
-    fieldset.append(legend, titleField.render(), descriptionTextfield, menu);
+    fieldset.append(legend, titleField.render(), descriptionTextfield.render(), menu);
     this.form.appendChild(fieldset);
   }
 

@@ -16,7 +16,7 @@ export class InputField {
   }
 
   private createElement(): HTMLElement {
-    const wrapper = document.createElement('div');
+    const wrapper = document.createElement('label');
     wrapper.classList.add('input-field');
 
     const input = document.createElement('input');
