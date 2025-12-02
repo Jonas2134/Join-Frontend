@@ -1,4 +1,5 @@
 import LogoRaw from "/logo.svg?raw";
+import Burgermenu from "../assets/icons/menu.svg?raw";
 
 export class AppHeader {
   private element: HTMLElement;
@@ -23,9 +24,9 @@ export class AppHeader {
 
   render(): HTMLElement {
     this.element.innerHTML = /*html*/ `
-      <nav class="flex gap-3">
-        <span class="text-white">Burger menu</span>
-      </nav>
+      <span class="menu">
+        ${Burgermenu}
+      </span>
     `;
 
     if (this.colorLogo) this.element.prepend(this.colorLogo);
