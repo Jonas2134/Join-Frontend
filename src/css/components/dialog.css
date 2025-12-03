@@ -1,9 +1,13 @@
 @layer components {
-    .dialog {
+    .board-dialog {
         @apply fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-xl p-6 w-auto shadow-xl;
 
         &::backdrop {
             @apply bg-black opacity-70 transition-opacity;
         }
+    }
+
+    .menu-dialog {
+        @apply fixed top-24 left-[98%] -translate-x-[100%] px-8 pt-4 rounded-xl;
     }
 }

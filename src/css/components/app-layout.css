@@ -4,6 +4,14 @@
 
 		header {
 			@apply col-span-full row-span-1 flex justify-between items-center left-0 px-10 py-5  bg-(--color-light-blue) shadow-xl/10 z-10;
+
+      .menu {
+        @apply cursor-pointer rounded-full transition-all;
+
+        &:hover {
+          @apply bg-sky-900/25 scale-105;
+        }
+      }
 		}
 
 		aside {

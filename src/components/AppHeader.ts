@@ -1,9 +1,12 @@
+import { BurgerMenuDialog } from "./BurgerMenuDialog";
+
 import LogoRaw from "/logo.svg?raw";
 import Burgermenu from "../assets/icons/menu.svg?raw";
 
 export class AppHeader {
   private element: HTMLElement;
   private colorLogo?: HTMLElement;
+  menuDialog: BurgerMenuDialog | null = null;
 
   constructor() {
     this.element = document.createElement('header');
@@ -30,6 +33,19 @@ export class AppHeader {
     `;
 
     if (this.colorLogo) this.element.prepend(this.colorLogo);
+
+    const menuBtn = this.element.querySelector('.menu');
+    if (menuBtn) {
+      this.menuDialog = new BurgerMenuDialog();
+      document.body.appendChild(this.menuDialog.render());
+
+      menuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log("Burgermenu clicked!");
+        this.menuDialog?.open();
+      });
+    }
+
     return this.element;
   }
 }

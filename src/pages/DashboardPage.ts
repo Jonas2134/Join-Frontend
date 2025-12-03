@@ -3,7 +3,7 @@ import { BasePage } from "../core/BasePage";
 import { BoardCard } from "../components/BoardCard";
 import { appStore } from "../store/AppStore";
 import { router } from "../core/router";
-import { BoardCreateDialog } from "../components/BoardCreateDialoge";
+import { BoardCreateDialog } from "../components/BoardCreateDialog";
 import type { Board } from "../interfaces/BoardInterface";
 
 export class DashboardPage extends BasePage {

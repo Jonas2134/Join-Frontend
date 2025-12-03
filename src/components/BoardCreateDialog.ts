@@ -11,8 +11,8 @@ export class BoardCreateDialog {
 
   constructor() {
     this.dialog = document.createElement("dialog");
-    this.dialog.id = "dialog";
-    this.dialog.classList.add('dialog');
+    this.dialog.id = "board-dialog";
+    this.dialog.classList.add('board-dialog');
 
     this.form = document.createElement("form");
     this.form.id = "form";
