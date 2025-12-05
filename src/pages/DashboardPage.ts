@@ -14,7 +14,7 @@ export class DashboardPage extends BasePage {
   }
 
   renderheader() {
-    const header = document.createElement("div");
+    const header = document.createElement("header");
     header.classList.add("flex", "items-center", "justify-between");
     header.innerHTML = `
       <h1 class="text-(--color-light-blue) underline">My Boards</h1>
@@ -87,10 +87,8 @@ export class DashboardPage extends BasePage {
   render() {
     const container = document.createElement("section");
     container.classList.add("p-6", "space-y-8");
-
     container.appendChild(this.renderheader());
     container.appendChild(this.renderDashboard());
-
     return this.wrapWithLayout(container);
   }
 

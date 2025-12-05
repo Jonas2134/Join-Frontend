@@ -2,17 +2,18 @@
   .app-layout {
     @apply grid grid-cols-[190px_1fr] grid-rows-[110px_1fr] w-screen h-screen;
 
-		header {
+		.app-header {
 			@apply col-span-full row-span-1 flex justify-between items-center left-0 px-10 py-5  bg-(--color-light-blue) shadow-xl/10 z-10;
 
-      .menu {
-        @apply cursor-pointer rounded-full transition-all;
-
-        &:hover {
-          @apply bg-sky-900/25 scale-105;
-        }
-      }
 		}
+
+    .menu {
+      @apply cursor-pointer rounded-full transition-all;
+
+      &:hover {
+        @apply bg-sky-900/25 scale-105;
+      }
+    }
 
 		aside {
       @apply col-span-1 row-start-2 row-span-1 flex flex-col justify-between px-10 py-50 border-r-1 border-(--color-light-gray) z-5;

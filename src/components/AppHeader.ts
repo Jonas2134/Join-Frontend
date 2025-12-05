@@ -10,6 +10,7 @@ export class AppHeader {
 
   constructor() {
     this.element = document.createElement('header');
+    this.element.classList.add("app-header")
     this.colorLogo = this.createLogo();
   }
 

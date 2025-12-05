@@ -2,6 +2,7 @@ import { http } from "../api/HttpClient";
 
 class AppStore {
   boards: any[] = [];
+  singBoard: any
   columns: Record<number, any[]> = {};
   tasks: Record<number, any[]> = {};
 
@@ -16,6 +17,11 @@ class AppStore {
     const response = await http.post("/boards/", { title, description, members });
     window.dispatchEvent(new CustomEvent("board:created"));
     return response;
+  }
+
+  async loadBoard(id: string) {
+    this.singBoard = await http.get(`/boards/${id}`);
+    return this.singBoard;
   }
 }
 

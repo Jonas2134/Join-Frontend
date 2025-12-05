@@ -4,7 +4,6 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { BoardPage } from './pages/BoardPage';
-import { OpenTasksPage } from './pages/OpenTasksPage';
 
 import "./css/main.css";
 
@@ -16,7 +15,6 @@ const router = initRouter(app, [
   { path: '/signup', component: SignupPage },
   { path: '/dashboard', component: DashboardPage },
   { path: '/board/:id', component: BoardPage },
-  { path: '/open-tasks', component: OpenTasksPage },
 ]);
 
 document.body.addEventListener('click', (e) => {
