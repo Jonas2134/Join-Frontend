@@ -27,14 +27,14 @@ export class AppHeader {
 
   render(): HTMLElement {
     this.element.innerHTML = /*html*/ `
-      <span class="menu">
+      <button id="menu" class="menu">
         ${Burgermenu}
-      </span>
+      </button>
     `;
 
     if (this.colorLogo) this.element.prepend(this.colorLogo);
 
-    const menuBtn = this.element.querySelector('.menu');
+    const menuBtn = this.element.querySelector('#menu');
     if (menuBtn) {
       this.menuDialog = new BurgerMenuDialog();
       document.body.appendChild(this.menuDialog.render());

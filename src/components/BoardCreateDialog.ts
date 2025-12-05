@@ -16,6 +16,7 @@ export class BoardCreateDialog {
 
     this.form = document.createElement("form");
     this.form.id = "form";
+    this.form.classList.add('p-6');
     this.form.method = "dialog";
 
     this.createFormDialog();
@@ -60,7 +61,7 @@ export class BoardCreateDialog {
 
   attachEvents() {
     const cancelBtn = this.dialog.querySelector("#cancel-btn") as HTMLFormElement;
-    
+
     cancelBtn.addEventListener("click", () => {
       this.dialog.close();
     });
@@ -76,6 +77,13 @@ export class BoardCreateDialog {
         this.form.reset();
       } catch (err: any) {
         alert("Creation is failed: " + err.message);
+      }
+    });
+
+    this.dialog.addEventListener("click", (e) => {
+      if (e.target === this.dialog) {
+        this.dialog.close();
+        this.form.reset();
       }
     });
   }
