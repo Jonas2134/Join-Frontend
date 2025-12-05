@@ -15,7 +15,7 @@ const router = initRouter(app, [
   { path: '/login', component: LoginPage },
   { path: '/signup', component: SignupPage },
   { path: '/dashboard', component: DashboardPage },
-  { path: '/board', component: BoardPage },
+  { path: '/board/:id', component: BoardPage },
   { path: '/open-tasks', component: OpenTasksPage },
 ]);
 
