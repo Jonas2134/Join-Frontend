@@ -1,4 +1,5 @@
 import { http } from "../api/HttpClient";
+import { router } from "../core/router";
 
 export class AuthStore {
   private client = http;
@@ -21,7 +22,7 @@ export class AuthStore {
   }
 
   async refresh() {
-    return this.client.post("/token/refresh/");
+    await this.client.post("/token/refresh/");
   }
 
   private async handleUnauthorized() {
@@ -31,9 +32,8 @@ export class AuthStore {
 
     try {
       await this.refresh();
-    } catch (e) {
-      console.warn("Refresh failed => Logout");
-      await this.logout();
+    } catch {
+      router.navigate(`/login`);
     } finally {
       this.isRefreshing = false;
     }
