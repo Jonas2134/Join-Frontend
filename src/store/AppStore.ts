@@ -1,4 +1,5 @@
 import { http } from "../api/HttpClient";
+import { API_ROUTES } from "../api/config";
 
 class AppStore {
   boards: any[] = [];
@@ -9,18 +10,18 @@ class AppStore {
   constructor() {}
 
   async loadDashboard() {
-    this.boards = await http.get("/boards/");
+    this.boards = await http.get(API_ROUTES.boards.list);
     return this.boards;
   }
 
   async createBoard(title: string, description?: string, members?: number) {
-    const response = await http.post("/boards/", { title, description, members });
+    const response = await http.post(API_ROUTES.boards.list, { title, description, members });
     window.dispatchEvent(new CustomEvent("board:created"));
     return response;
   }
 
   async loadBoard(id: string) {
-    this.singBoard = await http.get(`/boards/${id}`);
+    this.singBoard = await http.get(API_ROUTES.boards.detail(id));
     return this.singBoard;
   }
 }

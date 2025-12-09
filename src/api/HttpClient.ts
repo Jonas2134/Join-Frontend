@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "./config";
+
 type HttpMethod = "GET" | "POST" | "PATCH" | "DELETE";
 
 export class HttpClient {
@@ -65,4 +67,4 @@ export class HttpClient {
   }
 }
 
-export const http = new HttpClient("http://localhost:8000/api");
+export const http = new HttpClient(API_BASE_URL);
