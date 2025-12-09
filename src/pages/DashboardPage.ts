@@ -32,7 +32,6 @@ export class DashboardPage extends BasePage {
 
   renderOpenBoardsSection(container: HTMLElement, boards: Board[]) {
     const openBoards = boards.filter((b) => b.is_active === true);
-    console.log(openBoards);
     const openSection = document.createElement("section");
     openSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Open Boards</h2>`;
     if (openBoards.length > 0) {
@@ -56,7 +55,6 @@ export class DashboardPage extends BasePage {
 
   renderClosedBoardsSection(container: HTMLElement, boards: Board[]) {
     const closedBoards = boards.filter((b) => b.is_active === false);
-    console.log(closedBoards);
     if (closedBoards.length > 0) {
       const closedSection = document.createElement("section");
       closedSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Closed Boards</h2>`;
@@ -96,12 +94,10 @@ export class DashboardPage extends BasePage {
     await appStore.loadDashboard();
     this.updateDashboardUI();
 
-    this.dialog = new BoardCreateDialog();
-    document.body.appendChild(this.dialog.render());
-
-    this.events.on(document.getElementById("createBoardBtn")!, "click", (e) => {
-      e.preventDefault();
-      this.dialog?.open();
+    this.events.on(document.getElementById("createBoardBtn")!, "click", () => {
+      this.dialog = new BoardCreateDialog();
+      document.body.appendChild(this.dialog.render());
+      this.dialog?.open()
     });
 
     this.events.on(window, "board:created", async () => {

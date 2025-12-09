@@ -1,23 +1,18 @@
+import { BaseDialog } from "../core/BaseDialog";
 import { authStore } from "../store/AuthStore";
 import { router } from "../core/router";
 
 import Cross from "../assets/icons/cross.svg?raw";
 
-export class BurgerMenuDialog {
-  dialog: HTMLDialogElement;
-
+export class BurgerMenuDialog extends BaseDialog {
   constructor() {
-    this.dialog = document.createElement("dialog");
-    this.dialog.id = "menu-dialog";
-    this.dialog.classList.add("menu-dialog");
-
-    this.createMenuDialog();
-    this.attachEvents();
+    super("menu-dialog", "menu-dialog");
   }
 
-  createMenuDialog() {
+  protected renderContent() {
     const nav = document.createElement("nav");
     nav.classList.add('px-8', 'pt-4');
+
     const list = document.createElement("ol");
     list.innerHTML = /*html*/ `
       <li>
@@ -30,11 +25,12 @@ export class BurgerMenuDialog {
         <button id="close-btn">${Cross}</button>
       </li>
     `;
+
     nav.appendChild(list);
-    this.dialog.appendChild(nav);
+    return nav;
   }
 
-  attachEvents() {
+  protected override mount() {
     const logoutBtn = this.dialog.querySelector("#logout-btn") as HTMLElement;
     const closeBtn = this.dialog.querySelector("#close-btn") as HTMLElement;
 
@@ -48,22 +44,6 @@ export class BurgerMenuDialog {
       }
     });
 
-    closeBtn.addEventListener("click", () => {
-      this.dialog.close();
-    });
-
-    this.dialog.addEventListener("click", (e) => {
-      if (e.target === this.dialog) {
-        this.dialog.close();
-      }
-    });
-  }
-
-  open() {
-    this.dialog.showModal();
-  }
-
-  render() {
-    return this.dialog;
+    closeBtn.addEventListener("click", () => this.close());
   }
 }

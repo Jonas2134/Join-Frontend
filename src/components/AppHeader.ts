@@ -37,13 +37,10 @@ export class AppHeader {
 
     const menuBtn = this.element.querySelector('#menu');
     if (menuBtn) {
-      this.menuDialog = new BurgerMenuDialog();
-      document.body.appendChild(this.menuDialog.render());
-
-      menuBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log("Burgermenu clicked!");
-        this.menuDialog?.open();
+      menuBtn.addEventListener('click', () => {
+        this.menuDialog = new BurgerMenuDialog();
+        document.body.appendChild(this.menuDialog.render());
+        this.menuDialog?.open()
       });
     }
 

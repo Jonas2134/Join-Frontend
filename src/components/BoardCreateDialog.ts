@@ -1,3 +1,4 @@
+import { BaseDialog } from "../core/BaseDialog";
 import { appStore } from "../store/AppStore";
 import { InputField } from "./InputField";
 import { Textarea } from "./textarea";
@@ -5,27 +6,16 @@ import { Textarea } from "./textarea";
 import User from "../assets/icons/user.svg?raw";
 import Textareaicon from "../assets/icons/textarea.svg?raw";
 
-export class BoardCreateDialog {
-  dialog: HTMLDialogElement;
-  form: HTMLFormElement;
-
+export class BoardCreateDialog extends BaseDialog {
   constructor() {
-    this.dialog = document.createElement("dialog");
-    this.dialog.id = "board-dialog";
-    this.dialog.classList.add('board-dialog');
-
-    this.form = document.createElement("form");
-    this.form.id = "form";
-    this.form.classList.add('p-6');
-    this.form.method = "dialog";
-
-    this.createFormDialog();
-    this.dialog.appendChild(this.form);
-
-    this.attachEvents();
+    super("board-dialog", "board-dialog");
   }
 
-  createFormDialog() {
+  protected renderContent() {
+    const form = document.createElement("form");
+    form.id = "cform";
+    form.classList.add("p-6");
+
     const fieldset = document.createElement("fieldset");
     fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
 
@@ -56,43 +46,30 @@ export class BoardCreateDialog {
     `;
 
     fieldset.append(legend, titleField.render(), descriptionTextfield.render(), menu);
-    this.form.appendChild(fieldset);
+    form.appendChild(fieldset);
+    return form;
   }
 
-  attachEvents() {
+  protected override mount() {
     const cancelBtn = this.dialog.querySelector("#cancel-btn") as HTMLFormElement;
+    const form = this.dialog.querySelector("#cform") as HTMLFormElement;
 
-    cancelBtn.addEventListener("click", () => {
-      this.dialog.close();
-    });
+    cancelBtn.addEventListener("click", () => this.close());
 
-    this.form.addEventListener("submit", async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formDate = new FormData(this.form);
-      const title = formDate.get("title") as string;
-      const description = formDate.get("description") as string;
+      const formDate = new FormData(form);
+      console.log(formDate);
       try {
-        await appStore.createBoard(title, description);
-        this.dialog.close();
-        this.form.reset();
+        await appStore.createBoard(
+          formDate.get("title") as string,
+          formDate.get("description") as string
+        );
+        this.close();
+        form.reset();
       } catch (err: any) {
         alert("Creation is failed: " + err.message);
       }
     });
-
-    this.dialog.addEventListener("click", (e) => {
-      if (e.target === this.dialog) {
-        this.dialog.close();
-        this.form.reset();
-      }
-    });
-  }
-
-  open() {
-    this.dialog.showModal();
-  }
-
-  render() {
-    return this.dialog;
   }
 }
