@@ -13,22 +13,29 @@ export class BoardPage extends BasePage {
 
   renderheader() {
     const header = document.createElement("header");
+    header.id = "boardHeader";
     header.classList.add("flex", "items-center", "justify-between");
-    header.innerHTML = `
-      <h1 class="text-(--color-light-blue) underline">Board No. ${this.id}</h1>
-      <button id="changeBoardBtn" class="btn-blue">Change board</button>
-    `;
+    // header.innerHTML = `
+    //   <h1 class="text-(--color-light-blue) underline">${this.title}</h1>
+    //   <button id="changeBoardBtn" class="btn-blue">Change board</button>
+    // `;
     return header;
   }
 
   renderSection() {
     const section = document.createElement("section");
     section.id = "boardSection";
-    section.classList.add("space-y-8");
     return section;
   }
 
-  renderBoard(container: HTMLElement, board: Board) {
+  renderHeaderContent(header: HTMLElement, board: Board) {
+    header.innerHTML = `
+      <h1 class="text-(--color-light-blue) underline">${board.title}</h1>
+      <button id="changeBoardBtn" class="btn-blue">Change board</button>
+    `;
+  }
+
+  renderBoardContent(container: HTMLElement, board: Board) {
     const ol = document.createElement("ol");
     ol.innerHTML = `
       <li>${board.description}</li>
@@ -38,18 +45,21 @@ export class BoardPage extends BasePage {
   }
 
   updateBoardUI() {
+    const header = document.getElementById("boardHeader");
     const container = document.getElementById("boardSection");
-    if (!container) return;
+    if (!container || !header) return;
 
-    container.innerHTML = "";
     const board = appStore.singBoard;
+    header.innerHTML = "";
+    container.innerHTML = "";
 
-    this.renderBoard(container, board);
+    this.renderHeaderContent(header, board)
+    this.renderBoardContent(container, board);
   }
 
   render() {
     const container = document.createElement('section');
-    container.classList.add("p-6", "space-y-8");
+    container.classList.add("flex", "flex-col", "gap-6");
     container.append(this.renderheader(), this.renderSection());
     return this.wrapWithLayout(container);
   }
