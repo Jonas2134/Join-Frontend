@@ -3,6 +3,7 @@ export class AppSidebar {
 
   constructor() {
     this.element = document.createElement('aside');
+    this.element.classList.add("app-aside")
   }
 
   render(): HTMLElement {

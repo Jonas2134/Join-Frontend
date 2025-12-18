@@ -15,11 +15,11 @@
       }
     }
 
-		aside {
+		.app-aside {
       @apply col-span-1 row-start-2 row-span-1 flex flex-col justify-between px-10 py-50 border-r-1 border-(--color-light-gray) z-5;
 		}
 
-    main {
+    .app-main {
       @apply col-start-2 row-start-2 row-span-1 p-5 overflow-auto;
     }
 	}

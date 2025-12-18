@@ -12,6 +12,7 @@ export class AppLayout {
     const header = new AppHeader();
     const sidebar = new AppSidebar();
     this.main = document.createElement('main');
+    this.main.classList.add("app-main")
 
     this.element.append(header.render(), sidebar.render(), this.main);
   }
