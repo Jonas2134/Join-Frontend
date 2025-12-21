@@ -9,6 +9,9 @@
 @import "./layouts/auth-layout.css";
 @import "./layouts/app-layout.css";
 
+/* import page styles */
+@import "./pages/board.css";
+
 /* import component styles */
 @import "./components/buttons.css";
 @import "./components/inputs.css";

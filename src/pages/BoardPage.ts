@@ -1,7 +1,7 @@
 import { AppLayout } from "../layouts/AppLayout";
 import { BasePage } from "../core/BasePage";
 import { appStore } from "../store/AppStore";
-import type { Board } from "../interfaces/BoardInterface";
+import type { Board, Column, Task } from "../interfaces/BoardInterface";
 
 export class BoardPage extends BasePage {
   id: string;
@@ -10,6 +10,8 @@ export class BoardPage extends BasePage {
     super(new AppLayout());
     this.id = params.id;
   }
+
+  /* ---------- Layout ---------- */
 
   renderheader() {
     const header = document.createElement("header");
@@ -21,8 +23,11 @@ export class BoardPage extends BasePage {
   renderSection() {
     const section = document.createElement("section");
     section.id = "board-section";
+    section.classList.add("h-full", "overflow-x-auto");
     return section;
   }
+
+  /* ---------- Header ---------- */
 
   renderHeaderContent(header: HTMLElement, board: Board) {
     header.innerHTML = `
@@ -34,76 +39,132 @@ export class BoardPage extends BasePage {
     `;
   }
 
-  renderBoardContent(container: HTMLElement, board: Board) {
-    const columnsList = document.createElement("ol");
-    columnsList.classList.add("flex", "gap-4")
-    
-    for (const column of board.columns) {
-      const columnItem = document.createElement("li");
-      columnItem.classList.add("p-1", "border", "border-(--color-light-gray)", "rounded-lg");
-      columnItem.dataset.columnId = String(column.id);
+  /* ---------- Drag & drop help elements ---------- */
 
-      const columnSection = document.createElement("section");
-      columnSection.classList.add("flex", "flex-col", "gap-1")
+  renderColumnDropZone(position: number): HTMLElement {
+    const zone = document.createElement("li");
+    zone.classList.add("column-drop-zone");
+    zone.dataset.position = String(position);
+    return zone;
+  }
 
-      const header = document.createElement("header");
-      header.classList.add("py-2", "px-4", "bg-(--color-dark-blue)", "rounded-lg")
-      const title = document.createElement("h3");
-      title.classList.add("text-white")
-      title.textContent = column.name;
-      header.appendChild(title);
+  renderTaskDropZone(position: number): HTMLElement {
+    const zone = document.createElement("li");
+    zone.classList.add("task-drop-zone");
+    zone.dataset.position = String(position);
+    return zone;
+  }
 
-      const taskList = document.createElement("ol");
-      taskList.classList.add("flex", "flex-col", "items-center");
+  /* ---------- Column ---------- */
 
-      for (const task of column.tasks) {
-        const taskItem = document.createElement("li");
-        taskItem.classList.add("task");
-        taskItem.textContent = task.title;
-        taskItem.dataset.taskId = String(task.id);
-        taskList.appendChild(taskItem);
-      }
+  renderColumnHeader(column: Column) {
+    const header = document.createElement("header");
+    header.classList.add("column-header");
+    const title = document.createElement("h4");
+    title.textContent = column.name;
+    header.appendChild(title);
+    return header;
+  }
 
-      const footer = document.createElement("footer");
-      footer.classList.add("flex", "justify-center")
-      const addTaskBtn = document.createElement("button");
-      addTaskBtn.classList.add("btn-blue")
-      addTaskBtn.textContent = "+ add Task";
-      footer.appendChild(addTaskBtn);
+  renderColumnFooter() {
+    const footer = document.createElement("footer");
+    footer.classList.add("flex", "justify-center");
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.classList.add("btn-blue");
+    addTaskBtn.textContent = "+ add Task";
+    footer.appendChild(addTaskBtn);
+    return footer;
+  }
 
-      columnSection.append(header, taskList, footer);
-      columnItem.appendChild(columnSection);
-      columnsList.appendChild(columnItem);
+  renderColumnTaskContent(column: Column) {
+    const taskList = document.createElement("ol");
+    taskList.classList.add("task-list");
+
+    for (const [index, task] of column.tasks.entries()) {
+      taskList.appendChild(this.renderTaskDropZone(index + 1));
+      taskList.appendChild(this.renderTask(task));
     }
 
-    const addColumnItem = document.createElement("li");
-    addColumnItem.classList.add("p-1", "border", "border-(--color-light-gray)", "rounded-lg");
+    taskList.appendChild(this.renderTaskDropZone(column.tasks.length + 1));
+    return taskList;
+  }
 
+  renderColumn(column: Column): HTMLElement {
+    const columnItem = document.createElement("li");
+    columnItem.classList.add("board-column");
+    columnItem.dataset.columnId = String(column.id);
+
+    const columnSection = document.createElement("section");
+    columnSection.classList.add("flex", "flex-col", "gap-1");
+
+    const header = this.renderColumnHeader(column);
+    const taskList = this.renderColumnTaskContent(column);
+    const footer = this.renderColumnFooter();
+
+    columnSection.append(header, taskList, footer);
+    columnItem.appendChild(columnSection);
+    return columnItem;
+  }
+
+  renderAddColumn() {
+    const addColumnItem = document.createElement("li");
+    addColumnItem.classList.add("board-column");
     const addColumnBtn = document.createElement("button");
-    addColumnBtn.classList.add("btn-blue")
+    addColumnBtn.classList.add("btn-blue");
     addColumnBtn.textContent = "+ New Column";
     addColumnItem.appendChild(addColumnBtn);
+    return addColumnItem;
+  }
+
+  /* ---------- Task ---------- */
+
+  renderTask(task: Task) {
+    const taskItem = document.createElement("li");
+    taskItem.classList.add("task");
+    taskItem.textContent = task.title;
+    taskItem.dataset.taskId = String(task.id);
+    return taskItem;
+  }
+
+  /* ---------- Board ---------- */
+
+  renderBoardContent(container: HTMLElement, board: Board) {
+    const columnsList = document.createElement("ol");
+    columnsList.classList.add("board-columns-list");
+
+    for (const [index, column] of board.columns.entries()) {
+      columnsList.appendChild(this.renderColumnDropZone(index + 1));
+      columnsList.appendChild(this.renderColumn(column));
+    }
+
+    columnsList.appendChild(
+      this.renderColumnDropZone(board.columns.length + 1)
+    );
+
+    const addColumnItem = this.renderAddColumn();
 
     columnsList.appendChild(addColumnItem);
     container.appendChild(columnsList);
   }
 
+  /* ---------- Lifecycle ---------- */
+
   updateBoardUI() {
     const header = document.getElementById("board-header");
-    const container = document.getElementById("board-section");
-    if (!container || !header) return;
+    const section = document.getElementById("board-section");
+    if (!section || !header) return;
 
     const board = appStore.singBoard;
     header.innerHTML = "";
-    container.innerHTML = "";
+    section.innerHTML = "";
 
-    this.renderHeaderContent(header, board)
-    this.renderBoardContent(container, board);
+    this.renderHeaderContent(header, board);
+    this.renderBoardContent(section, board);
   }
 
   render() {
-    const container = document.createElement('section');
-    container.classList.add("flex", "flex-col", "gap-6");
+    const container = document.createElement("section");
+    container.classList.add("flex", "flex-col", "gap-6", "h-full");
     container.append(this.renderheader(), this.renderSection());
     return this.wrapWithLayout(container);
   }
