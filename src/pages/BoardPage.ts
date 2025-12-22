@@ -40,22 +40,6 @@ export class BoardPage extends BasePage {
     `;
   }
 
-  /* ---------- Drag & drop help elements ---------- */
-
-  renderColumnDropZone(position: number): HTMLElement {
-    const zone = document.createElement("li");
-    zone.classList.add("column-drop-zone");
-    zone.dataset.position = String(position);
-    return zone;
-  }
-
-  renderTaskDropZone(position: number): HTMLElement {
-    const zone = document.createElement("li");
-    zone.classList.add("task-drop-zone");
-    zone.dataset.position = String(position);
-    return zone;
-  }
-
   /* ---------- Column ---------- */
 
   renderColumnHeader(column: Column) {
@@ -81,12 +65,10 @@ export class BoardPage extends BasePage {
     const taskList = document.createElement("ol");
     taskList.classList.add("task-list");
 
-    for (const [index, task] of column.tasks.entries()) {
-      taskList.appendChild(this.renderTaskDropZone(index + 1));
+    for (const task of column.tasks) {
       taskList.appendChild(this.renderTask(task));
     }
 
-    taskList.appendChild(this.renderTaskDropZone(column.tasks.length + 1));
     return taskList;
   }
 
@@ -109,11 +91,13 @@ export class BoardPage extends BasePage {
 
   renderAddColumn() {
     const addColumnItem = document.createElement("li");
-    addColumnItem.classList.add("board-column");
+    const addColumnSection = document.createElement("section");
+    addColumnSection.classList.add("add-column");
     const addColumnBtn = document.createElement("button");
     addColumnBtn.classList.add("btn-blue");
     addColumnBtn.textContent = "+ New Column";
-    addColumnItem.appendChild(addColumnBtn);
+    addColumnSection.appendChild(addColumnBtn);
+    addColumnItem.appendChild(addColumnSection);
     return addColumnItem;
   }
 
@@ -133,17 +117,11 @@ export class BoardPage extends BasePage {
     const columnsList = document.createElement("ol");
     columnsList.classList.add("board-columns-list");
 
-    for (const [index, column] of board.columns.entries()) {
-      columnsList.appendChild(this.renderColumnDropZone(index + 1));
+    for (const column of board.columns) {
       columnsList.appendChild(this.renderColumn(column));
     }
 
-    columnsList.appendChild(
-      this.renderColumnDropZone(board.columns.length + 1)
-    );
-
     const addColumnItem = this.renderAddColumn();
-
     columnsList.appendChild(addColumnItem);
     container.appendChild(columnsList);
   }
@@ -163,7 +141,7 @@ export class BoardPage extends BasePage {
     this.renderHeaderContent(header, board);
     this.renderBoardContent(section, board);
 
-    const dnd = new BoardDragAndDrop();
+    const dnd = new BoardDragAndDrop(this.id, this.updateBoardUI.bind(this));
     dnd.init(section);
   }
 

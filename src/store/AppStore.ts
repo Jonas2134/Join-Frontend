@@ -1,5 +1,6 @@
 import { http } from "../api/HttpClient";
 import { API_ROUTES } from "../api/config";
+import type { ColumnUpdate, TaskUpdate } from "../interfaces/BoardInterface";
 
 class AppStore {
   boards: any[] = [];
@@ -23,6 +24,14 @@ class AppStore {
   async loadBoard(id: string) {
     this.singBoard = await http.get(API_ROUTES.boards.detail(id));
     return this.singBoard;
+  }
+
+  async updateColumn(columnId: string, data: ColumnUpdate) {
+    await http.patch(API_ROUTES.columns.detail(columnId), data);
+  }
+
+  async updateTask(taskId: string, data: TaskUpdate) {
+    await http.patch(API_ROUTES.tasks.detail(taskId), data);
   }
 }
 

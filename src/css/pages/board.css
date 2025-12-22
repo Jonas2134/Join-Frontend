@@ -3,24 +3,24 @@
         @apply flex gap-4 h-full overflow-x-auto;
     }
 
-    .board-column {
-        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-(--color-soft-blue) shadow-lg;
+    .board-column, .add-column {
+        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-large);
     }
 
     .column-drop-zone {
         @apply w-2 h-full;
     }
 
-    .board-columns.dragging .column-drop-zone {
+    .board-column.dragging .column-drop-zone {
         @apply bg-[rgba(0,0,255,0.1)];
     }
 
     .column-header {
-        @apply py-2 px-4 border border-(--color-dark-blue) rounded-lg;
+        @apply py-2 px-4 border border-(--color-dark-blue) bg-(--color-soft-blue) shadow-(--shadow-large) rounded-lg;
     }
 
     .task-list {
-        @apply flex flex-col flex-1 overflow-y-auto;
+        @apply flex flex-col flex-1 min-h-2 overflow-y-auto;
     }
 
     .task-drop-zone {
@@ -29,5 +29,9 @@
 
     .task-list.dragging .task-drop-zone {
         @apply bg-[rgba(0,0,255,0.1)];
+    }
+
+    .task {
+        @apply p-2 mb-2 border border-(--color-light-gray) rounded-lg bg-white shadow;
     }
 }

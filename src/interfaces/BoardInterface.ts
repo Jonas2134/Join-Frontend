@@ -26,6 +26,12 @@ export interface Column {
   tasks: Task[];
 }
 
+export interface ColumnUpdate {
+  name?: string;
+  position?: number;
+  wip_limit?: string | null;
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -35,4 +41,12 @@ export interface Task {
   column: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface TaskUpdate {
+  title?: string;
+  description?: string | null;
+  assignee?: string;
+  position?: number;
+  column?: number;
 }

@@ -11,4 +11,12 @@ export const API_ROUTES = {
     list: "/boards/",
     detail: (id: string) => `/boards/${id}/`,
   },
+  columns: {
+    list: (boardId: string) => `/boards/${boardId}/columns/`,
+    detail: (columnId: string) => `/columns/${columnId}/`,
+  },
+  tasks: {
+    list: (columnId: string) => `/columns/${columnId}/tasks/`,
+    detail: (taskId: string) => `/tasks/${taskId}/`,
+  },
 } as const;
