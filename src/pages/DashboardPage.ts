@@ -13,6 +13,8 @@ export class DashboardPage extends BasePage {
     super(new AppLayout());
   }
 
+  /* ---------- Layout ---------- */
+
   renderheader() {
     const header = document.createElement("header");
     header.classList.add("flex", "items-center", "justify-between");
@@ -29,6 +31,8 @@ export class DashboardPage extends BasePage {
     section.classList.add("space-y-8");
     return section;
   }
+
+  /* ---------- open Board section ---------- */
 
   renderOpenBoardsSection(container: HTMLElement, boards: Board[]) {
     const openBoards = boards.filter((b) => b.is_active === true);
@@ -53,6 +57,8 @@ export class DashboardPage extends BasePage {
     }
   }
 
+  /* ---------- closed Board section ---------- */
+
   renderClosedBoardsSection(container: HTMLElement, boards: Board[]) {
     const closedBoards = boards.filter((b) => b.is_active === false);
     if (closedBoards.length > 0) {
@@ -70,6 +76,8 @@ export class DashboardPage extends BasePage {
       container.appendChild(closedSection);
     }
   }
+
+  /* ---------- Lifecycle ---------- */
 
   updateDashboardUI() {
     const container = document.getElementById("dashboardsection");
@@ -97,7 +105,7 @@ export class DashboardPage extends BasePage {
     this.events.on(document.getElementById("createBoardBtn")!, "click", () => {
       this.dialog = new BoardCreateDialog();
       document.body.appendChild(this.dialog.render());
-      this.dialog?.open()
+      this.dialog?.open();
     });
 
     this.events.on(window, "board:created", async () => {

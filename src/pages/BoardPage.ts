@@ -1,5 +1,6 @@
 import { AppLayout } from "../layouts/AppLayout";
 import { BasePage } from "../core/BasePage";
+import { BoardDragAndDrop } from "../core/BoardDragAndDrop";
 import { appStore } from "../store/AppStore";
 import type { Board, Column, Task } from "../interfaces/BoardInterface";
 
@@ -149,17 +150,21 @@ export class BoardPage extends BasePage {
 
   /* ---------- Lifecycle ---------- */
 
-  updateBoardUI() {
+  updateBoardUI(): void {
     const header = document.getElementById("board-header");
     const section = document.getElementById("board-section");
     if (!section || !header) return;
 
     const board = appStore.singBoard;
+
     header.innerHTML = "";
     section.innerHTML = "";
 
     this.renderHeaderContent(header, board);
     this.renderBoardContent(section, board);
+
+    const dnd = new BoardDragAndDrop();
+    dnd.init(section);
   }
 
   render() {
