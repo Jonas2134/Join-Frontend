@@ -4,15 +4,7 @@
     }
 
     .board-column, .add-column {
-        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-large);
-    }
-
-    .column-drop-zone {
-        @apply w-2 h-full;
-    }
-
-    .board-column.dragging .column-drop-zone {
-        @apply bg-[rgba(0,0,255,0.1)];
+        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-column) shrink-0 min-w-60;
     }
 
     .column-header {
@@ -20,18 +12,14 @@
     }
 
     .task-list {
-        @apply flex flex-col flex-1 min-h-2 overflow-y-auto;
-    }
-
-    .task-drop-zone {
-        @apply w-full h-2;
-    }
-
-    .task-list.dragging .task-drop-zone {
-        @apply bg-[rgba(0,0,255,0.1)];
+        @apply flex flex-col gap-2 flex-1 min-h-2 overflow-y-auto;
     }
 
     .task {
-        @apply p-2 mb-2 border border-(--color-light-gray) rounded-lg bg-white shadow;
+        @apply p-2 border border-(--color-light-gray) rounded-lg bg-white shadow;
+    }
+
+    .is-dragging {
+        @apply scale-105 bg-(--color-light-gray) shadow-(--shadow-large);
     }
 }

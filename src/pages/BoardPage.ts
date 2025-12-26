@@ -107,6 +107,7 @@ export class BoardPage extends BasePage {
     const taskItem = document.createElement("li");
     taskItem.classList.add("task");
     taskItem.textContent = task.title;
+    taskItem.draggable = true;
     taskItem.dataset.taskId = String(task.id);
     return taskItem;
   }
@@ -141,7 +142,7 @@ export class BoardPage extends BasePage {
     this.renderHeaderContent(header, board);
     this.renderBoardContent(section, board);
 
-    const dnd = new BoardDragAndDrop(this.id, this.updateBoardUI.bind(this));
+    const dnd = new BoardDragAndDrop(this.initLoadBoard.bind(this));
     dnd.init(section);
   }
 
@@ -152,9 +153,13 @@ export class BoardPage extends BasePage {
     return this.wrapWithLayout(container);
   }
 
-  async mount() {
+  async initLoadBoard() {
     await appStore.loadBoard(this.id);
     console.log(appStore.singBoard);
     this.updateBoardUI();
+  }
+
+  async mount() {
+    await this.initLoadBoard();
   }
 }

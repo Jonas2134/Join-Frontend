@@ -1,137 +1,122 @@
 import { appStore } from "../store/AppStore";
 
-type DragType = "column" | "task";
-
 interface DragPayload {
-  type: DragType;
-  id: number;
-  fromColumnId?: number;
-  fromPosition?: number;
-  fromColumnPosition?: number;
+  taskId: number;
+  taskPosition: number;
+  columnId: number;
+}
+
+interface DropPayload {
+  targetColumnId: number;
+  targetPosition: number;
 }
 
 export class BoardDragAndDrop {
-  private dragged: DragPayload | null = null;
-  private boardId: string;
   private onUpdate: () => void;
+  private dragged: DragPayload | null = null;
+  private droped: DropPayload | null = null;
 
-  constructor(boardId: string, func: () => void) {
-    this.boardId = boardId;
+  constructor(func: () => void) {
     this.onUpdate = func;
   }
 
   init(root: HTMLElement): void {
-    this.initColumnDnD(root);
     this.initTaskDnD(root);
-    this.initTaskDropTargets(root);
-    this.initColumnDropTargets(root);
-  }
-
-  private initColumnDnD(root: HTMLElement): void {
-    const columns = Array.from(root.querySelectorAll<HTMLElement>(".board-column"));
-
-    columns.forEach((columnEl, index) => {
-      columnEl.draggable = true;
-
-      columnEl.addEventListener("dragstart", () => {
-        this.dragged = {
-          type: "column",
-          id: Number(columnEl.dataset.columnId),
-          fromPosition: index + 1,
-        };
-      });
-    });
-  }
-
-  private initColumnDropTargets(root: HTMLElement): void {
-    const columns = Array.from(root.querySelectorAll<HTMLElement>(".board-column"));
-
-    columns.forEach((col, index) => {
-      col.addEventListener("dragover", (e) => {
-        if (this.dragged?.type === "column") {
-          e.preventDefault();
-        }
-      });
-
-      col.addEventListener("drop", async () => {
-        if (!this.dragged || this.dragged.type !== "column") return;
-
-        const toPosition = index + 1;
-
-        if (this.dragged.fromColumnPosition === toPosition) return;
-
-        await appStore.updateColumn(this.dragged.id.toString(), { position: toPosition });
-        await appStore.loadBoard(this.boardId);
-        this.onUpdate();
-      });
-    });
   }
 
   private initTaskDnD(root: HTMLElement): void {
-    root.querySelectorAll<HTMLElement>(".task").forEach((taskEl) => {
-      taskEl.draggable = true;
+    const draggables = root.querySelectorAll<HTMLElement>(".task");
+    const droppables = root.querySelectorAll<HTMLElement>(".task-list");
 
-      taskEl.addEventListener("dragstart", (e) => {
-        e.stopPropagation();
-        this.setColumnsDraggable(root, false);
+    draggables.forEach((task) => {
+      task.addEventListener("dragstart", () => {
+        const column = task.closest<HTMLElement>(".board-column");
+        const list = task.closest<HTMLElement>(".task-list");
 
-        const columnEl = taskEl.closest<HTMLElement>(".board-column");
-        if (!columnEl) return;
-        const tasks = Array.from(columnEl.querySelectorAll<HTMLElement>(".task"));
+        if (!column || !list) return;
 
         this.dragged = {
-          type: "task",
-          id: Number(taskEl.dataset.taskId),
-          fromColumnId: Number(columnEl?.dataset.columnId),
-          fromPosition: tasks.indexOf(taskEl),
+          taskId: Number(task.dataset.taskId),
+          taskPosition: Array.from(list.querySelectorAll<HTMLElement>(".task")).indexOf(task) + 1,
+          columnId: Number(column.dataset.columnId),
+        };
+        this.droped = null;
+        task.classList.add("is-dragging");
+      });
+
+      task.addEventListener("dragend", () => {
+        task.classList.remove("is-dragging");
+      });
+    });
+
+    droppables.forEach((zone) => {
+      zone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+
+        const curTask = root.querySelector<HTMLElement>(".is-dragging");
+        if (!curTask) return;
+
+        const bottomTask = this.insertAboveTask(zone, e.clientY);
+        if (!bottomTask) {
+          if (zone.lastElementChild !== curTask) {
+            zone.appendChild(curTask);
+          }
+        } else if (bottomTask.previousElementSibling !== curTask) {
+          zone.insertBefore(curTask, bottomTask);
+        }
+
+        const column = zone.closest<HTMLElement>(".board-column");
+        if (!column) return;
+        const tasks = Array.from(zone.querySelectorAll<HTMLElement>(".task"));
+
+        this.droped = {
+          targetColumnId: Number(column.dataset.columnId),
+          targetPosition: tasks.indexOf(curTask) + 1
         };
       });
 
-      taskEl.addEventListener("dragend", () => {
-        this.setColumnsDraggable(root, true);
+      zone.addEventListener("drop", async () => {
+        if (!this.dragged || !this.droped) return;
+
+        const sameColumn = this.dragged.columnId === this.droped.targetColumnId;
+        const samePosition = this.dragged.taskPosition === this.droped.targetPosition;
+
+        if (sameColumn && samePosition) {
+          this.dragged = null;
+          this.droped = null;
+          return;
+        }
+
+        await appStore.updateTask(String(this.dragged.taskId), {
+          column: this.droped.targetColumnId,
+          position: this.droped.targetPosition
+        });
+
         this.dragged = null;
-      });
-    });
-  }
-
-  private initTaskDropTargets(root: HTMLElement): void {
-    root.querySelectorAll<HTMLElement>("task-list").forEach((list) => {
-      list.addEventListener("dragover", (e) => {
-        if (this.dragged?.type === "task") {
-          e.preventDefault();
-        }
-      });
-
-      list.addEventListener("drop", async (e) => {
-        if (!this.dragged || this.dragged.type !== "task") return;
-
-        const columnEl = list.closest<HTMLElement>(".board-column");
-        if (!columnEl) return;
-
-        const toColumnId = Number(columnEl.dataset.columnId);
-        const tasks = Array.from(list.querySelectorAll<HTMLElement>(".task"));
-
-        let toPosition = tasks.length + 1;
-        for (let i = 0; i < tasks.length; i++) {
-          const rect = tasks[i].getBoundingClientRect();
-          if (e.clientY < rect.top + rect.height / 2) {
-            toPosition = i + 1;
-            break;
-          }
-        }
-
-        if (this.dragged.fromColumnId === toColumnId && this.dragged.fromColumnPosition === toPosition) return;
-
-        await appStore.updateTask(this.dragged.id.toString(), { column: toColumnId, position: toPosition });
-        await appStore.loadBoard(this.boardId);
+        this.droped = null;
         this.onUpdate();
       });
     });
   }
 
-  private setColumnsDraggable(root: HTMLElement, value: boolean): void {
-    root.querySelectorAll<HTMLElement>(".board-column").forEach((col) => {
-      col.draggable = value;
+  private insertAboveTask(
+    zone: HTMLElement,
+    mouseY: number
+  ): HTMLElement | null {
+    const els = zone.querySelectorAll<HTMLElement>(".task:not(.is-dragging)");
+
+    let closestTask: HTMLElement | null = null;
+    let closetstOffset = Number.NEGATIVE_INFINITY;
+
+    els.forEach((task) => {
+      const { top } = task.getBoundingClientRect();
+      const offset = mouseY - top;
+
+      if (offset < 0 && offset > closetstOffset) {
+        closetstOffset = offset;
+        closestTask = task;
+      }
     });
+    return closestTask;
   }
 }
