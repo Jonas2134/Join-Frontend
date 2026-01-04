@@ -26,6 +26,10 @@ class AppStore {
     return this.singBoard;
   }
 
+  async createNewColumn(boardId: string, data: ColumnUpdate) {
+    await http.post(API_ROUTES.columns.list(boardId), data);
+  }
+
   async updateColumn(columnId: string, data: ColumnUpdate) {
     await http.patch(API_ROUTES.columns.detail(columnId), data);
   }

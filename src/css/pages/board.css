@@ -12,11 +12,15 @@
     }
 
     .task-list {
-        @apply flex flex-col gap-2 flex-1 min-h-2 overflow-y-auto;
+        @apply flex flex-col gap-2 flex-1 min-h-3 overflow-y-auto overflow-x-hidden;
     }
 
     .task {
         @apply p-2 border border-(--color-light-gray) rounded-lg bg-white shadow;
+
+        &:hover {
+            @apply cursor-pointer border-black shadow-2xl;
+        }
     }
 
     .is-dragging {
