@@ -6,7 +6,7 @@ import Cross from "../assets/icons/cross.svg?raw";
 
 export class BurgerMenuDialog extends BaseDialog {
   constructor() {
-    super("menu-dialog", "menu-dialog");
+    super("menu-dialog");
   }
 
   protected renderContent() {

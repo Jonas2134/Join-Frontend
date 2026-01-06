@@ -3,22 +3,14 @@ import { dialogManager } from "./DialogManager";
 export abstract class BaseDialog {
   protected dialog: HTMLDialogElement;
 
-  constructor(dialogId?: string, dialogClass?: string) {
+  constructor(dialogClass?: string) {
     this.dialog = document.createElement('dialog');
 
-    if (dialogId) this.dialog.id = dialogId;
     if (dialogClass) this.dialog.classList.add(dialogClass);
 
     this.setupBaseBehavior();
-    
-    const content = this.renderContent();
-    if (content) {
-      this.dialog.appendChild(content);
-    }
 
     dialogManager.register(this.dialog);
-
-    this.mount();
   }
 
   protected abstract renderContent(): HTMLElement;
@@ -38,7 +30,16 @@ export abstract class BaseDialog {
     });
   }
 
+  private initContent() {
+    const content = this.renderContent();
+    if (content) {
+      this.dialog.appendChild(content);
+    }
+    this.mount();
+  }
+
   open() {
+    this.initContent();
     this.dialog.showModal();
   }
 

@@ -8,7 +8,7 @@ import Textareaicon from "../assets/icons/textarea.svg?raw";
 
 export class BoardCreateDialog extends BaseDialog {
   constructor() {
-    super("board-dialog", "board-dialog");
+    super("board-dialog");
   }
 
   protected renderContent() {
@@ -39,10 +39,10 @@ export class BoardCreateDialog extends BaseDialog {
     });
 
     const menu = document.createElement("menu");
-    menu.classList.add('flex', 'gap-6')
+    menu.classList.add('flex', 'gap-6');
     menu.innerHTML = `
-      <button class="btn-blue transition-all" type="submit">Create</button>
-      <button class="btn-blue transition-all" type="button" id="cancel-btn">Cancel</button>
+      <button class="btn-blue" type="submit">Create</button>
+      <button class="btn-blue" type="button" id="cancel-btn">Cancel</button>
     `;
 
     fieldset.append(legend, titleField.render(), descriptionTextfield.render(), menu);

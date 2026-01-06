@@ -2,10 +2,12 @@ import { AppLayout } from "../layouts/AppLayout";
 import { BasePage } from "../core/BasePage";
 import { BoardDragAndDrop } from "../core/BoardDragAndDrop";
 import { appStore } from "../store/AppStore";
+import { CreateTaskDialog } from "../components/CreateTaskDialog";
 import type { Board, Column, Task } from "../interfaces/BoardInterface";
 
 export class BoardPage extends BasePage {
   id: string;
+  dialog: CreateTaskDialog | null = null;
 
   constructor(params: { id: string }) {
     super(new AppLayout());
@@ -160,7 +162,35 @@ export class BoardPage extends BasePage {
     this.updateBoardUI();
   }
 
+  openCreateTaskDialog(id: number) {
+    this.dialog = new CreateTaskDialog(id);
+    document.body.appendChild(this.dialog.render());
+    this.dialog?.open();
+  }
+
   async mount() {
     await this.initLoadBoard();
+
+    const boardroot = document.getElementById("board-section");
+    if (!boardroot) {
+      throw new Error("board-root not found");
+    }
+
+    this.events.on(boardroot, "click", (e) => {
+      const target = e.target as HTMLElement;
+      const createTBtn = target.closest<HTMLButtonElement>(".create-task-btn");
+      if (!createTBtn) return;
+
+      const column = createTBtn.closest<HTMLElement>(".board-column");
+      if (!column) return;
+      
+      const columnId = Number(column.dataset.columnId);
+      if (Number.isNaN(columnId)) {
+        console.error("Invalid column id");
+        return;
+      }
+
+      this.openCreateTaskDialog(columnId);
+    });
   }
 }
