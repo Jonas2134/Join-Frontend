@@ -1,5 +1,7 @@
 import { BaseDialog } from "../core/BaseDialog";
 // import { appStore } from "../store/AppStore";
+import { InputField } from "./InputField";
+import { Textarea } from "./textarea";
 
 export class CreateTaskDialog extends BaseDialog {
   columnId: number;
@@ -15,15 +17,46 @@ export class CreateTaskDialog extends BaseDialog {
     form.classList.add("p-6");
 
     const fieldset = document.createElement("fieldset");
-    fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
+    fieldset.classList.add("flex", "flex-col", "items-center", "w-full");
 
     const legend = document.createElement("legend");
-    legend.classList.add('auth-legend');
-    legend.textContent = 'Create Task';
+    legend.classList.add("auth-legend");
+    legend.textContent = "Create Task";
 
-    const section = document.createElement("section");
-    section.textContent = `${this.columnId}`;
+    const main = document.createElement("main");
+    main.classList.add("grid", "grid-cols-2");
 
+    const firstsec = document.createElement("section");
+    firstsec.classList.add("flex", "flex-col", "gap-3");
+
+    const titleField = new InputField({
+      type: 'text',
+      placeholder: 'Title',
+      name: 'title',
+      required: true,
+    });
+
+    const descriptionTextfield = new Textarea({
+      nameId: 'description',
+      placeholder: 'Write your description.'
+    });
+
+    firstsec.append(titleField.render(), descriptionTextfield.render());
+
+    const secontsec = document.createElement("section");
+    secontsec.innerHTML = `
+      <label for="assignee">Choose an assignee:</label
+      <br>
+      <select name="assignee" id="assignee">
+        <option value="">--Please choose the assignee--</option>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="opel">Opel</option>
+        <option value="audi">Audi</option>
+      </select>
+    `;
+
+    main.append(firstsec, secontsec);
 
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
@@ -32,7 +65,7 @@ export class CreateTaskDialog extends BaseDialog {
       <button class="btn-blue" type="button" id="cancel-btn">Cancel</button>
     `;
 
-    fieldset.append(legend, section, menu);
+    fieldset.append(legend, main, menu);
     form.appendChild(fieldset);
     return form;
   }
