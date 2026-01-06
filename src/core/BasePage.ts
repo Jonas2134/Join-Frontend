@@ -1,5 +1,4 @@
 import { EventManager } from "./EventManager";
-// import { dialogManager } from "./DialogManager";
 
 export interface Layout {
   render(): HTMLElement;
@@ -28,8 +27,6 @@ export abstract class BasePage {
   }
 
   public attachTo(root: HTMLElement): void {
-    // dialogManager.removeAll();
-
     if (this.mounted) {
       this.unmount?.();
       this.events.clearAll();

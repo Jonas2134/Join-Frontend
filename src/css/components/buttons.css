@@ -1,13 +1,37 @@
 @layer components {
   .btn-blue {
-    @apply px-6 py-2.5 text-lg text-white bg-(--color-light-blue) rounded-lg transition-all;
+    @apply px-6 py-2.5 text-lg text-white bg-(--color-light-blue) rounded-lg shadow-2xl transition-all;
   
     &:hover {
-      @apply cursor-pointer bg-(--color-dark-blue);
+      @apply scale-105 cursor-pointer bg-(--color-dark-blue);
     }
   
     &:active {
-      transform: scale(0.95);
+      @apply scale-95;
+    }
+  }
+
+  .btn-white {
+    @apply px-6 py-2.5 text-lg text-(--color-blue-gray) bg-white border border-(--color-blue-gray) rounded-lg shadow-2xl transition-all;
+
+    &:hover {
+      @apply scale-105 cursor-pointer text-(--color-dark-blue) border-(--color-dark-blue);
+    }
+
+    &:active {
+      @apply scale-95;
+    }
+  }
+
+  .create-task-btn {
+    @apply px-6 py-2.5 text-lg text-(--color-light-blue) bg-(--color-soft-blue) border border-transparent rounded-lg shadow-2xl transition-all;
+
+    &:hover {
+      @apply scale-105 cursor-pointer text-(--color-dark-blue) border-(--color-light-blue) bg-white;
+    }
+
+    &:active {
+      @apply scale-95;
     }
   }
 }

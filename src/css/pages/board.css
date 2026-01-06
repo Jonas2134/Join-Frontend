@@ -1,4 +1,4 @@
-@layer {
+@layer components {
     .board-columns-list {
         @apply flex gap-4 h-full overflow-x-auto;
     }
@@ -8,7 +8,7 @@
     }
 
     .column-header {
-        @apply py-2 px-4 border border-(--color-dark-blue) bg-(--color-soft-blue) shadow-(--shadow-large) rounded-lg;
+        @apply py-2 px-4;
     }
 
     .task-list {
@@ -19,7 +19,7 @@
         @apply p-2 border border-(--color-light-gray) rounded-lg bg-white shadow;
 
         &:hover {
-            @apply cursor-pointer border-black shadow-2xl;
+            @apply cursor-pointer border-(--color-blue-gray) shadow-2xl scale-99;
         }
     }
 

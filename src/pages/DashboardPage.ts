@@ -98,9 +98,13 @@ export class DashboardPage extends BasePage {
     return this.wrapWithLayout(container);
   }
 
-  async mount() {
+  async initLoadDashboard() {
     await appStore.loadDashboard();
     this.updateDashboardUI();
+  }
+
+  async mount() {
+    this.initLoadDashboard();
 
     this.events.on(document.getElementById("createBoardBtn")!, "click", () => {
       this.dialog = new BoardCreateDialog();

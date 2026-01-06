@@ -5,6 +5,9 @@
 @import "./theme.css";
 @import "./base.css";
 
+/* import utility styles */
+@import "./utilities.css";
+
 /* import layout styles */
 @import "./layouts/auth-layout.css";
 @import "./layouts/app-layout.css";

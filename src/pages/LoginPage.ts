@@ -55,12 +55,12 @@ export class LoginPage extends BasePage {
 
     const loginBtn = document.createElement('button');
     loginBtn.type = 'submit';
-    loginBtn.classList.add('btn-blue', 'transition-all');
+    loginBtn.classList.add('btn-blue');
     loginBtn.textContent = 'Login';
 
     const guestBtn = document.createElement('button');
     guestBtn.type = 'button';
-    guestBtn.classList.add('btn-blue', 'transition-all');
+    guestBtn.classList.add('btn-white');
     guestBtn.textContent = 'Guest Login';
     guestBtn.addEventListener('click', () => router.navigate('/dashboard'));
 

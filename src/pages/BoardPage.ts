@@ -36,7 +36,7 @@ export class BoardPage extends BasePage {
         <summary class="text-2xl text-(--color-light-blue) underline">${board.title}</summary>
         <p>${board.description}</p>
       </details>
-      <button id="changeBoardBtn" class="btn-blue">Change board</button>
+      <button id="changeBoardBtn" class="btn-white">Change board</button>
     `;
   }
 
@@ -46,6 +46,7 @@ export class BoardPage extends BasePage {
     const header = document.createElement("header");
     header.classList.add("column-header");
     const title = document.createElement("h4");
+    title.classList.add("text-2xl", "text-(--color-light-blue)", "underline")
     title.textContent = column.name;
     header.appendChild(title);
     return header;
@@ -55,7 +56,7 @@ export class BoardPage extends BasePage {
     const footer = document.createElement("footer");
     footer.classList.add("flex", "justify-center");
     const addTaskBtn = document.createElement("button");
-    addTaskBtn.classList.add("btn-blue");
+    addTaskBtn.classList.add("create-task-btn");
     addTaskBtn.textContent = "+ add Task";
     footer.appendChild(addTaskBtn);
     return footer;
@@ -63,7 +64,7 @@ export class BoardPage extends BasePage {
 
   renderColumnTaskContent(column: Column) {
     const taskList = document.createElement("ol");
-    taskList.classList.add("task-list");
+    taskList.classList.add("task-list", "scrollbar-hide");
 
     for (const task of column.tasks) {
       taskList.appendChild(this.renderTask(task));
@@ -78,7 +79,7 @@ export class BoardPage extends BasePage {
     columnItem.dataset.columnId = String(column.id);
 
     const columnSection = document.createElement("section");
-    columnSection.classList.add("flex", "flex-col", "gap-1");
+    columnSection.classList.add("flex", "flex-col", "gap-4");
 
     const header = this.renderColumnHeader(column);
     const taskList = this.renderColumnTaskContent(column);
