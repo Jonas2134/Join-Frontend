@@ -1,5 +1,5 @@
 @layer components {
-  .btn-blue {
+  .btn-blue, .create-column-btn {
     @apply px-6 py-2.5 text-lg text-white bg-(--color-light-blue) rounded-lg shadow-2xl transition-all;
   
     &:hover {
@@ -11,7 +11,7 @@
     }
   }
 
-  .btn-white {
+  .btn-white, .cancel-column-btn {
     @apply px-6 py-2.5 text-lg text-(--color-blue-gray) bg-white border border-(--color-blue-gray) rounded-lg shadow-2xl transition-all;
 
     &:hover {

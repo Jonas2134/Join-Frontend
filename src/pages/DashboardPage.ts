@@ -112,9 +112,6 @@ export class DashboardPage extends BasePage {
       this.dialog?.open();
     });
 
-    this.events.on(window, "board:created", async () => {
-      await appStore.loadDashboard();
-      this.updateDashboardUI();
-    });
+    this.events.on(window, "board:created", async () => this.initLoadDashboard());
   }
 }

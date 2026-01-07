@@ -3,8 +3,8 @@
         @apply flex gap-4 h-full overflow-x-auto;
     }
 
-    .board-column, .add-column {
-        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-column) shrink-0 min-w-60;
+    .board-column, .add-column, .add-column-form {
+        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-column) shrink-0 min-w-70;
     }
 
     .column-header {

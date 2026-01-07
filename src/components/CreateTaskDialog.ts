@@ -112,11 +112,7 @@ export class CreateTaskDialog extends BaseDialog {
       //const assignee = formDate.get("assignee") as string;
       console.log(formDate);
       try {
-        await appStore.createTask(
-          String(this.columnId),
-          title,
-          description
-        );
+        await appStore.createTask(String(this.columnId), title, description);
         this.close();
         form.reset();
       } catch (err: any) {
