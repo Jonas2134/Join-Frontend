@@ -1,5 +1,5 @@
 import { BaseDialog } from "../core/BaseDialog";
-// import { appStore } from "../store/AppStore";
+import { appStore } from "../store/AppStore";
 import { InputField } from "./InputField";
 import { Textarea } from "./textarea";
 
@@ -24,7 +24,7 @@ export class CreateTaskDialog extends BaseDialog {
     legend.textContent = "Create Task";
 
     const main = document.createElement("main");
-    main.classList.add("grid", "grid-cols-2");
+    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
 
     const firstsec = document.createElement("section");
     firstsec.classList.add("flex", "flex-col", "gap-3");
@@ -45,7 +45,7 @@ export class CreateTaskDialog extends BaseDialog {
 
     const secontsec = document.createElement("section");
     secontsec.innerHTML = `
-      <label for="assignee">Choose an assignee:</label
+      <label for="assignee">Choose an assignee:</label>
       <br>
       <select name="assignee" id="assignee">
         <option value="">--Please choose the assignee--</option>
@@ -62,7 +62,7 @@ export class CreateTaskDialog extends BaseDialog {
     menu.classList.add("flex", "gap-6");
     menu.innerHTML = `
       <button class="btn-blue" type="submit">Create</button>
-      <button class="btn-blue" type="button" id="cancel-btn">Cancel</button>
+      <button class="btn-white" type="button" id="cancel-btn">Cancel</button>
     `;
 
     fieldset.append(legend, main, menu);
@@ -79,7 +79,21 @@ export class CreateTaskDialog extends BaseDialog {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formDate = new FormData(form);
+      const title = formDate.get("title") as string;
+      const description = formDate.get("description") as string;
+      //const assignee = formDate.get("assignee") as string;
       console.log(formDate);
+      try {
+        await appStore.createTask(
+          String(this.columnId),
+          title,
+          description
+        );
+        this.close();
+        form.reset();
+      } catch (err: any) {
+        alert("Creation is failed: " + err.message);
+      }
     });
   }
 }

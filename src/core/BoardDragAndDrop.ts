@@ -29,12 +29,12 @@ export class BoardDragAndDrop {
     const droppables = root.querySelectorAll<HTMLElement>(".task-list");
 
     draggables.forEach((task) => {
-      task.addEventListener("dragstart", this.onTaskDragstart.bind(this, task));
-      task.addEventListener("dragend", this.onTaskDragend.bind(this, task));
+      task.addEventListener("dragstart", () => this.onTaskDragstart(task));
+      task.addEventListener("dragend", () => this.onTaskDragend(task));
     });
 
     droppables.forEach((zone) => {
-      zone.addEventListener("dragover", e => this.onTaskDragover(e, zone, root));
+      zone.addEventListener("dragover", (e) => this.onTaskDragover(e, zone, root));
     });
   }
 
@@ -110,9 +110,7 @@ export class BoardDragAndDrop {
 
     const bottomTask = this.insertAboveTask(zone, e.clientY);
     if (!bottomTask) {
-      if (zone.lastElementChild !== curTask) {
-        zone.appendChild(curTask);
-      }
+      if (zone.lastElementChild !== curTask) zone.appendChild(curTask);
     } else if (bottomTask.previousElementSibling !== curTask) {
       zone.insertBefore(curTask, bottomTask);
     }

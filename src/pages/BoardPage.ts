@@ -192,5 +192,7 @@ export class BoardPage extends BasePage {
 
       this.openCreateTaskDialog(columnId);
     });
+
+    this.events.on(window, "task:created", async () => await this.initLoadBoard());
   }
 }

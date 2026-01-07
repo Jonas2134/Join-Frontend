@@ -26,12 +26,18 @@ class AppStore {
     return this.singBoard;
   }
 
-  async createNewColumn(boardId: string, data: ColumnUpdate) {
+  async createColumn(boardId: string, data: ColumnUpdate) {
     await http.post(API_ROUTES.columns.list(boardId), data);
   }
 
   async updateColumn(columnId: string, data: ColumnUpdate) {
     await http.patch(API_ROUTES.columns.detail(columnId), data);
+  }
+
+  async createTask(columnId: string, title: string, description?: string, assignee?: string) {
+    const response = await http.post(API_ROUTES.tasks.list(columnId), { title, description, assignee });
+    window.dispatchEvent(new CustomEvent("task:created"));
+    return response;
   }
 
   async updateTask(taskId: string, data: TaskUpdate) {
