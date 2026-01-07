@@ -11,21 +11,15 @@ export class CreateTaskDialog extends BaseDialog {
     this.columnId = id;
   }
 
-  protected renderContent(): HTMLElement {
-    const form = document.createElement("form");
-    form.id = "tform";
-    form.classList.add("p-6");
-
-    const fieldset = document.createElement("fieldset");
-    fieldset.classList.add("flex", "flex-col", "items-center", "w-full");
-
+  /* render HTML excerpts */
+  renderLegend() {
     const legend = document.createElement("legend");
     legend.classList.add("auth-legend");
     legend.textContent = "Create Task";
+    return legend;
+  }
 
-    const main = document.createElement("main");
-    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
-
+  renderFirstFormSection() {
     const firstsec = document.createElement("section");
     firstsec.classList.add("flex", "flex-col", "gap-3");
 
@@ -42,7 +36,10 @@ export class CreateTaskDialog extends BaseDialog {
     });
 
     firstsec.append(titleField.render(), descriptionTextfield.render());
+    return firstsec;
+  }
 
+  renderSecondFormSection() {
     const secontsec = document.createElement("section");
     secontsec.innerHTML = `
       <label for="assignee">Choose an assignee:</label>
@@ -55,21 +52,52 @@ export class CreateTaskDialog extends BaseDialog {
         <option value="audi">Audi</option>
       </select>
     `;
+    return secontsec;
+  }
+
+  renderMainSection() {
+    const main = document.createElement("main");
+    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
+
+    const firstsec = this.renderFirstFormSection();
+    const secontsec = this.renderSecondFormSection();
 
     main.append(firstsec, secontsec);
+    return main;
+  }
 
+  renderMenu() {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
     menu.innerHTML = `
       <button class="btn-blue" type="submit">Create</button>
       <button class="btn-white" type="button" id="cancel-btn">Cancel</button>
     `;
+    return menu;
+  }
+
+  renderFieldset() {
+    const fieldset = document.createElement("fieldset");
+    fieldset.classList.add("flex", "flex-col", "items-center", "w-full");
+
+    const legend = this.renderLegend();
+    const main = this.renderMainSection();
+    const menu = this.renderMenu();
 
     fieldset.append(legend, main, menu);
-    form.appendChild(fieldset);
+    return fieldset;
+  }
+
+  /* render Dialog Content */
+  protected renderContent(): HTMLElement {
+    const form = document.createElement("form");
+    form.id = "tform";
+    form.classList.add("p-6");    
+    form.appendChild(this.renderFieldset());
     return form;
   }
 
+  /* Mount Eventlistener */
   protected override mount(): void {
     const cancelBtn = this.dialog.querySelector("#cancel-btn") as HTMLFormElement;
     const form = this.dialog.querySelector("#tform") as HTMLFormElement;
