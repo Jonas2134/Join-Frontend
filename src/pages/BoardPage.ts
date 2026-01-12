@@ -6,6 +6,9 @@ import { CreateTaskDialog } from "../components/CreateTaskDialog";
 import { InputField } from "../components/InputField";
 import type { Board, Column, Task } from "../interfaces/BoardInterface";
 
+import ToggleIcon from "../assets/icons/ToggleIcon.svg?raw";
+import EditIcon from "../assets/icons/edit.svg?raw";
+
 export class BoardPage extends BasePage {
   id: string;
   dialog: CreateTaskDialog | null = null;
@@ -20,7 +23,7 @@ export class BoardPage extends BasePage {
   renderheader() {
     const header = document.createElement("header");
     header.id = "board-header";
-    header.classList.add("flex", "items-center", "justify-between");
+    header.classList.add("border-b", "border-gray-200", "pb-4", "shadow-sm");
     return header;
   }
 
@@ -33,14 +36,87 @@ export class BoardPage extends BasePage {
 
   /* ---------- Header ---------- */
 
+  renderHeaderSummary(board: Board) {
+    const summary = document.createElement("summary");
+    summary.classList.add("flex", "items-center", "justify-between", "cursor-pointer", "list-none");
+
+    const title = document.createElement("h3");
+    title.classList.add("text-(--color-light-blue)", "font-semibold", "underline");
+    title.textContent = board.title;
+
+    const toggleIcon = document.createElement("span");
+    toggleIcon.innerHTML = ToggleIcon;
+
+    summary.append(title, toggleIcon);
+    return summary;
+  }
+
+  renderDetailsDescriptionSection(board: Board) {
+    const descriptionSection = document.createElement("section");
+
+    const descriptionTitle = document.createElement("h4");
+    descriptionTitle.classList.add("font-medium", "text-gray-500", "mb-1");
+    descriptionTitle.textContent = "Description";
+
+    const descriptionText = document.createElement("p");
+    descriptionText.classList.add("text-gray-700");
+    descriptionText.textContent = board.description || "No description";
+
+    descriptionSection.append(descriptionTitle, descriptionText);
+    return descriptionSection;
+  }
+
+  renderDetailsMembersSection(board: Board) {
+    const membersSection = document.createElement("section");
+
+    const membersTitle = document.createElement("h4");
+    membersTitle.classList.add("font-medium", "text-gray-500", "mb-1");
+    membersTitle.textContent = "Members";
+
+    const membersList = document.createElement("ul");
+    membersList.classList.add("list-disc", "list-inside");
+
+    for (const member of board.members) {
+      const memberItem = document.createElement("li");
+      memberItem.classList.add("text-gray-700");
+      memberItem.textContent = member.username;
+      membersList.appendChild(memberItem);
+    }
+
+    membersSection.append(membersTitle, membersList);
+    return membersSection;
+  }
+
+  renderEditButton() {
+    const editButton = document.createElement("button");
+    editButton.id = "changeBoardBtn";
+    editButton.classList.add("cursor-pointer", "p-2", "rounded");
+    editButton.title = "Edit board";
+    editButton.innerHTML = EditIcon;
+    return editButton;
+  }
+
+  renderDetailsContent(board: Board) {
+    const detailsContent = document.createElement("main");
+    detailsContent.classList.add("flex", "items-start", "justify-between", "mt-4", "px-2");
+
+    const descriptionSection = this.renderDetailsDescriptionSection(board);
+    const membersSection = this.renderDetailsMembersSection(board);
+    const editBtn = this.renderEditButton();
+
+    detailsContent.append(descriptionSection, membersSection, editBtn);
+    return detailsContent;
+  }
+
   renderHeaderContent(header: HTMLElement, board: Board) {
-    header.innerHTML = `
-      <details class="transition-all">
-        <summary class="text-2xl text-(--color-light-blue) underline">${board.title}</summary>
-        <p>${board.description}</p>
-      </details>
-      <button id="changeBoardBtn" class="btn-blue">Change board</button>
-    `;
+    const details = document.createElement("details");
+    details.classList.add("group");
+
+    const summary = this.renderHeaderSummary(board);
+    const detailsContent = this.renderDetailsContent(board);
+
+    details.append(summary, detailsContent)
+    header.appendChild(details);
   }
 
   /* ---------- Column ---------- */
@@ -49,7 +125,7 @@ export class BoardPage extends BasePage {
     const header = document.createElement("header");
     header.classList.add("column-header");
     const title = document.createElement("h4");
-    title.classList.add("text-2xl", "text-(--color-light-blue)", "underline", "text-center");
+    title.classList.add("text-xl", "text-(--color-light-blue)", "underline");
     title.textContent = column.name;
     header.appendChild(title);
     return header;
