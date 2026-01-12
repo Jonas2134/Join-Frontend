@@ -8,6 +8,7 @@ import type { Board, Column, Task } from "../interfaces/BoardInterface";
 
 import ToggleIcon from "../assets/icons/ToggleIcon.svg?raw";
 import EditIcon from "../assets/icons/edit.svg?raw";
+import VerticalDotsIcon from "../assets/icons/menu-vertical.svg?raw";
 
 export class BoardPage extends BasePage {
   id: string;
@@ -23,7 +24,7 @@ export class BoardPage extends BasePage {
   renderheader() {
     const header = document.createElement("header");
     header.id = "board-header";
-    header.classList.add("border-b", "border-gray-200", "pb-4", "shadow-sm");
+    header.classList.add("border-b", "border-(--color-light-gray)", "pb-4");
     return header;
   }
 
@@ -55,11 +56,11 @@ export class BoardPage extends BasePage {
     const descriptionSection = document.createElement("section");
 
     const descriptionTitle = document.createElement("h4");
-    descriptionTitle.classList.add("font-medium", "text-gray-500", "mb-1");
+    descriptionTitle.classList.add("text-(--color-placeholder-gray)", "font-semibold", "underline", "mb-1");
     descriptionTitle.textContent = "Description";
 
     const descriptionText = document.createElement("p");
-    descriptionText.classList.add("text-gray-700");
+    descriptionText.classList.add("max-w-2xs");
     descriptionText.textContent = board.description || "No description";
 
     descriptionSection.append(descriptionTitle, descriptionText);
@@ -70,7 +71,7 @@ export class BoardPage extends BasePage {
     const membersSection = document.createElement("section");
 
     const membersTitle = document.createElement("h4");
-    membersTitle.classList.add("font-medium", "text-gray-500", "mb-1");
+    membersTitle.classList.add("text-(--color-placeholder-gray)", "font-semibold", "underline", "mb-1");
     membersTitle.textContent = "Members";
 
     const membersList = document.createElement("ul");
@@ -78,7 +79,6 @@ export class BoardPage extends BasePage {
 
     for (const member of board.members) {
       const memberItem = document.createElement("li");
-      memberItem.classList.add("text-gray-700");
       memberItem.textContent = member.username;
       membersList.appendChild(memberItem);
     }
@@ -98,7 +98,7 @@ export class BoardPage extends BasePage {
 
   renderDetailsContent(board: Board) {
     const detailsContent = document.createElement("main");
-    detailsContent.classList.add("flex", "items-start", "justify-between", "mt-4", "px-2");
+    detailsContent.classList.add("flex", "items-start", "justify-between", "mt-4", "px-3");
 
     const descriptionSection = this.renderDetailsDescriptionSection(board);
     const membersSection = this.renderDetailsMembersSection(board);
@@ -124,19 +124,31 @@ export class BoardPage extends BasePage {
   renderColumnHeader(column: Column) {
     const header = document.createElement("header");
     header.classList.add("column-header");
+
     const title = document.createElement("h4");
     title.classList.add("text-xl", "text-(--color-light-blue)", "underline");
     title.textContent = column.name;
-    header.appendChild(title);
+
+    const verticalDots = document.createElement("button");
+    verticalDots.innerHTML = VerticalDotsIcon;
+    verticalDots.title = "Column menu";
+    verticalDots.type = "button";
+    verticalDots.classList.add("column-menu-btn");
+
+    header.append(title, verticalDots);
     return header;
   }
 
   renderColumnFooter() {
     const footer = document.createElement("footer");
     footer.classList.add("flex", "justify-center");
+
     const addTaskBtn = document.createElement("button");
     addTaskBtn.classList.add("create-task-btn");
+    addTaskBtn.title = "Add Task";
+    addTaskBtn.type = "button";
     addTaskBtn.textContent = "+ add Task";
+
     footer.appendChild(addTaskBtn);
     return footer;
   }
@@ -182,6 +194,8 @@ export class BoardPage extends BasePage {
 
     const addColumnBtn = document.createElement("button");
     addColumnBtn.classList.add("create-column-btn");
+    addColumnBtn.title = "Add Column";
+    addColumnBtn.type = "button";
     addColumnBtn.textContent = "+ New Column";
 
     addColumnSection.appendChild(addColumnBtn);
@@ -203,14 +217,16 @@ export class BoardPage extends BasePage {
     buttonGroup.classList.add("flex", "gap-4");
 
     const submitBtn = document.createElement("button");
+    submitBtn.classList.add("btn-blue");
+    submitBtn.title = "Submit new column";
     submitBtn.type = "submit";
     submitBtn.textContent = "+ Add";
-    submitBtn.classList.add("btn-blue");
 
     const cancelBtn = document.createElement("button");
+    cancelBtn.classList.add("cancel-column-btn");
+    cancelBtn.title = "Cancel adding column";
     cancelBtn.type = "button";
     cancelBtn.textContent = "Cancel";
-    cancelBtn.classList.add("cancel-column-btn");
 
     buttonGroup.append(submitBtn, cancelBtn);
     form.append(input.render(), buttonGroup);
@@ -355,9 +371,7 @@ export class BoardPage extends BasePage {
 
       const formData = new FormData(form);
       const columnName = formData.get("columnName") as string;
-      if (columnName) {
-        await this.createColumn(columnName);
-      }
+      if (columnName) await this.createColumn(columnName);
     });
   }
 
