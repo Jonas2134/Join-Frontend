@@ -1,4 +1,4 @@
-import { BasePage } from '../core/BasePage';
+import { BasePage } from '../components/bases/BasePage';
 
 export class StartPage extends BasePage {
   private element: HTMLElement;

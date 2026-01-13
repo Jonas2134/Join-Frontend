@@ -1,12 +1,12 @@
-import { BaseDialog } from "../core/BaseDialog";
-import { appStore } from "../store/AppStore";
-import { InputField } from "./InputField";
-import { Textarea } from "./textarea";
+import { BaseDialog } from "../../components/bases/BaseDialog";
+import { appStore } from "../../core/store/AppStore";
+import { InputField } from "../../components/common/InputField";
+import { Textarea } from "../../components/common/textarea";
 
 export class CreateTaskDialog extends BaseDialog {
-  columnId: number;
+  columnId: string;
 
-  constructor(id: number) {
+  constructor(id: string) {
     super("create-task-dialog");
     this.columnId = id;
   }
@@ -112,7 +112,7 @@ export class CreateTaskDialog extends BaseDialog {
       //const assignee = formDate.get("assignee") as string;
       console.log(formDate);
       try {
-        await appStore.createTask(String(this.columnId), title, description);
+        await appStore.createTask(this.columnId, title, description);
         this.close();
         form.reset();
       } catch (err: any) {

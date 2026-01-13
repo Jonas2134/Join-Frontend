@@ -1,6 +1,6 @@
-import type { Board } from "../../interfaces/BoardInterface";
-import ToggleIcon from "../../assets/icons/ToggleIcon.svg?raw";
-import EditIcon from "../../assets/icons/edit.svg?raw";
+import type { Board } from "../../../core/types/board.types";
+import ToggleIcon from "../../../assets/icons/ToggleIcon.svg?raw";
+import EditIcon from "../../../assets/icons/edit.svg?raw";
 
 export class BoardHeaderRenderer {
   renderHeaderContent(header: HTMLElement, board: Board) {

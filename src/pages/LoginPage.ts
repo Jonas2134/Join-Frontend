@@ -1,8 +1,8 @@
 import { AuthLayout } from '../layouts/AuthLayout';
 import { router } from '../core/router';
-import { authStore } from '../store/AuthStore';
-import { InputField } from '../components/InputField';
-import { BasePage } from '../core/BasePage';
+import { authStore } from '../core/store/AuthStore';
+import { InputField } from '../components/common/InputField';
+import { BasePage } from '../components/bases/BasePage';
 
 import User from "../assets/icons/user.svg?raw";
 import LockOn from "../assets/icons/lock-on.svg?raw";

@@ -1,10 +1,10 @@
-import { AppLayout } from "../layouts/AppLayout";
-import { BasePage } from "../core/BasePage";
-import { BoardCard } from "../components/BoardCard";
-import { appStore } from "../store/AppStore";
-import { router } from "../core/router";
-import { BoardCreateDialog } from "../components/BoardCreateDialog";
-import type { Board } from "../interfaces/BoardInterface";
+import { AppLayout } from "../../layouts/AppLayout";
+import { BasePage } from "../../components/bases/BasePage";
+import { BoardCard } from "./renderers/BoardCardRenderer";
+import { appStore } from "../../core/store/AppStore";
+import { router } from "../../core/router";
+import { BoardCreateDialog } from "./BoardCreateDialog";
+import type { Board } from "../../core/types/board.types";
 
 export class DashboardPage extends BasePage {
   dialog: BoardCreateDialog | null = null;
@@ -42,9 +42,7 @@ export class DashboardPage extends BasePage {
       const openGrid = document.createElement("div");
       openGrid.classList.add("grid", "grid-cols-3", "gap-4");
       openBoards.forEach((board) => {
-        const card = new BoardCard(board, () => {
-          router.navigate(`/board/${board.id}`);
-        });
+        const card = new BoardCard(board, () => router.navigate(`/board/${board.id}`));
         openGrid.appendChild(card.render());
       });
       openSection.appendChild(openGrid);

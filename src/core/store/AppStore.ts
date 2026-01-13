@@ -1,6 +1,6 @@
 import { http } from "../api/HttpClient";
 import { API_ROUTES } from "../api/config";
-import type { ColumnUpdate, TaskUpdate } from "../interfaces/BoardInterface";
+import type { ColumnUpdate, TaskUpdate } from "../types/board.types";
 
 class AppStore {
   boards: any[] = [];

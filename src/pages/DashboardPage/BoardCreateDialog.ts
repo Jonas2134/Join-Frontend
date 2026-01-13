@@ -1,10 +1,10 @@
-import { BaseDialog } from "../core/BaseDialog";
-import { appStore } from "../store/AppStore";
-import { InputField } from "./InputField";
-import { Textarea } from "./textarea";
+import { BaseDialog } from "../../components/bases/BaseDialog";
+import { appStore } from "../../core/store/AppStore";
+import { InputField } from "../../components/common/InputField";
+import { Textarea } from "../../components/common/textarea";
 
-import User from "../assets/icons/user.svg?raw";
-import Textareaicon from "../assets/icons/textarea.svg?raw";
+import User from "../../assets/icons/user.svg?raw";
+import Textareaicon from "../../assets/icons/textarea.svg?raw";
 
 export class BoardCreateDialog extends BaseDialog {
   constructor() {

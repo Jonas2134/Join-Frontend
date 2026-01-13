@@ -1,6 +1,6 @@
 import { BoardTaskRenderer } from "./BoardTaskRenderer";
-import type { Column } from "../../interfaces/BoardInterface";
-import VerticalDotsIcon from "../../assets/icons/menu-vertical.svg?raw";
+import type { Column } from "../../../core/types/board.types";
+import VerticalDotsIcon from "../../../assets/icons/menu-vertical.svg?raw";
 
 export class BoardColumnRenderer {
   private taskRenderer: BoardTaskRenderer;

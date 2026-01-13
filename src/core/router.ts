@@ -1,4 +1,4 @@
-import type { BasePage } from './BasePage';
+import type { BasePage } from '../components/bases/BasePage';
 
 type Route = {
   path: string;

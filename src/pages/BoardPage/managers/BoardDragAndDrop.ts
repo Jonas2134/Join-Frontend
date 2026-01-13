@@ -1,4 +1,4 @@
-import { appStore } from "../store/AppStore";
+import { appStore } from "../../../core/store/AppStore";
 
 interface DragPayload {
   taskId: number;

@@ -2,8 +2,8 @@ import { initRouter } from './core/router';
 import { StartPage } from './pages/StartPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
-import { DashboardPage } from './pages/DashboardPage';
-import { BoardPage } from './pages/BoardPage';
+import { DashboardPage } from './pages/DashboardPage/DashboardPage';
+import { BoardPage } from './pages/BoardPage/BoardPage';
 
 import "./css/main.css";
 

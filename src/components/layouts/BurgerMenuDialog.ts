@@ -1,8 +1,8 @@
-import { BaseDialog } from "../core/BaseDialog";
-import { authStore } from "../store/AuthStore";
-import { router } from "../core/router";
+import { BaseDialog } from "../bases/BaseDialog";
+import { authStore } from "../../core/store/AuthStore";
+import { router } from "../../core/router";
 
-import Cross from "../assets/icons/cross.svg?raw";
+import Cross from "../../assets/icons/cross.svg?raw";
 
 export class BurgerMenuDialog extends BaseDialog {
   constructor() {

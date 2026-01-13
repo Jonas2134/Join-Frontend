@@ -1,7 +1,7 @@
 import { BurgerMenuDialog } from "./BurgerMenuDialog";
 
 import LogoRaw from "/logo.svg?raw";
-import Burgermenu from "../assets/icons/menu.svg?raw";
+import Burgermenu from "../../assets/icons/menu.svg?raw";
 
 export class AppHeader {
   private element: HTMLElement;

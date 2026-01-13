@@ -1,4 +1,4 @@
-import { dialogManager } from "./DialogManager";
+import { dialogManager } from "../../core/DialogManager";
 
 export abstract class BaseDialog {
   protected dialog: HTMLDialogElement;

@@ -1,6 +1,6 @@
 import { http } from "../api/HttpClient";
-import { router } from "../core/router";
 import { API_ROUTES } from "../api/config";
+import { router } from "../router";
 
 export class AuthStore {
   private client = http;

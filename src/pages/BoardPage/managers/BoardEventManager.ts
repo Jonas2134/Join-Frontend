@@ -1,5 +1,5 @@
-import { appStore } from "../../store/AppStore";
-import { CreateTaskDialog } from "../../components/CreateTaskDialog";
+import { appStore } from "../../../core/store/AppStore";
+import { CreateTaskDialog } from "../CreateTaskDialog";
 
 export class BoardEventManager {
   dialog: CreateTaskDialog | null = null;
@@ -20,12 +20,28 @@ export class BoardEventManager {
     const column = createTBtn.closest<HTMLElement>(".board-column");
     if (!column) return;
 
-    const columnId = Number(column.dataset.columnId);
-    if (Number.isNaN(columnId)) {
-      console.error("Invalid column id");
+    const columnId = column.dataset.columnId;
+    if (!columnId) return;
+    this.openCreateTaskDialog(columnId);
+  }
+
+  registerColumnThreeDotListener(e: Event) {
+    const target = e.target as HTMLElement;
+
+    const threeDotBtn = target.closest<HTMLButtonElement>(".column-menu-btn");
+    if (!threeDotBtn) return;
+
+    const column = threeDotBtn?.closest<HTMLElement>(".board-column");
+    if (!column) return;
+
+    const columnId = column.dataset.columnId;
+    if (!columnId) return;
+
+    if (threeDotBtn) {
+      console.log("Three dot button clicked! Column ID: ", columnId);
+      // Here you can add functionality for the column menu
       return;
     }
-    this.openCreateTaskDialog(columnId);
   }
 
   registerColumnButtonListener(e: Event, renderer?: any) {
@@ -62,7 +78,7 @@ export class BoardEventManager {
 
   /* ---------- Sub functions ---------- */
 
-  private openCreateTaskDialog(id: number) {
+  private openCreateTaskDialog(id: string) {
     this.dialog = new CreateTaskDialog(id);
     document.body.appendChild(this.dialog.render());
     this.dialog?.open();

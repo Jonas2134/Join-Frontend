@@ -1,5 +1,5 @@
-import { AuthHeader } from '../components/AuthHeader';
-import { AuthFooter } from '../components/AuthFooter';
+import { AuthHeader } from '../components/layouts/AuthHeader';
+import { AuthFooter } from '../components/layouts/AuthFooter';
 
 export class AuthLayout {
   private element: HTMLElement;

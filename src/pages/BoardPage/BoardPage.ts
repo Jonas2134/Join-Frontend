@@ -1,10 +1,10 @@
-import { AppLayout } from "../layouts/AppLayout";
-import { BasePage } from "../core/BasePage";
+import { AppLayout } from "../../layouts/AppLayout";
+import { BasePage } from "../../components/bases/BasePage";
 import { BoardHeaderRenderer } from "./renderers/BoardHeaderRenderer";
 import { BoardContentRenderer } from "./renderers/BoardContentRenderer";
-import { BoardDragAndDrop } from "../core/BoardDragAndDrop";
-import { BoardEventManager } from "./event-managers/BoardEventManager";
-import { appStore } from "../store/AppStore";
+import { BoardDragAndDrop } from "./managers/BoardDragAndDrop";
+import { BoardEventManager } from "./managers/BoardEventManager";
+import { appStore } from "../../core/store/AppStore";
 
 export class BoardPage extends BasePage {
   id: string;
@@ -76,10 +76,11 @@ export class BoardPage extends BasePage {
       throw new Error("board-root not found");
     }
 
-    this.events.on(boardroot, "click", (e) => this.eventManager.registerTaskButtonListener(e));
-    this.events.on(boardroot, "click", (e) => this.eventManager.registerColumnButtonListener(e, this.contentRenderer));
-    this.events.on(boardroot, "click", (e) => this.eventManager.registerColumnCancelButtonListener(e, this.contentRenderer));
-    this.events.on(boardroot, "submit", async (e) => this.eventManager.registerColumnFormSubmitListener(e, this.id));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskButtonListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnThreeDotListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnButtonListener(e, this.contentRenderer));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnCancelButtonListener(e, this.contentRenderer));
+    this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnFormSubmitListener(e, this.id));
     this.events.on(window, "task:created", async () => await this.initLoadBoard());
   }
 }

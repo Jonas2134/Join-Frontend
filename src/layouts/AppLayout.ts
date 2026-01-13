@@ -1,5 +1,5 @@
-import { AppHeader } from "../components/AppHeader";
-import { AppSidebar } from "../components/AppSidebar";
+import { AppHeader } from "../components/layouts/AppHeader";
+import { AppSidebar } from "../components/layouts/AppSidebar";
 
 export class AppLayout {
   private element: HTMLElement;
