@@ -34,6 +34,10 @@ class AppStore {
     await http.patch(API_ROUTES.columns.detail(columnId), data);
   }
 
+  async deleteColumn(columnId: string) {
+    await http.delete(API_ROUTES.columns.detail(columnId));
+  }
+
   async createTask(columnId: string, title: string, description?: string, assignee?: string) {
     const response = await http.post(API_ROUTES.tasks.list(columnId), { title, description, assignee });
     window.dispatchEvent(new CustomEvent("task:created"));

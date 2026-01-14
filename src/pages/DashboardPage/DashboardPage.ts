@@ -65,9 +65,7 @@ export class DashboardPage extends BasePage {
       const closedGrid = document.createElement("div");
       closedGrid.classList.add("grid", "grid-cols-3", "gap-4");
       closedBoards.forEach((board) => {
-        const card = new BoardCard(board, () => {
-          router.navigate(`/board/${board.id}`);
-        });
+        const card = new BoardCard(board, () => router.navigate(`/board/${board.id}`));
         closedGrid.appendChild(card.render());
       });
       closedSection.appendChild(closedGrid);
@@ -104,7 +102,10 @@ export class DashboardPage extends BasePage {
   async mount() {
     this.initLoadDashboard();
 
-    this.events.on(document.getElementById("createBoardBtn")!, "click", () => {
+    const createBoardBtn = document.getElementById("createBoardBtn");
+    if (!createBoardBtn) return;
+
+    this.events.on(createBoardBtn, "click", () => {
       this.dialog = new BoardCreateDialog();
       document.body.appendChild(this.dialog.render());
       this.dialog?.open();

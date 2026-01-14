@@ -1,8 +1,11 @@
 import { appStore } from "../../../core/store/AppStore";
 import { CreateTaskDialog } from "../CreateTaskDialog";
+import { ColumnThreeDotDropdown } from "../ColumnThreeDotDropdown";
+import type { ColumnUpdate } from "../../../core/types/board.types";
 
 export class BoardEventManager {
   dialog: CreateTaskDialog | null = null;
+  dropdown: ColumnThreeDotDropdown | null = null;
   private initLoadBoard: () => Promise<void>;
 
   constructor(func: () => Promise<void>) {
@@ -31,7 +34,10 @@ export class BoardEventManager {
     const threeDotBtn = target.closest<HTMLButtonElement>(".column-menu-btn");
     if (!threeDotBtn) return;
 
-    const column = threeDotBtn?.closest<HTMLElement>(".board-column");
+    const columnHeader = threeDotBtn.closest<HTMLElement>(".column-header");
+    if (!columnHeader) return;
+
+    const column = threeDotBtn.closest<HTMLElement>(".board-column");
     if (!column) return;
 
     const columnId = column.dataset.columnId;
@@ -39,7 +45,7 @@ export class BoardEventManager {
 
     if (threeDotBtn) {
       console.log("Three dot button clicked! Column ID: ", columnId);
-      // Here you can add functionality for the column menu
+      this.openColumnThreeDotDropdown(columnId, threeDotBtn, columnHeader);
       return;
     }
   }
@@ -84,6 +90,17 @@ export class BoardEventManager {
     this.dialog?.open();
   }
 
+  private openColumnThreeDotDropdown(id: string, btn: HTMLButtonElement, header: HTMLElement) {
+    this.dropdown = new ColumnThreeDotDropdown(
+      btn,
+      (newName) => this.updateColumn(id, { name: newName }),
+      (limit) => this.updateColumn(id, { wip_limit: limit }),
+      () => this.deleteColumn(id)
+    );
+    header.appendChild(this.dropdown.render());
+    this.dropdown.toggle();
+  }
+
   private showAddColumnForm(renderer?: any) {
     const addColumnItem = document.querySelector(".add-column-item");
     if (!addColumnItem) return;
@@ -122,6 +139,24 @@ export class BoardEventManager {
       await this.initLoadBoard();
     } catch (err: any) {
       alert("Creation is failed: " + err.message);
+    }
+  }
+
+  private async updateColumn(columnId: string, data: ColumnUpdate) {
+    try {
+      await appStore.updateColumn(columnId, data);
+      await this.initLoadBoard();
+    } catch (err: any) {
+      alert("Update is failed: " + err.message);
+    }
+  }
+
+  private async deleteColumn(columnId: string) {
+    try {
+      await appStore.deleteColumn(columnId);
+      await this.initLoadBoard();
+    } catch (err: any) {
+      alert("Deletion is failed: " + err.message);
     }
   }
 }
