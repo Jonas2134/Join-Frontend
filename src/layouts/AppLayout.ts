@@ -1,0 +1,28 @@
+import { AppHeader } from "../components/layouts/AppHeader";
+import { AppSidebar } from "../components/layouts/AppSidebar";
+
+export class AppLayout {
+  private element: HTMLElement;
+  private main: HTMLElement;
+
+  constructor() {
+    this.element = document.createElement('div');
+    this.element.classList.add('app-layout');
+
+    const header = new AppHeader();
+    const sidebar = new AppSidebar();
+    this.main = document.createElement('main');
+    this.main.classList.add("app-main")
+
+    this.element.append(header.render(), sidebar.render(), this.main);
+  }
+
+  setContent(content: HTMLElement) {
+    this.main.innerHTML = '';
+    this.main.appendChild(content);
+  }
+
+  render() {
+    return this.element;
+  }
+}

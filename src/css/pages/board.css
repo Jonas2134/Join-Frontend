@@ -1,0 +1,33 @@
+@layer components {
+    .board-columns-list {
+        @apply flex gap-4 h-full overflow-x-auto;
+    }
+
+    .board-column, .add-column, .add-column-form {
+        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-column) shrink-0 min-w-70;
+    }
+
+    .column-header {
+        @apply flex justify-between items-center py-2;
+    }
+
+    .column-dropdown-menu {
+        @apply fixed bg-white shadow-lg rounded-md z-50 border border-(--color-light-gray) p-3;
+    }
+
+    .task-list {
+        @apply flex flex-col gap-2 flex-1 min-h-3 overflow-y-auto overflow-x-hidden;
+    }
+
+    .task {
+        @apply p-2 border border-(--color-light-gray) rounded-lg bg-white shadow;
+
+        &:hover {
+            @apply cursor-pointer border-(--color-blue-gray) shadow-2xl scale-99;
+        }
+    }
+
+    .is-dragging {
+        @apply scale-105 bg-(--color-light-gray) shadow-(--shadow-large);
+    }
+}

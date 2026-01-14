@@ -1,0 +1,11 @@
+@theme {
+  --color-light-blue: #4589ff;
+  --color-soft-blue: #d2e3ff;
+  --color-dark-blue: #005dff;
+  --color-blue-gray: #647188;
+  --color-light-gray: #d1d1d1;
+  --color-placeholder-gray: #a8a8a8;
+
+  --shadow-large: 0 0 10px 3px rgba(0, 0, 0, 0.2);
+  --shadow-column: 0 5 15px rgba(0, 0, 0, 0.25);
+}

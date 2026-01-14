@@ -1,26 +1,27 @@
-import "./style.css";
-import typescriptLogo from "./typescript.svg";
-import viteLogo from "/vite.svg";
-import { setupCounter } from "./counter.ts";
+import { initRouter } from './core/router';
+import { StartPage } from './pages/StartPage';
+import { LoginPage } from './pages/LoginPage';
+import { SignupPage } from './pages/SignupPage';
+import { DashboardPage } from './pages/DashboardPage/DashboardPage';
+import { BoardPage } from './pages/BoardPage/BoardPage';
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <div>
-    <div class="flex">
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    </div>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`;
+import "./css/main.css";
 
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+const app = document.getElementById('app')!;
+
+const router = initRouter(app, [
+  { path: '/', component: StartPage },
+  { path: '/login', component: LoginPage },
+  { path: '/signup', component: SignupPage },
+  { path: '/dashboard', component: DashboardPage },
+  { path: '/board/:id', component: BoardPage },
+]);
+
+document.body.addEventListener('click', (e) => {
+  const target = e.target as HTMLElement;
+  if (target.matches('[data-link]')) {
+    e.preventDefault();
+    const href = target.getAttribute('href');
+    if (href) router.navigate(href);
+  }
+});
