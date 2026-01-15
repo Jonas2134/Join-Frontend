@@ -77,10 +77,16 @@ export class BoardPage extends BasePage {
     }
 
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskButtonListener(e));
-    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnThreeDotListener(e));
+    this.events.on(window, "task:created", async () => await this.initLoadBoard());
+
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnButtonListener(e, this.contentRenderer));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnCancelButtonListener(e, this.contentRenderer));
     this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnFormSubmitListener(e, this.id));
-    this.events.on(window, "task:created", async () => await this.initLoadBoard());
+
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnThreeDotListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnRenameToFormListener(e));
+    this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnRenameFromSubmitListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnRenameCancelButtonListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnDotMenuDeleteButtonListener(e));
   }
 }

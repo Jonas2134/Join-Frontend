@@ -3,6 +3,7 @@ export interface InputFieldOptions {
   placeholder: string;
   icon?: string;
   name?: string;
+  class?:string;
   required?: boolean;
 }
 
@@ -17,7 +18,8 @@ export class InputField {
 
   private createElement(): HTMLElement {
     const wrapper = document.createElement('label');
-    wrapper.classList.add('input-field');
+    if (this.options.class) wrapper.classList.add(this.options.class);
+    else wrapper.classList.add("input-field");
 
     const input = document.createElement('input');
     input.type = this.options.type;

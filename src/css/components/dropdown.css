@@ -1,0 +1,17 @@
+@layer components {
+    .column-dropdown-menu {
+        @apply fixed w-65 bg-white shadow-lg rounded-md z-50 border border-(--color-light-gray) p-3;
+    }
+
+    .menu-item {
+        @apply border-b border-(--color-light-gray) last:border-0;
+    }
+
+    .rename-column-form {
+        @apply flex gap-1;
+    }
+
+    .rename-form-menu {
+        @apply flex flex-col gap-1;
+    }
+}

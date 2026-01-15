@@ -11,10 +11,6 @@
         @apply flex justify-between items-center py-2;
     }
 
-    .column-dropdown-menu {
-        @apply fixed bg-white shadow-lg rounded-md z-50 border border-(--color-light-gray) p-3;
-    }
-
     .task-list {
         @apply flex flex-col gap-2 flex-1 min-h-3 overflow-y-auto overflow-x-hidden;
     }

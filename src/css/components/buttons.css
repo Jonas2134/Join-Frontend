@@ -37,11 +37,27 @@
     }
   }
 
-  .column-menu-btn {
+  .column-menu-btn, .three-dot-btn {
     @apply cursor-pointer rounded-full transition-all;
 
     &:hover {
       @apply bg-(--color-soft-blue);
+    }
+  }
+
+  #cancel-rename-btn {
+    @apply font-bold;
+  }
+
+  .dropdown-btn {
+    @apply w-full text-left py-2 transition-all;
+
+    &:hover {
+      @apply cursor-pointer bg-(--color-light-gray);
+    }
+
+    &:active {
+      @apply scale-99;
     }
   }
 }
