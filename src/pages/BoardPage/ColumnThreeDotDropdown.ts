@@ -40,6 +40,7 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
   renderRenameForm(): HTMLElement {
     const form = document.createElement("form");
     form.classList.add("rename-column-form");
+
     const renameInput = new InputField({
       type: "text",
       placeholder: "New column name",
@@ -77,6 +78,39 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
     setLimitBtn.type = "button";
     setLimitBtn.title = "Set Task Limit";
     return setLimitBtn;
+  }
+
+  renderSetLimitForm(): HTMLElement {
+    const form = document.createElement("form");
+    form.classList.add("set-limit-form");
+
+    const limitInput = new InputField({
+      type: "number",
+      placeholder: "Task limit",
+      name: "task-limit",
+      class: "limit-input",
+      required: true
+    });
+
+    const menu = document.createElement("menu");
+    menu.classList.add("limit-form-menu");
+
+    const submitBtn = document.createElement("button");
+    submitBtn.type = "submit";
+    submitBtn.classList.add("three-dot-btn");
+    submitBtn.innerHTML = Editicon;
+    submitBtn.title = "Set Task Limit";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.type = "button";
+    cancelBtn.classList.add("three-dot-btn");
+    cancelBtn.id = "cancel-limit-btn";
+    cancelBtn.innerHTML = "X";
+    cancelBtn.title = "Cancel Setting Limit";
+    
+    menu.append(submitBtn, cancelBtn);
+    form.append(limitInput.render(), menu);
+    return form;
   }
 
   renderDeleteSec(): HTMLElement {

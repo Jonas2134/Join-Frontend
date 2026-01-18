@@ -92,7 +92,7 @@ export class BoardEventManager {
     }
   }
 
-  registerColumnRenameFromSubmitListener(e: Event) {
+  async registerColumnRenameFromSubmitListener(e: Event) {
     const target = e.target as HTMLElement;
     const form = target.closest<HTMLFormElement>(".rename-column-form");
     if (!form) return;
@@ -105,7 +105,7 @@ export class BoardEventManager {
 
     const formData = new FormData(form);
     const newColumnName = formData.get("column-rename") as string;
-    if (newColumnName) this.updateColumn(columnId, { name: newColumnName });
+    if (newColumnName) await this.updateColumn(columnId, { name: newColumnName });
   }
 
   registerColumnRenameCancelButtonListener(e: Event) {
@@ -126,6 +126,63 @@ export class BoardEventManager {
     if (!existingBtn) {
       const renameBtn = this.dropdown?.renderRenameBtn();
       item.appendChild(renameBtn!);
+    }
+  }
+
+  registerColumnSetLimitToFormListener(e: Event) {
+    const target = e.target as HTMLElement;
+    const setLimitBtn = target.closest<HTMLButtonElement>("#set-task-limit-btn");
+    if (!setLimitBtn) return;
+    e.stopPropagation();
+
+    const item = setLimitBtn.closest<HTMLElement>(".menu-item");
+    if (!item) return;
+
+    setLimitBtn.remove();
+    
+    const existingForm = item.querySelector(".set-limit-form");
+    if (!existingForm) {
+      const form = this.dropdown?.renderSetLimitForm();
+      item.appendChild(form!);
+      const input = form?.querySelector("input");
+      input?.focus();
+    }
+  }
+
+  registerColumnSetLimitFormSubmitListener(e: Event) {
+    const target = e.target as HTMLElement;
+    const form = target.closest<HTMLFormElement>(".set-limit-form");
+    if (!form) return;
+    e.preventDefault();
+
+    const column = form.closest<HTMLElement>(".board-column");
+    if (!column) return;
+    const columnId = column.dataset.columnId;
+    if (!columnId) return;
+
+    const formData = new FormData(form);
+    const newLimit = formData.get("task-limit") as string;
+    if (newLimit) this.updateColumn(columnId, { wip_limit: newLimit });
+  }
+
+  registerColumnSetLimitCancelButtonListener(e: Event) {
+    const target = e.target as HTMLElement;
+    const cancelBtn = target.closest<HTMLButtonElement>("#cancel-limit-btn");
+    if (!cancelBtn) return;
+    e.stopPropagation();
+
+    const form = cancelBtn.closest<HTMLElement>(".set-limit-form");
+    if (!form) return;
+
+    const item = form.closest<HTMLElement>(".menu-item");
+    if (!item) return;
+
+    form.remove();
+
+    const existingBtn = item.querySelector<HTMLButtonElement>("#set-task-limit-btn");
+    if (!existingBtn) {
+      const setLimitBtn = this.dropdown?.renderLimitBtn();
+      item.appendChild(setLimitBtn!);
     }
   }
 

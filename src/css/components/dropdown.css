@@ -7,11 +7,11 @@
         @apply border-b border-(--color-light-gray) last:border-0;
     }
 
-    .rename-column-form {
+    .rename-column-form, .set-limit-form {
         @apply flex gap-1;
     }
 
-    .rename-form-menu {
+    .rename-form-menu, .limit-form-menu {
         @apply flex flex-col gap-1;
     }
 }

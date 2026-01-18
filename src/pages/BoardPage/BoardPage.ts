@@ -87,6 +87,9 @@ export class BoardPage extends BasePage {
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnRenameToFormListener(e));
     this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnRenameFromSubmitListener(e));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnRenameCancelButtonListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnSetLimitToFormListener(e));
+    this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnSetLimitFormSubmitListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnSetLimitCancelButtonListener(e));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnDotMenuDeleteButtonListener(e));
   }
 }
