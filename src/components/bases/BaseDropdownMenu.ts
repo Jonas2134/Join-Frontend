@@ -14,10 +14,9 @@ export abstract class BaseDropdownMenu {
   }
 
   protected setupBaseBehavior() {
-    this.button.addEventListener("click", () => this.toggle());
     document.addEventListener("click", (e) => this.handleDocumentClick(e));
   }
-  
+
   protected handleDocumentClick(e: Event) {
     if (
       this.isOpen &&

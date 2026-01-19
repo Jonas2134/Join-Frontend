@@ -37,6 +37,7 @@ export class BoardEventManager {
     const columnHeader = threeDotBtn.closest<HTMLElement>(".column-header");
     if (!columnHeader) return;
 
+    e.stopPropagation();
     this.openColumnThreeDotDropdown(threeDotBtn, columnHeader);
   }
 
@@ -208,13 +209,21 @@ export class BoardEventManager {
 
   private openColumnThreeDotDropdown(btn: HTMLButtonElement, header: HTMLElement) {
     if (!this.dropdown) {
+      console.log(this.dropdown);
       this.dropdown = new ColumnThreeDotDropdown(btn);
-      this.dropdown.setOnCloseCallback(() => this.dropdown = null);
+      this.dropdown.setOnCloseCallback(() => this.toggelDropdown());
       header.appendChild(this.dropdown.render());
       this.dropdown.open();
+      console.log("Open Menu!!");
+      console.log(this.dropdown);
     } else {
-      this.dropdown = null;
+      console.log("Close Menu!!")
+      this.dropdown.close();
     }
+  }
+
+  toggelDropdown() {
+    this.dropdown = null;
   }
 
   private showAddColumnForm(renderer?: any) {
