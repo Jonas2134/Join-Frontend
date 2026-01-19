@@ -15,7 +15,7 @@ export class BoardAddColumnRenderer {
     addColumnSection.classList.add("add-column");
 
     const addColumnBtn = document.createElement("button");
-    addColumnBtn.classList.add("create-column-btn");
+    addColumnBtn.classList.add("create-column-btn", "btn");
     addColumnBtn.title = "Add Column";
     addColumnBtn.type = "button";
     addColumnBtn.textContent = "+ New Column";
@@ -39,13 +39,13 @@ export class BoardAddColumnRenderer {
     buttonGroup.classList.add("flex", "gap-4");
 
     const submitBtn = document.createElement("button");
-    submitBtn.classList.add("btn-blue");
+    submitBtn.classList.add("btn-blue", "btn");
     submitBtn.title = "Submit new column";
     submitBtn.type = "submit";
     submitBtn.textContent = "+ Add";
 
     const cancelBtn = document.createElement("button");
-    cancelBtn.classList.add("cancel-column-btn");
+    cancelBtn.classList.add("cancel-column-btn", "btn");
     cancelBtn.title = "Cancel adding column";
     cancelBtn.type = "button";
     cancelBtn.textContent = "Cancel";

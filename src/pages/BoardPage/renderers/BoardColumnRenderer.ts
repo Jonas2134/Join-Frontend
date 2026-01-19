@@ -49,7 +49,7 @@ export class BoardColumnRenderer {
     footer.classList.add("flex", "justify-center");
 
     const addTaskBtn = document.createElement("button");
-    addTaskBtn.classList.add("create-task-btn");
+    addTaskBtn.classList.add("create-task-btn", "btn");
     addTaskBtn.title = "Add Task";
     addTaskBtn.type = "button";
     addTaskBtn.textContent = "+ add Task";

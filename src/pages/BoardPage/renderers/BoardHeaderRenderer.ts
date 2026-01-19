@@ -16,23 +16,14 @@ export class BoardHeaderRenderer {
 
   renderHeaderSummary(board: Board) {
     const summary = document.createElement("summary");
-    summary.classList.add(
-      "flex",
-      "items-center",
-      "justify-between",
-      "cursor-pointer",
-      "list-none"
-    );
+    summary.classList.add("detail-header-summary");
 
     const title = document.createElement("h3");
-    title.classList.add(
-      "text-(--color-light-blue)",
-      "font-semibold",
-      "underline"
-    );
+    title.classList.add("detail-header-summary-headline");
     title.textContent = board.title;
 
     const toggleIcon = document.createElement("span");
+    toggleIcon.classList.add("detail-header-summary-icon")
     toggleIcon.innerHTML = ToggleIcon;
 
     summary.append(title, toggleIcon);
@@ -43,12 +34,7 @@ export class BoardHeaderRenderer {
     const descriptionSection = document.createElement("section");
 
     const descriptionTitle = document.createElement("h4");
-    descriptionTitle.classList.add(
-      "text-(--color-placeholder-gray)",
-      "font-semibold",
-      "underline",
-      "mb-1"
-    );
+    descriptionTitle.classList.add("detail-content-headline");
     descriptionTitle.textContent = "Description";
 
     const descriptionText = document.createElement("p");
@@ -63,12 +49,7 @@ export class BoardHeaderRenderer {
     const membersSection = document.createElement("section");
 
     const membersTitle = document.createElement("h4");
-    membersTitle.classList.add(
-      "text-(--color-placeholder-gray)",
-      "font-semibold",
-      "underline",
-      "mb-1"
-    );
+    membersTitle.classList.add("detail-content-headline");
     membersTitle.textContent = "Members";
 
     const membersList = document.createElement("ul");
@@ -87,7 +68,7 @@ export class BoardHeaderRenderer {
   renderEditButton() {
     const editButton = document.createElement("button");
     editButton.id = "changeBoardBtn";
-    editButton.classList.add("cursor-pointer", "p-2", "rounded");
+    editButton.classList.add("edit-btn");
     editButton.title = "Edit board";
     editButton.innerHTML = EditIcon;
     return editButton;
@@ -95,13 +76,7 @@ export class BoardHeaderRenderer {
 
   renderDetailsContent(board: Board) {
     const detailsContent = document.createElement("main");
-    detailsContent.classList.add(
-      "flex",
-      "items-start",
-      "justify-between",
-      "mt-4",
-      "px-3"
-    );
+    detailsContent.classList.add("detail-main");
 
     const descriptionSection = this.renderDetailsDescriptionSection(board);
     const membersSection = this.renderDetailsMembersSection(board);
