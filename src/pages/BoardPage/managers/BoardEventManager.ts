@@ -12,167 +12,173 @@ export class BoardEventManager {
     this.initLoadBoard = func;
   }
 
-  /* ---------- Eventlistener ---------- */
+  // ============================================
+  // Public Event Listeners
+  // ============================================
 
   registerTaskButtonListener(e: Event) {
-    const target = e.target as HTMLElement;
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".create-task-btn");
+    if (!btn) return;
 
-    const createTBtn = target.closest<HTMLButtonElement>(".create-task-btn");
-    if (!createTBtn) return;
-
-    const column = createTBtn.closest<HTMLElement>(".board-column");
-    if (!column) return;
-
-    const columnId = column.dataset.columnId;
-    if (!columnId) return;
-    this.openCreateTaskDialog(columnId);
-  }
-
-  registerColumnThreeDotListener(e: Event) {
-    const target = e.target as HTMLElement;
-
-    const threeDotBtn = target.closest<HTMLButtonElement>(".column-menu-btn");
-    if (!threeDotBtn) return;
-
-    const columnHeader = threeDotBtn.closest<HTMLElement>(".column-header");
-    if (!columnHeader) return;
-
-    e.stopPropagation();
-    this.openColumnThreeDotDropdown(threeDotBtn, columnHeader);
+    const columnId = this.getColumnIdFromElement(btn);
+    if (columnId) this.openCreateTaskDialog(columnId)
   }
 
   registerColumnButtonListener(e: Event, renderer?: any) {
-    const target = e.target as HTMLElement;
-    const createCBtn = target.closest<HTMLButtonElement>(".create-column-btn");
-    if (createCBtn) {
-      console.log("KLICK!!!");
-      this.showAddColumnForm(renderer);
-      return;
-    }
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".create-column-btn");
+    if (btn) this.showAddColumnForm(renderer);
   }
 
   registerColumnCancelButtonListener(e: Event, renderer?: any) {
-    const target = e.target as HTMLElement;
-    const cancelBtn = target.closest<HTMLButtonElement>(".cancel-column-btn");
-    if (cancelBtn) {
-      console.log("GECANCELT!!!!");
-      this.hideAddColumnForm(renderer);
-      return;
-    }
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".cancel-column-btn");
+    if (btn) this.hideAddColumnForm(renderer);
   }
 
   async registerColumnFormSubmitListener(e: Event, id: string) {
-    const target = e.target as HTMLElement;
-
-    const form = target.closest<HTMLFormElement>(".add-column-form");
+    const form = this.findClosestElement<HTMLFormElement>(e.target, ".add-column-form");
     if (!form) return;
-    e.preventDefault();
 
-    const formData = new FormData(form);
-    const columnName = formData.get("columnName") as string;
+    e.preventDefault();
+    const columnName = this.getFormValue(form, "columnName");
     if (columnName) await this.createColumn(columnName, id);
   }
 
-  registerColumnRenameToFormListener(e: Event) {
-    const target = e.target as HTMLElement;
-    const renameBtn = target.closest<HTMLButtonElement>("#rename-column-btn");
-    if (!renameBtn) return;
+  registerColumnThreeDotListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".column-menu-btn");
+    if (!btn) return;
+
+    const header = this.findClosestElement<HTMLElement>(btn, ".column-header");
+    if (!header) return;
+
     e.stopPropagation();
+    this.openColumnThreeDotDropdown(btn, header);
+  }
 
-    const item = renameBtn.closest<HTMLElement>(".menu-item");
-    if (!item) return;
-
-    renameBtn.remove();
+  registerColumnRenameToFormListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#rename-column-btn");
+    if (!btn) return;
     
-    const existingForm = item.querySelector(".rename-column-form");
-    if (!existingForm) {
-      const form = this.dropdown?.renderRenameForm();
-      item.appendChild(form!);
-      const input = form?.querySelector("input");
-      input?.focus();
-    }
+    e.stopPropagation();
+    this.toggleFormInMenuItem(btn, ".rename-column-form", () => this.dropdown?.renderRenameForm());
   }
 
   async registerColumnRenameFromSubmitListener(e: Event) {
-    const target = e.target as HTMLElement;
-    const form = target.closest<HTMLFormElement>(".rename-column-form");
+    const form = this.findClosestElement<HTMLFormElement>(e.target, ".rename-column-form");
     if (!form) return;
+    
     e.preventDefault();
-
-    const column = form.closest<HTMLElement>(".board-column");
-    if (!column) return;
-    const columnId = column.dataset.columnId;
-    if (!columnId) return;
-
-    const formData = new FormData(form);
-    const newColumnName = formData.get("column-rename") as string;
-    if (newColumnName) await this.updateColumn(columnId, { name: newColumnName });
+    const columnId = this.getColumnIdFromElement(form);
+    const newName = this.getFormValue(form, "column-rename");
+    
+    if (columnId && newName) {
+      await this.updateColumn(columnId, { name: newName });
+    }
   }
 
   registerColumnRenameCancelButtonListener(e: Event) {
-    const target = e.target as HTMLElement;
-    const cancelBtn = target.closest<HTMLButtonElement>("#cancel-rename-btn");
-    if (!cancelBtn) return;
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#cancel-rename-btn");
+    if (!btn) return;
+    
     e.stopPropagation();
-
-    const form = cancelBtn.closest<HTMLElement>(".rename-column-form");
-    if (!form) return;
-
-    const item = form.closest<HTMLElement>(".menu-item");
-    if (!item) return;
-
-    form.remove();
-
-    const existingBtn = item.querySelector<HTMLButtonElement>("#rename-column-btn");
-    if (!existingBtn) {
-      const renameBtn = this.dropdown?.renderRenameBtn();
-      item.appendChild(renameBtn!);
-    }
+    this.restoreButtonInMenuItem(btn, ".rename-column-form", "#rename-column-btn", () => 
+      this.dropdown?.renderRenameBtn()
+    );
   }
 
   registerColumnSetLimitToFormListener(e: Event) {
-    const target = e.target as HTMLElement;
-    const setLimitBtn = target.closest<HTMLButtonElement>("#set-task-limit-btn");
-    if (!setLimitBtn) return;
-    e.stopPropagation();
-
-    const item = setLimitBtn.closest<HTMLElement>(".menu-item");
-    if (!item) return;
-
-    setLimitBtn.remove();
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#set-task-limit-btn");
+    if (!btn) return;
     
-    const existingForm = item.querySelector(".set-limit-form");
-    if (!existingForm) {
-      const form = this.dropdown?.renderSetLimitForm();
-      item.appendChild(form!);
-      const input = form?.querySelector("input");
-      input?.focus();
-    }
+    e.stopPropagation();
+    this.toggleFormInMenuItem(btn, ".set-limit-form", () => this.dropdown?.renderSetLimitForm());
   }
 
   registerColumnSetLimitFormSubmitListener(e: Event) {
-    const target = e.target as HTMLElement;
-    const form = target.closest<HTMLFormElement>(".set-limit-form");
+    const form = this.findClosestElement<HTMLFormElement>(e.target, ".set-limit-form");
     if (!form) return;
+    
     e.preventDefault();
-
-    const column = form.closest<HTMLElement>(".board-column");
-    if (!column) return;
-    const columnId = column.dataset.columnId;
-    if (!columnId) return;
-
-    const formData = new FormData(form);
-    const newLimit = formData.get("task-limit") as string;
-    if (newLimit) this.updateColumn(columnId, { wip_limit: newLimit });
+    const columnId = this.getColumnIdFromElement(form);
+    const newLimit = this.getFormValue(form, "task-limit");
+    
+    if (columnId && newLimit) {
+      this.updateColumn(columnId, { wip_limit: newLimit });
+    }
   }
 
   registerColumnSetLimitCancelButtonListener(e: Event) {
-    const target = e.target as HTMLElement;
-    const cancelBtn = target.closest<HTMLButtonElement>("#cancel-limit-btn");
-    if (!cancelBtn) return;
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#cancel-limit-btn");
+    if (!btn) return;
+    
     e.stopPropagation();
+    this.restoreButtonInMenuItem(btn, ".set-limit-form", "#set-task-limit-btn", () => 
+      this.dropdown?.renderLimitBtn()
+    );
+  }
 
-    const form = cancelBtn.closest<HTMLElement>(".set-limit-form");
+  registerColumnDotMenuDeleteButtonListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#delete-column-btn");
+    if (!btn) return;
+
+    const columnId = this.getColumnIdFromElement(btn);
+    if (columnId) this.deleteColumn(columnId);
+  }
+
+  // ============================================
+  // Private Helper Methods
+  // ============================================
+
+  private findClosestElement<T extends HTMLElement>(
+    target: EventTarget | null,
+    selector: string,
+  ): T | null {
+    if (target instanceof HTMLElement) {
+      return target.closest<T>(selector);
+    }
+    if (target instanceof SVGElement) {
+      return (target.closest(selector) as T) || null;
+    }
+    return null;
+  }
+
+  private getColumnIdFromElement(element: HTMLElement): string | null {
+    const column = element.closest<HTMLElement>(".board-column");
+    return column?.dataset.columnId ?? null;
+  }
+
+  private getFormValue(form: HTMLFormElement, fieldName: string): string {
+    const formData = new FormData(form);
+    return (formData.get(fieldName) as string) || "";
+  }
+
+  private toggleFormInMenuItem(
+    button: HTMLButtonElement,
+    formSelector: string,
+    formRenderer: () => HTMLElement | undefined,
+  ) {
+    const item = button.closest<HTMLElement>(".menu-item");
+    if (!item) return;
+
+    button.remove();
+
+    const existingForm = item.querySelector(formSelector);
+    if (!existingForm) {
+      const form = formRenderer();
+      if (form) {
+        item.appendChild(form);
+        const input = form.querySelector("input");
+        input?.focus();
+      }
+    }
+  }
+
+  private restoreButtonInMenuItem(
+    cancelButton: HTMLButtonElement,
+    formSelector: string,
+    buttonSelector: string,
+    buttonRenderer: () => HTMLElement | undefined,
+  ) {
+    const form = cancelButton.closest<HTMLElement>(formSelector);
     if (!form) return;
 
     const item = form.closest<HTMLElement>(".menu-item");
@@ -180,26 +186,16 @@ export class BoardEventManager {
 
     form.remove();
 
-    const existingBtn = item.querySelector<HTMLButtonElement>("#set-task-limit-btn");
+    const existingBtn = item.querySelector<HTMLButtonElement>(buttonSelector);
     if (!existingBtn) {
-      const setLimitBtn = this.dropdown?.renderLimitBtn();
-      item.appendChild(setLimitBtn!);
+      const newBtn = buttonRenderer();
+      if (newBtn) item.appendChild(newBtn);
     }
   }
 
-  registerColumnDotMenuDeleteButtonListener(e: Event) {
-    const target = e.target as HTMLElement;
-    const deleteBtn = target.closest<HTMLButtonElement>("#delete-column-btn");
-    if (!deleteBtn) return;
-
-    const column = deleteBtn.closest<HTMLElement>(".board-column");
-    if (!column) return;
-
-    const columnId = column.dataset.columnId;
-    if (columnId) this.deleteColumn(columnId);
-  }
-
-  /* ---------- Sub functions ---------- */
+  // ============================================
+  // Dialog & Dropdown Management
+  // ============================================
 
   private openCreateTaskDialog(id: string) {
     this.dialog = new CreateTaskDialog(id);
@@ -207,17 +203,16 @@ export class BoardEventManager {
     this.dialog?.open();
   }
 
-  private openColumnThreeDotDropdown(btn: HTMLButtonElement, header: HTMLElement) {
+  private openColumnThreeDotDropdown(
+    btn: HTMLButtonElement,
+    header: HTMLElement,
+  ) {
     if (!this.dropdown) {
-      console.log(this.dropdown);
       this.dropdown = new ColumnThreeDotDropdown(btn);
       this.dropdown.setOnCloseCallback(() => this.toggelDropdown());
       header.appendChild(this.dropdown.render());
       this.dropdown.open();
-      console.log("Open Menu!!");
-      console.log(this.dropdown);
     } else {
-      console.log("Close Menu!!")
       this.dropdown.close();
     }
   }
@@ -226,19 +221,21 @@ export class BoardEventManager {
     this.dropdown = null;
   }
 
+  // ============================================
+  // Add Column Form Management
+  // ============================================
+
   private showAddColumnForm(renderer?: any) {
     const addColumnItem = document.querySelector(".add-column-item");
     if (!addColumnItem) return;
 
-    const addColumnSection = addColumnItem.querySelector(".add-column");
-    addColumnSection?.remove();
+    addColumnItem.querySelector(".add-column")?.remove();
 
     const existingForm = addColumnItem.querySelector(".add-column-form");
-    if (!existingForm) {
+    if (!existingForm && renderer) {
       const form = renderer.addColumnRenderer.renderAddColumnForm();
       addColumnItem.appendChild(form);
-      const input = form.querySelector("input");
-      input?.focus();
+      form.querySelector("input")?.focus();
     }
   }
 
@@ -246,37 +243,50 @@ export class BoardEventManager {
     const addColumnItem = document.querySelector(".add-column-item");
     if (!addColumnItem) return;
 
-    const form = addColumnItem.querySelector(".add-column-form");
-    form?.remove();
+    addColumnItem.querySelector(".add-column-form")?.remove();
 
-    const existingAddColumnSection = addColumnItem.querySelector(".add-column");
-    if (!existingAddColumnSection) addColumnItem.appendChild(renderer.addColumnRenderer.renderAddColumnSection());
+    const existingSection = addColumnItem.querySelector(".add-column");
+    if (!existingSection && renderer) {
+      addColumnItem.appendChild(
+        renderer.addColumnRenderer.renderAddColumnSection(),
+      );
+    }
   }
 
+  // ============================================
+  // API Operations
+  // ============================================
+
   private async createColumn(columnName: string, id: string) {
-    try {
-      await appStore.createColumn(id, columnName);
-      await this.initLoadBoard();
-    } catch (err: any) {
-      alert("Creation is failed: " + err.message);
-    }
+    await this.performStoreOperation(
+      () => appStore.createColumn(id, columnName),
+      "Creation",
+    );
   }
 
   private async updateColumn(columnId: string, data: ColumnUpdate) {
-    try {
-      await appStore.updateColumn(columnId, data);
-      await this.initLoadBoard();
-    } catch (err: any) {
-      alert("Update is failed: " + err.message);
-    }
+    await this.performStoreOperation(
+      () => appStore.updateColumn(columnId, data),
+      "Update",
+    );
   }
 
   private async deleteColumn(columnId: string) {
+    await this.performStoreOperation(
+      () => appStore.deleteColumn(columnId),
+      "Deletion",
+    );
+  }
+
+  private async performStoreOperation(
+    operation: () => Promise<any>,
+    operationName: string,
+  ) {
     try {
-      await appStore.deleteColumn(columnId);
+      await operation();
       await this.initLoadBoard();
     } catch (err: any) {
-      alert("Deletion is failed: " + err.message);
+      alert(`${operationName} failed: ${err.message}`);
     }
   }
 }

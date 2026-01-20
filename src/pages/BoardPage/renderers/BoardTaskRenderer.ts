@@ -1,4 +1,4 @@
-import type { Task } from "../../interfaces/BoardInterface";
+import type { Task } from "../../../core/types/board.types";
 
 export class BoardTaskRenderer {
   constructor() {}
