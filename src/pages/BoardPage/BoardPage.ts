@@ -20,7 +20,9 @@ export class BoardPage extends BasePage {
     this.eventManager = new BoardEventManager(this.initLoadBoard.bind(this));
   }
 
-  /* ---------- Base render ---------- */
+  // ============================================
+  // Base render
+  // ============================================
 
   renderheader() {
     const header = document.createElement("header");
@@ -36,7 +38,9 @@ export class BoardPage extends BasePage {
     return section;
   }
 
-  /* ---------- Lifecycle ---------- */
+  // ============================================
+  // Lifecycle
+  // ============================================
 
   updateBoardUI(): void {
     const header = document.getElementById("board-header");
@@ -68,6 +72,10 @@ export class BoardPage extends BasePage {
     this.updateBoardUI();
   }
 
+  // ============================================
+  // Mount Eventlistener
+  // ============================================
+
   async mount() {
     await this.initLoadBoard();
 
@@ -76,20 +84,33 @@ export class BoardPage extends BasePage {
       throw new Error("board-root not found");
     }
 
-    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskButtonListener(e));
-    this.events.on(window, "task:created", async () => await this.initLoadBoard());
+    this.mountThreeDotListener(boardroot);
+    this.mountAddColumnListener(boardroot);
+    this.mountTaskListener(boardroot);
+  }
 
-    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnButtonListener(e, this.contentRenderer));
-    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnCancelButtonListener(e, this.contentRenderer));
-    this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnFormSubmitListener(e, this.id));
-
+  mountThreeDotListener(boardroot: HTMLElement) {
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnThreeDotListener(e));
+
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnRenameToFormListener(e));
     this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnRenameFromSubmitListener(e));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnRenameCancelButtonListener(e));
+
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnSetLimitToFormListener(e));
     this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnSetLimitFormSubmitListener(e));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnSetLimitCancelButtonListener(e));
+
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnDotMenuDeleteButtonListener(e));
+  }
+
+  mountAddColumnListener(boardroot: HTMLElement) {
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnButtonListener(e, this.contentRenderer));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerColumnCancelButtonListener(e, this.contentRenderer));
+    this.events.on(boardroot, "submit", async (e: Event) => this.eventManager.registerColumnFormSubmitListener(e, this.id));
+  }
+
+  mountTaskListener(boardroot: HTMLElement) {
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskButtonListener(e));
+    this.events.on(window, "task:created", async () => await this.initLoadBoard());
   }
 }

@@ -11,7 +11,10 @@ export class CreateTaskDialog extends BaseDialog {
     this.columnId = id;
   }
 
-  /* render HTML excerpts */
+  // ============================================
+  // render HTML excerpts
+  // ============================================
+
   renderLegend() {
     const legend = document.createElement("legend");
     legend.classList.add("auth-legend");
@@ -70,8 +73,8 @@ export class CreateTaskDialog extends BaseDialog {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
     menu.innerHTML = `
-      <button class="btn-blue" type="submit">Create</button>
-      <button class="btn-white" type="button" id="cancel-btn">Cancel</button>
+      <button class="btn btn-blue" type="submit">Create</button>
+      <button class="btn btn-white" type="button" id="cancel-btn">Cancel</button>
     `;
     return menu;
   }
@@ -88,7 +91,10 @@ export class CreateTaskDialog extends BaseDialog {
     return fieldset;
   }
 
-  /* render Dialog Content */
+  // ============================================
+  // render Dialog Content
+  // ============================================
+
   protected renderContent(): HTMLElement {
     const form = document.createElement("form");
     form.id = "tform";
@@ -97,7 +103,10 @@ export class CreateTaskDialog extends BaseDialog {
     return form;
   }
 
-  /* Mount Eventlistener */
+  // ============================================
+  // Mount Eventlistener
+  // ============================================
+
   protected override mount(): void {
     const cancelBtn = this.dialog.querySelector("#cancel-btn") as HTMLFormElement;
     const form = this.dialog.querySelector("#tform") as HTMLFormElement;
