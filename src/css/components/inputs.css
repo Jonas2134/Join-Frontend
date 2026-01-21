@@ -3,7 +3,7 @@
     @apply flex items-center gap-2 w-full pb-2 mb-4 border-b-1 border-b-(--color-light-gray);
   }
 
-  .rename-input {
+  .rename-input, .limit-input {
     @apply flex justify-center items-center flex-grow;
   }
 }

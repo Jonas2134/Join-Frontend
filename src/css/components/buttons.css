@@ -37,7 +37,10 @@
     }
   }
 
-  .column-menu-btn, .three-dot-btn, .edit-btn, .detail-header-summary-icon {
+  .column-menu-btn,
+  .three-dot-btn,
+  .edit-btn,
+  .detail-header-summary-icon {
     @apply p-1 cursor-pointer rounded-full transition-all;
 
     &:hover {
@@ -58,6 +61,34 @@
 
     &:active {
       @apply scale-99;
+    }
+  }
+
+  .round-base-btn {
+    @apply flex items-center justify-center rounded-full text-white font-medium cursor-pointer transition-all;
+  }
+
+  .more-indicator-btn {
+    @apply w-8 h-8 text-xs bg-gray-400;
+
+    &:hover {
+      @apply bg-gray-500;
+    }
+  }
+
+  .avatar-normal {
+    @apply bg-(--color-light-blue);
+
+    &:hover {
+      @apply ring-2 ring-blue-300;
+    }
+  }
+
+  .avatar-owner {
+    @apply bg-red-500;
+
+    &:hover {
+      @apply ring-2 ring-red-300;
     }
   }
 }

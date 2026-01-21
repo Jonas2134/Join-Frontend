@@ -1,3 +1,4 @@
+import { Avatar } from "../../../components/common/Avatar";
 import type { Board } from "../../../core/types/board.types";
 import ToggleIcon from "../../../assets/icons/ToggleIcon.svg?raw";
 import EditIcon from "../../../assets/icons/edit.svg?raw";
@@ -23,7 +24,7 @@ export class BoardHeaderRenderer {
     title.textContent = board.title;
 
     const toggleIcon = document.createElement("span");
-    toggleIcon.classList.add("detail-header-summary-icon")
+    toggleIcon.classList.add("detail-header-summary-icon");
     toggleIcon.innerHTML = ToggleIcon;
 
     summary.append(title, toggleIcon);
@@ -52,17 +53,50 @@ export class BoardHeaderRenderer {
     membersTitle.classList.add("detail-content-headline");
     membersTitle.textContent = "Members";
 
-    const membersList = document.createElement("ul");
-    membersList.classList.add("list-disc", "list-inside");
-
-    for (const member of board.members) {
-      const memberItem = document.createElement("li");
-      memberItem.textContent = member.username;
-      membersList.appendChild(memberItem);
-    }
+    const membersList = this.renderMemberList(board);
 
     membersSection.append(membersTitle, membersList);
     return membersSection;
+  }
+
+  renderMemberList(board: Board) {
+    const membersList = document.createElement("ul");
+    membersList.classList.add("detail-list");
+
+    const maxVisibleMembers = 5;
+    const sortedMembers = [...board.members].sort((a, b) => {
+      if (a.id === board.owner) return -1;
+      if (b.id === board.owner) return 1;
+      return 0;
+    });
+    const visibleMembers = sortedMembers.slice(0, maxVisibleMembers);
+    const remainingCount = board.members.length - maxVisibleMembers;
+
+    visibleMembers.forEach((member) => {
+      const listItem = document.createElement("li");
+      const isOwner = member.id === board.owner;
+      const avatar = new Avatar({ size: "lg", isOwner });
+      listItem.appendChild(avatar.createAvatar(member.username));
+      membersList.appendChild(listItem);
+    });
+
+    if (remainingCount < 0) {
+      const listItem = document.createElement("li");
+      const moreIndicator = this.createMoreIndicator(remainingCount);
+      listItem.appendChild(moreIndicator)
+      membersList.appendChild(listItem);
+    }
+    return membersList;
+  }
+
+  createMoreIndicator(count: number) {
+    const moreButton = document.createElement("button");
+    moreButton.type = "button";
+    moreButton.id = "more-indicator";
+    moreButton.classList.add("round-base-btn", "more-indicator-btn");
+    moreButton.textContent = `+${count}`;
+    
+    return moreButton;
   }
 
   renderEditButton() {
