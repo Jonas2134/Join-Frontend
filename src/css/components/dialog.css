@@ -1,13 +1,15 @@
 @layer components {
-    .board-dialog, .create-task-dialog {
-        @apply fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-xl w-auto shadow-xl;
+  .board-dialog,
+  .create-task-dialog,
+  .edit-board-dialog {
+    @apply fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-xl w-auto shadow-xl;
 
-        &::backdrop {
-            @apply bg-black opacity-70 transition-opacity;
-        }
+    &::backdrop {
+      @apply bg-black opacity-70 transition-opacity;
     }
+  }
 
-    .menu-dialog {
-        @apply fixed top-24 left-[98%] -translate-x-[100%] rounded-xl;
-    }
+  .menu-dialog {
+    @apply fixed top-24 left-[98%] -translate-x-[100%] rounded-xl;
+  }
 }

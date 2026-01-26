@@ -1,10 +1,11 @@
 import { appStore } from "../../../core/store/AppStore";
 import { CreateTaskDialog } from "../dialogAndDropdown/CreateTaskDialog";
+import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
 import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
 import type { ColumnUpdate } from "../../../core/types/board.types";
 
 export class BoardEventManager {
-  dialog: CreateTaskDialog | null = null;
+  dialog: CreateTaskDialog | EditBoardDialog | null = null;
   dropdown: ColumnThreeDotDropdown | null = null;
   private initLoadBoard: () => Promise<void>;
 
@@ -15,6 +16,12 @@ export class BoardEventManager {
   // ============================================
   // Public Event Listeners
   // ============================================
+
+  registerEditBoardDialog(id: string) {
+    this.dialog = new EditBoardDialog(id);
+    document.body.appendChild(this.dialog.render());
+    this.dialog?.open();
+  }
 
   registerTaskButtonListener(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".create-task-btn");

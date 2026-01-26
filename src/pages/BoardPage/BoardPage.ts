@@ -79,6 +79,11 @@ export class BoardPage extends BasePage {
   async mount() {
     await this.initLoadBoard();
 
+    const boardEdit = document.getElementById("editBoardBtn");
+    if (boardEdit) {
+      this.events.on(boardEdit, "click", () => this.eventManager.registerEditBoardDialog(this.id));
+    }
+
     const boardroot = document.getElementById("board-section");
     if (!boardroot) {
       throw new Error("board-root not found");

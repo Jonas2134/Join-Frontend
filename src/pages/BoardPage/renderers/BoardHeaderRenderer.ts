@@ -101,7 +101,7 @@ export class BoardHeaderRenderer {
 
   renderEditButton() {
     const editButton = document.createElement("button");
-    editButton.id = "changeBoardBtn";
+    editButton.id = "editBoardBtn";
     editButton.classList.add("edit-btn");
     editButton.title = "Edit board";
     editButton.innerHTML = EditIcon;
