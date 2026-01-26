@@ -26,17 +26,23 @@ export class LoginPage extends BasePage {
     fieldset.appendChild(legend);
 
     const usernameField = new InputField({
-      type: 'text',
-      placeholder: 'Username',
+      label: "Enter your Username:",
+      name: "username",
+      type: "text",
+      placeholder: "Username",
+      className: "input-b-border",
       icon: User,
-      name: 'username',
+      autocomplete: "username",
       required: true,
     });
     const passwordField = new InputField({
-      type: 'password',
-      placeholder: 'Password',
+      label: "Enter your Password:",
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      className: "input-b-border",
       icon: LockOn,
-      name: 'password',
+      autocomplete: "current-password",
       required: true,
     });
 
@@ -55,12 +61,12 @@ export class LoginPage extends BasePage {
 
     const loginBtn = document.createElement('button');
     loginBtn.type = 'submit';
-    loginBtn.classList.add('btn-blue');
+    loginBtn.classList.add("btn", "btn-blue");
     loginBtn.textContent = 'Login';
 
     const guestBtn = document.createElement('button');
     guestBtn.type = 'button';
-    guestBtn.classList.add('btn-white');
+    guestBtn.classList.add("btn", "btn-white");
     guestBtn.textContent = 'Guest Login';
     guestBtn.addEventListener('click', () => router.navigate('/dashboard'));
 

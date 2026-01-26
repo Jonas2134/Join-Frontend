@@ -26,12 +26,13 @@ export class BoardAddColumnRenderer {
 
   renderAddColumnForm() {
     const form = document.createElement("form");
-    form.classList.add("add-column-form", "items-center", "py-4");
+    form.classList.add("add-column-form", "items-center", "gap-4", "py-4");
 
     const input = new InputField({
+      label: "Column Name:",
+      name: "columnName",
       type: "text",
       placeholder: "Enter column name...",
-      name: "columnName",
       required: true,
     });
 

@@ -42,10 +42,10 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
     form.classList.add("rename-column-form");
 
     const renameInput = new InputField({
+      label: "Rename column:",
+      name: "column-rename",
       type: "text",
       placeholder: "New column name",
-      name: "column-rename",
-      class: "rename-input",
       required: true
     });
 
@@ -85,10 +85,10 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
     form.classList.add("set-limit-form");
 
     const limitInput = new InputField({
+      label: "Set Task Limit:",
+      name: "task-limit",
       type: "number",
       placeholder: "Task limit",
-      name: "task-limit",
-      class: "limit-input",
       required: true
     });
 

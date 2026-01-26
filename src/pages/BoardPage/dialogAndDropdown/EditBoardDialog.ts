@@ -22,6 +22,8 @@ export class EditBoardDialog extends BaseDialog {
   renderMainSection() {
     const main = document.createElement("main");
     main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
+    
+    // TODO: add Inputfields
 
     return main;
   }

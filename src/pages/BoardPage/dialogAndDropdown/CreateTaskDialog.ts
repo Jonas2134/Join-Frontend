@@ -1,7 +1,7 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
 import { appStore } from "../../../core/store/AppStore";
 import { InputField } from "../../../components/common/InputField";
-import { Textarea } from "../../../components/common/textarea";
+import { Textarea } from "../../../components/common/Textarea";
 
 export class CreateTaskDialog extends BaseDialog {
   columnId: string;
@@ -27,15 +27,22 @@ export class CreateTaskDialog extends BaseDialog {
     firstsec.classList.add("flex", "flex-col", "gap-3");
 
     const titleField = new InputField({
-      type: 'text',
-      placeholder: 'Title',
-      name: 'title',
-      required: true,
+      label: "Task Title:",
+      name: "title",
+      type: "text",
+      placeholder: "Title",
+      className: "input-b-border",
+      required: true
     });
 
     const descriptionTextfield = new Textarea({
-      nameId: 'description',
-      placeholder: 'Write your description.'
+      label: "Task description:",
+      name: "description",
+      placeholder: "Write your description.",
+      className: "input-b-border",
+      rows: 5,
+      maxLength: 500,
+      required: true
     });
 
     firstsec.append(titleField.render(), descriptionTextfield.render());
@@ -81,7 +88,7 @@ export class CreateTaskDialog extends BaseDialog {
 
   renderFieldset() {
     const fieldset = document.createElement("fieldset");
-    fieldset.classList.add("flex", "flex-col", "items-center", "w-full");
+    fieldset.classList.add("flex", "flex-col", "items-center", "gap-4", "w-full");
 
     const legend = this.renderLegend();
     const main = this.renderMainSection();
