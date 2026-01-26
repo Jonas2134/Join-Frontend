@@ -80,7 +80,7 @@ export class BoardHeaderRenderer {
       membersList.appendChild(listItem);
     });
 
-    if (remainingCount < 0) {
+    if (remainingCount > 0) {
       const listItem = document.createElement("li");
       const moreIndicator = this.createMoreIndicator(remainingCount);
       listItem.appendChild(moreIndicator)

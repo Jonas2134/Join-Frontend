@@ -1,7 +1,7 @@
-import { BaseDialog } from "../../components/bases/BaseDialog";
-import { appStore } from "../../core/store/AppStore";
-import { InputField } from "../../components/common/InputField";
-import { Textarea } from "../../components/common/textarea";
+import { BaseDialog } from "../../../components/bases/BaseDialog";
+import { appStore } from "../../../core/store/AppStore";
+import { InputField } from "../../../components/common/InputField";
+import { Textarea } from "../../../components/common/textarea";
 
 export class CreateTaskDialog extends BaseDialog {
   columnId: string;

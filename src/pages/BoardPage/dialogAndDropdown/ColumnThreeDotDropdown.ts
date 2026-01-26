@@ -1,7 +1,7 @@
-import { BaseDropdownMenu } from "../../components/bases/BaseDropdownMenu";
-import { InputField } from "../../components/common/InputField";
+import { BaseDropdownMenu } from "../../../components/bases/BaseDropdownMenu";
+import { InputField } from "../../../components/common/InputField";
 
-import Editicon from "../../assets/icons/edit.svg?raw";
+import Editicon from "../../../assets/icons/edit.svg?raw";
 
 export class ColumnThreeDotDropdown extends BaseDropdownMenu {
   constructor(btn: HTMLButtonElement) {

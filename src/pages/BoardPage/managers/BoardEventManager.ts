@@ -1,6 +1,6 @@
 import { appStore } from "../../../core/store/AppStore";
-import { CreateTaskDialog } from "../CreateTaskDialog";
-import { ColumnThreeDotDropdown } from "../ColumnThreeDotDropdown";
+import { CreateTaskDialog } from "../dialogAndDropdown/CreateTaskDialog";
+import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
 import type { ColumnUpdate } from "../../../core/types/board.types";
 
 export class BoardEventManager {
