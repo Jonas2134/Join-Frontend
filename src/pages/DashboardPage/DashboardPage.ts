@@ -35,7 +35,7 @@ export class DashboardPage extends BasePage {
   }
 
   // ============================================
-  // open Board section
+  // render Board section
   // ============================================
 
   renderOpenBoardsSection(container: HTMLElement, boards: Board[]) {
@@ -58,10 +58,6 @@ export class DashboardPage extends BasePage {
       container.appendChild(openSection);
     }
   }
-
-  // ============================================
-  // closed Board section
-  // ============================================
 
   renderClosedBoardsSection(container: HTMLElement, boards: Board[]) {
     const closedBoards = boards.filter((b) => b.is_active === false);

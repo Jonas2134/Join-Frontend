@@ -61,7 +61,7 @@ export class BoardCreateDialog extends BaseDialog {
 
   renderFieldset() {
     const fieldset = document.createElement("fieldset");
-    fieldset.classList.add('flex', 'flex-col', 'items-center', "gap-4", 'w-full');
+    fieldset.classList.add("base-fieldset");
 
     const legend = this.renderLegend();
     const titleField = this.renderInputField();

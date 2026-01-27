@@ -13,18 +13,33 @@ export class SignupPage extends BasePage {
     super(new AuthLayout());
   }
 
+  // ============================================
+  // Base render
+  // ============================================
+
   render() {
-    const form = document.createElement('form');
-    form.id = 'signupForm';
-    form.classList.add('w-full');
+    const container = document.createElement("div");
+    container.classList.add("auth-main-content");
+    container.id = "auth-main-content";
+    return this.wrapWithLayout(container);
+  }
 
-    const fieldset = document.createElement('fieldset');
-    fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
+  // ============================================
+  // render Login section
+  // ============================================
 
-    const legend = document.createElement('legend');
-    legend.classList.add('auth-legend');
-    legend.textContent = 'Signup';
-    fieldset.appendChild(legend);
+  renderSignupLegend() {
+    const legend = document.createElement("legend");
+    legend.classList.add("base-legend");
+    legend.textContent = "Signup";
+    return legend;
+  }
+
+  // TODO: create Input Field config Folder!!!
+
+  renderSignupFieldsWrapper() {
+    const fieldsWrapper = document.createElement("div");
+    fieldsWrapper.classList.add("fields-wrapper");
 
     const usernameField = new InputField({
       label: "Enter your Username:",
@@ -36,6 +51,7 @@ export class SignupPage extends BasePage {
       autocomplete: "username",
       required: true,
     });
+
     const emailField = new InputField({
       label: "Enter your Email:",
       name: "email",
@@ -46,6 +62,7 @@ export class SignupPage extends BasePage {
       autocomplete: "email",
       required: true,
     });
+
     const passwordField = new InputField({
       label: "Enter your Password:",
       name: "password",
@@ -56,6 +73,7 @@ export class SignupPage extends BasePage {
       autocomplete: "new-password",
       required: true,
     });
+
     const confPasswordField = new InputField({
       label: "Repeat your Password:",
       name: "confpassword",
@@ -67,49 +85,89 @@ export class SignupPage extends BasePage {
       required: true,
     });
 
-    fieldset.append(usernameField.render(), emailField.render(), passwordField.render(), confPasswordField.render());
+    fieldsWrapper.append(usernameField.render(), emailField.render(), passwordField.render(), confPasswordField.render());
+    return fieldsWrapper;
+  }
 
-    const checkboxWrapper = document.createElement('label');
-    checkboxWrapper.classList.add('checkboxItem', 'my-3');
-    checkboxWrapper.innerHTML = `
-      <input type="checkbox" name="checkbox" value="Remember me" class="checkbox" />
+  renderPrivacyCheckboxWrapper() {
+    const checkboxWrapper = document.createElement("label");
+    checkboxWrapper.classList.add("checkboxItem", "my-3");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "remember";
+    checkbox.classList.add("checkbox");
+
+    checkboxWrapper.appendChild(checkbox);
+    checkboxWrapper.innerHTML += `
       I accept the
       <a href="/privacy" data-link"> Privacy policy</a>
     `;
-    fieldset.appendChild(checkboxWrapper);
-
-    const signupBtn = document.createElement("button");
-    signupBtn.type = 'submit';
-    signupBtn.classList.add("btn", "btn-blue");
-    signupBtn.textContent = "Signup";
-
-    fieldset.append(signupBtn);
-    form.append(fieldset);
-    return this.wrapWithLayout(form);
+    return checkboxWrapper;
   }
+
+  renderSignupFieldset() {
+    const fieldset = document.createElement("fieldset");
+    fieldset.classList.add("base-fieldset");
+
+    const legend = this.renderSignupLegend();
+    const fieldsWrapper = this.renderSignupFieldsWrapper();
+    const checkboxWrapper = this.renderPrivacyCheckboxWrapper();
+
+    const subBtn = document.createElement("button");
+    subBtn.type = "submit";
+    subBtn.classList.add("btn", "btn-blue");
+    subBtn.textContent = "Signup";
+
+    fieldset.append(legend, fieldsWrapper, checkboxWrapper, subBtn);
+    return fieldset;
+  }
+
+  renderSignupForm(element: HTMLElement) {
+    const form = document.createElement("form");
+    form.id = "signupForm";
+    form.classList.add("w-full");
+    form.append(this.renderSignupFieldset());
+    element.appendChild(form);
+  }
+
+  // ============================================
+  // Lifecycle
+  // ============================================
+
+  updateSignupUI(): void {
+    const element = document.getElementById("auth-main-content");
+    if (!element) return;
+    element.innerHTML = "";
+    this.renderSignupForm(element);
+  }
+
+  // ============================================
+  // Mount Eventlistener
+  // ============================================
 
   mount() {
-    const form = document.getElementById('signupForm') as HTMLFormElement;
+    this.updateSignupUI();
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    const form = document.getElementById("signupForm") as HTMLFormElement;
+    if (!form) throw new Error("form not found!");
 
-      const formData = new FormData(form);
-      const username = formData.get("username") as string;
-      const email = formData.get("email") as string;
-      const password = formData.get("password") as string;
-      const repeated_password = formData.get("confpassword") as string;
-      try {
-        await authStore.register(username, email, password, repeated_password);
-        router.navigate('/login');
-      } catch (err: any) {
-        alert("Registration failed: " + err.message);
-      }
-    });
+    this.events.on(form, "submit", async (e: Event) => this.registerSignupFormListener(e, form));    
   }
 
-  unmount() {
-    const form = document.getElementById('signupForm');
-    if (form) form.replaceWith(form.cloneNode(true));
+  async registerSignupFormListener(e: Event, form: HTMLFormElement) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const username = formData.get("username") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const repeated_password = formData.get("confpassword") as string;
+    try {
+      await authStore.register(username, email, password, repeated_password);
+      router.navigate('/login');
+    } catch (err: any) {
+      alert("Registration failed: " + err.message);
+    }
   }
 }

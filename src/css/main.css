@@ -16,6 +16,7 @@
 @import "./pages/board.css";
 
 /* import component styles */
+@import "./components/form.css";
 @import "./components/buttons.css";
 @import "./components/inputs.css";
 @import "./components/checkbox.css";

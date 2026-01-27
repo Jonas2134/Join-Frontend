@@ -1,8 +1,8 @@
-import { AuthLayout } from '../layouts/AuthLayout';
-import { router } from '../core/router';
-import { authStore } from '../core/store/AuthStore';
-import { InputField } from '../components/common/InputField';
-import { BasePage } from '../components/bases/BasePage';
+import { AuthLayout } from "../layouts/AuthLayout";
+import { router } from "../core/router";
+import { authStore } from "../core/store/AuthStore";
+import { InputField } from "../components/common/InputField";
+import { BasePage } from "../components/bases/BasePage";
 
 import User from "../assets/icons/user.svg?raw";
 import LockOn from "../assets/icons/lock-on.svg?raw";
@@ -12,18 +12,33 @@ export class LoginPage extends BasePage {
     super(new AuthLayout());
   }
 
+  // ============================================
+  // Base render
+  // ============================================
+
   render() {
-    const form = document.createElement('form');
-    form.id = 'loginForm';
-    form.classList.add('w-full');
+    const container = document.createElement("div");
+    container.classList.add("auth-main-content");
+    container.id = "auth-main-content";
+    return this.wrapWithLayout(container);
+  }
 
-    const fieldset = document.createElement('fieldset');
-    fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
+  // ============================================
+  // render Login section
+  // ============================================
 
-    const legend = document.createElement('legend');
-    legend.classList.add('auth-legend');
-    legend.textContent = 'Login';
-    fieldset.appendChild(legend);
+  renderLoginLegend() {
+    const legend = document.createElement("legend");
+    legend.classList.add("base-legend");
+    legend.textContent = "Login";
+    return legend;
+  }
+
+  // TODO: create Input Field config Folder!!!
+
+  renderLoginFieldsWrapper() {
+    const fieldsWrapper = document.createElement("div");
+    fieldsWrapper.classList.add("fields-wrapper");
 
     const usernameField = new InputField({
       label: "Enter your Username:",
@@ -35,6 +50,7 @@ export class LoginPage extends BasePage {
       autocomplete: "username",
       required: true,
     });
+
     const passwordField = new InputField({
       label: "Enter your Password:",
       name: "password",
@@ -46,58 +62,100 @@ export class LoginPage extends BasePage {
       required: true,
     });
 
-    fieldset.append(usernameField.render(), passwordField.render());
-
-    const checkboxWrapper = document.createElement('label');
-    checkboxWrapper.classList.add('checkboxItem', 'my-3');
-    checkboxWrapper.innerHTML = `
-      <input type="checkbox" name="checkbox" value="Remember me" class="checkbox" />
-      Remember me
-    `;
-    fieldset.appendChild(checkboxWrapper);
-
-    const nav = document.createElement('nav');
-    nav.classList.add('flex', 'gap-4');
-
-    const loginBtn = document.createElement('button');
-    loginBtn.type = 'submit';
-    loginBtn.classList.add("btn", "btn-blue");
-    loginBtn.textContent = 'Login';
-
-    const guestBtn = document.createElement('button');
-    guestBtn.type = 'button';
-    guestBtn.classList.add("btn", "btn-white");
-    guestBtn.textContent = 'Guest Login';
-    guestBtn.addEventListener('click', () => router.navigate('/dashboard'));
-
-    nav.append(loginBtn, guestBtn);
-    fieldset.append(nav);
-
-    form.append(fieldset);
-
-    return this.wrapWithLayout(form);
+    fieldsWrapper.append(usernameField.render(), passwordField.render());
+    return fieldsWrapper;
   }
+
+  renderLoginCheckboxWrapper() {
+    const checkboxWrapper = document.createElement("label");
+    checkboxWrapper.classList.add("checkboxItem", "my-3");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "remember";
+    checkbox.classList.add("checkbox");
+
+    const labelText = document.createElement("span");
+    labelText.textContent = "Remember me";
+
+    checkboxWrapper.append(checkbox, labelText);
+    return checkboxWrapper;
+  }
+
+  renderLoginMenu() {
+    const menu = document.createElement("menu");
+    menu.classList.add("flex", "gap-6");
+
+    const subBtn = document.createElement("button");
+    subBtn.type = "submit";
+    subBtn.classList.add("btn", "btn-blue");
+    subBtn.title = "Login";
+    subBtn.textContent = "Login";
+
+    const guestBtn = document.createElement("button");
+    guestBtn.type = "button";
+    guestBtn.classList.add("btn", "btn-white");
+    guestBtn.title = "Guest login";
+    guestBtn.textContent = "Guest Login";
+
+    menu.append(subBtn, guestBtn);
+    return menu;
+  }
+
+  renderLoginFieldset() {
+    const fieldset = document.createElement("fieldset");
+    fieldset.classList.add("base-fieldset");
+
+    const legend = this.renderLoginLegend();
+    const fieldsWrapper = this.renderLoginFieldsWrapper();
+    const checkboxWrapper = this.renderLoginCheckboxWrapper();
+    const menu = this.renderLoginMenu();
+
+    fieldset.append(legend, fieldsWrapper, checkboxWrapper, menu);
+    return fieldset;
+  }
+
+  renderLoginForm(element: HTMLElement) {
+    const form = document.createElement("form");
+    form.id = "loginForm";
+    form.append(this.renderLoginFieldset());
+    element.appendChild(form);
+  }
+
+  // ============================================
+  // Lifecycle
+  // ============================================
+
+  updateLoginUI(): void {
+    const element = document.getElementById("auth-main-content");
+    if (!element) return;
+    element.innerHTML = "";
+    this.renderLoginForm(element);
+  }
+
+  // ============================================
+  // Mount Eventlistener
+  // ============================================
 
   mount() {
-    const form = document.getElementById('loginForm') as HTMLFormElement;
+    this.updateLoginUI();
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      const username = formData.get("username") as string;
-      const password = formData.get("password") as string;
-      try {
-        await authStore.login(username, password);
-        router.navigate('/dashboard');
-      } catch (err: any) {
-        alert("Login failed: " + err.message);
-      }
-    });
+    const form = document.getElementById("loginForm") as HTMLFormElement;
+    if (!form) throw new Error("form not found!");
+    this.events.on(form, "submit", async (e: Event) => this.registerLoginFormListener(e, form));
   }
 
-  unmount() {
-    const form = document.getElementById('loginForm');
-    if (form) form.replaceWith(form.cloneNode(true));
+  async registerLoginFormListener(e: Event, form: HTMLFormElement) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
+    try {
+      await authStore.login(username, password);
+      router.navigate("/dashboard");
+    } catch (err: any) {
+      alert("Login failed: " + err.message);
+    }
   }
 }

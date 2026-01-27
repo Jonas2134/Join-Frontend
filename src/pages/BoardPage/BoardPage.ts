@@ -38,6 +38,13 @@ export class BoardPage extends BasePage {
     return section;
   }
 
+  render() {
+    const container = document.createElement("section");
+    container.classList.add("flex", "flex-col", "gap-6", "h-full");
+    container.append(this.renderheader(), this.renderSection());
+    return this.wrapWithLayout(container);
+  }
+
   // ============================================
   // Lifecycle
   // ============================================
@@ -57,13 +64,6 @@ export class BoardPage extends BasePage {
 
     const dnd = new BoardDragAndDrop(this.initLoadBoard.bind(this));
     dnd.init(section);
-  }
-
-  render() {
-    const container = document.createElement("section");
-    container.classList.add("flex", "flex-col", "gap-6", "h-full");
-    container.append(this.renderheader(), this.renderSection());
-    return this.wrapWithLayout(container);
   }
 
   async initLoadBoard() {
