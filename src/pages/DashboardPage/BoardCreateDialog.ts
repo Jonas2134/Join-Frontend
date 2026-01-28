@@ -2,9 +2,7 @@ import { BaseDialog } from "../../components/bases/BaseDialog";
 import { appStore } from "../../core/store/AppStore";
 import { InputField } from "../../components/common/InputField";
 import { Textarea } from "../../components/common/Textarea";
-
-import User from "../../assets/icons/user.svg?raw";
-import Textareaicon from "../../assets/icons/textarea.svg?raw";
+import { dashboardFields } from "../../core/constants/appDashboardFields.config";
 
 export class BoardCreateDialog extends BaseDialog {
   constructor() {
@@ -17,36 +15,26 @@ export class BoardCreateDialog extends BaseDialog {
 
   renderLegend() {
     const legend = document.createElement("legend");
-    legend.classList.add("auth-legend");
+    legend.classList.add("base-legend");
     legend.textContent = "Create Board";
     return legend;
   }
 
-  renderInputField() {
-    const titleField = new InputField({
-      label: "Board Title:",
-      name: "title",
-      type: "text",
-      placeholder: "Title",
-      className: "input-b-border",
-      icon: User,
-      required: true
-    });
-    return titleField;
-  }
+  renderBoardCreateFieldsWrapper() {
+    const fieldsWrapper = document.createElement("div");
+    fieldsWrapper.classList.add("fields-wrapper");
 
-  renderTextarea() {
-    const descriptionTextfield = new Textarea({
-      label: "Board description:",
-      name: "description",
-      placeholder: "Write your description.",
-      icon: Textareaicon,
-      className: "input-b-border",
-      rows: 5,
-      maxLength: 500,
-      required: true
-    });
-    return descriptionTextfield;
+    const componentMap = {
+      input: InputField,
+      textarea: Textarea,
+    };
+
+    const fields = dashboardFields.map(field =>
+      new componentMap[field.type](field.config).render()
+    );
+
+    fieldsWrapper.append(...fields);
+    return fieldsWrapper;
   }
 
   renderMenu() {
@@ -64,11 +52,10 @@ export class BoardCreateDialog extends BaseDialog {
     fieldset.classList.add("base-fieldset");
 
     const legend = this.renderLegend();
-    const titleField = this.renderInputField();
-    const descriptionTextfield = this.renderTextarea();
+    const fieldsWrapper = this.renderBoardCreateFieldsWrapper();
     const menu = this.renderMenu();
 
-    fieldset.append(legend, titleField.render(), descriptionTextfield.render(), menu);
+    fieldset.append(legend, fieldsWrapper, menu);
     return fieldset;
   }
 
