@@ -4,9 +4,7 @@ import { authStore } from '../core/store/AuthStore';
 import { InputField } from '../components/common/InputField';
 import { BasePage } from '../components/bases/BasePage';
 
-import User from "../assets/icons/user.svg?raw";
-import Email from "../assets/icons/email.svg?raw";
-import LockOn from "../assets/icons/lock-on.svg?raw";
+import { signupFields } from '../core/constants/authFields.config';
 
 export class SignupPage extends BasePage {
   constructor() {
@@ -35,57 +33,16 @@ export class SignupPage extends BasePage {
     return legend;
   }
 
-  // TODO: create Input Field config Folder!!!
-
   renderSignupFieldsWrapper() {
     const fieldsWrapper = document.createElement("div");
     fieldsWrapper.classList.add("fields-wrapper");
 
-    const usernameField = new InputField({
-      label: "Enter your Username:",
-      name: "username",
-      type: "text",
-      placeholder: "Username",
-      className: "input-b-border",
-      icon: User,
-      autocomplete: "username",
-      required: true,
-    });
+    fieldsWrapper.append(
+      ...signupFields.map(config =>
+        new InputField({ ...config, className: "input-b-border", required: true }).render()
+      )
+    );
 
-    const emailField = new InputField({
-      label: "Enter your Email:",
-      name: "email",
-      type: "email",
-      placeholder: "Email",
-      className: "input-b-border",
-      icon: Email,
-      autocomplete: "email",
-      required: true,
-    });
-
-    const passwordField = new InputField({
-      label: "Enter your Password:",
-      name: "password",
-      type: "password",
-      placeholder: "Password",
-      className: "input-b-border",
-      icon: LockOn,
-      autocomplete: "new-password",
-      required: true,
-    });
-
-    const confPasswordField = new InputField({
-      label: "Repeat your Password:",
-      name: "confpassword",
-      type: "password",
-      placeholder: "Confirm Password",
-      className: "input-b-border",
-      icon: LockOn,
-      autocomplete: "new-password",
-      required: true,
-    });
-
-    fieldsWrapper.append(usernameField.render(), emailField.render(), passwordField.render(), confPasswordField.render());
     return fieldsWrapper;
   }
 

@@ -4,8 +4,7 @@ import { authStore } from "../core/store/AuthStore";
 import { InputField } from "../components/common/InputField";
 import { BasePage } from "../components/bases/BasePage";
 
-import User from "../assets/icons/user.svg?raw";
-import LockOn from "../assets/icons/lock-on.svg?raw";
+import { loginFields } from "../core/constants/authFields.config";
 
 export class LoginPage extends BasePage {
   constructor() {
@@ -34,35 +33,16 @@ export class LoginPage extends BasePage {
     return legend;
   }
 
-  // TODO: create Input Field config Folder!!!
-
   renderLoginFieldsWrapper() {
     const fieldsWrapper = document.createElement("div");
     fieldsWrapper.classList.add("fields-wrapper");
 
-    const usernameField = new InputField({
-      label: "Enter your Username:",
-      name: "username",
-      type: "text",
-      placeholder: "Username",
-      className: "input-b-border",
-      icon: User,
-      autocomplete: "username",
-      required: true,
-    });
+    fieldsWrapper.append(
+      ...loginFields.map(config =>
+        new InputField({ ...config, className: "input-b-border", required: true }).render()
+      )
+    );
 
-    const passwordField = new InputField({
-      label: "Enter your Password:",
-      name: "password",
-      type: "password",
-      placeholder: "Password",
-      className: "input-b-border",
-      icon: LockOn,
-      autocomplete: "current-password",
-      required: true,
-    });
-
-    fieldsWrapper.append(usernameField.render(), passwordField.render());
     return fieldsWrapper;
   }
 
