@@ -1,5 +1,6 @@
 import { BaseDropdownMenu } from "../../../components/bases/BaseDropdownMenu";
 import { InputField } from "../../../components/common/InputField";
+import { columnRenameField, columnLimitField } from "../../../core/constants/appBoardFields.config";
 
 import Editicon from "../../../assets/icons/edit.svg?raw";
 
@@ -37,36 +38,46 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
     return renameBtn;
   }
 
-  renderRenameForm(): HTMLElement {
-    const form = document.createElement("form");
-    form.classList.add("rename-column-form");
-
-    const renameInput = new InputField({
-      label: "Rename column:",
-      name: "column-rename",
-      type: "text",
-      placeholder: "New column name",
-      required: true
-    });
-
+  renderFormMenu(
+    menuClass: string,
+    subTitle: string,
+    cancelId: string,
+    cancelTitle: string,
+  ): HTMLElement {
     const menu = document.createElement("menu");
-    menu.classList.add("rename-form-menu");
+    menu.classList.add(menuClass);
 
     const submitBtn = document.createElement("button");
     submitBtn.type = "submit";
     submitBtn.classList.add("three-dot-btn");
     submitBtn.innerHTML = Editicon;
-    submitBtn.title = "Rename Column";
+    submitBtn.title = subTitle;
 
     const cancelBtn = document.createElement("button");
     cancelBtn.type = "button";
     cancelBtn.classList.add("three-dot-btn");
-    cancelBtn.id = "cancel-rename-btn";
+    cancelBtn.id = cancelId;
     cancelBtn.innerHTML = "X";
-    cancelBtn.title = "Cancel Renameing";
+    cancelBtn.title = cancelTitle;
 
     menu.append(submitBtn, cancelBtn);
-    form.append(renameInput.render(), menu);
+    return menu;
+  }
+
+  renderRenameForm(): HTMLElement {
+    const form = document.createElement("form");
+    form.classList.add("rename-column-form");
+
+    const renameInput = new InputField(columnRenameField).render();
+
+    const menu = this.renderFormMenu(
+      "rename-form-menu",
+      "Rename Column",
+      "cancel-rename-btn",
+      "Cancel Renameing",
+    );
+
+    form.append(renameInput, menu);
     return form;
   }
 
@@ -84,32 +95,16 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
     const form = document.createElement("form");
     form.classList.add("set-limit-form");
 
-    const limitInput = new InputField({
-      label: "Set Task Limit:",
-      name: "task-limit",
-      type: "number",
-      placeholder: "Task limit",
-      required: true
-    });
+    const limitInput = new InputField(columnLimitField).render();
 
-    const menu = document.createElement("menu");
-    menu.classList.add("limit-form-menu");
+    const menu = this.renderFormMenu(
+      "limit-form-menu",
+      "Set Task Limit",
+      "cancel-limit-btn",
+      "Cancel Setting Limit",
+    );
 
-    const submitBtn = document.createElement("button");
-    submitBtn.type = "submit";
-    submitBtn.classList.add("three-dot-btn");
-    submitBtn.innerHTML = Editicon;
-    submitBtn.title = "Set Task Limit";
-
-    const cancelBtn = document.createElement("button");
-    cancelBtn.type = "button";
-    cancelBtn.classList.add("three-dot-btn");
-    cancelBtn.id = "cancel-limit-btn";
-    cancelBtn.innerHTML = "X";
-    cancelBtn.title = "Cancel Setting Limit";
-    
-    menu.append(submitBtn, cancelBtn);
-    form.append(limitInput.render(), menu);
+    form.append(limitInput, menu);
     return form;
   }
 

@@ -1,4 +1,5 @@
 import { InputField } from "../../../components/common/InputField";
+import { addColumnField } from "../../../core/constants/appBoardFields.config";
 
 export class BoardAddColumnRenderer {
   constructor() {}
@@ -28,13 +29,7 @@ export class BoardAddColumnRenderer {
     const form = document.createElement("form");
     form.classList.add("add-column-form", "items-center", "gap-4", "py-4");
 
-    const input = new InputField({
-      label: "Column Name:",
-      name: "columnName",
-      type: "text",
-      placeholder: "Enter column name...",
-      required: true,
-    });
+    const input = new InputField(addColumnField).render();
 
     const buttonGroup = document.createElement("menu");
     buttonGroup.classList.add("flex", "gap-4");
@@ -52,7 +47,7 @@ export class BoardAddColumnRenderer {
     cancelBtn.textContent = "Cancel";
 
     buttonGroup.append(submitBtn, cancelBtn);
-    form.append(input.render(), buttonGroup);
+    form.append(input, buttonGroup);
     return form;
   }
 }

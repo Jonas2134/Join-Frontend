@@ -2,6 +2,7 @@ import { BaseDialog } from "../../../components/bases/BaseDialog";
 import { appStore } from "../../../core/store/AppStore";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
+import { createTaskFields } from "../../../core/constants/appBoardFields.config";
 
 export class CreateTaskDialog extends BaseDialog {
   columnId: string;
@@ -17,7 +18,7 @@ export class CreateTaskDialog extends BaseDialog {
 
   renderLegend() {
     const legend = document.createElement("legend");
-    legend.classList.add("auth-legend");
+    legend.classList.add("base-legend");
     legend.textContent = "Create Task";
     return legend;
   }
@@ -26,26 +27,16 @@ export class CreateTaskDialog extends BaseDialog {
     const firstsec = document.createElement("section");
     firstsec.classList.add("flex", "flex-col", "gap-3");
 
-    const titleField = new InputField({
-      label: "Task Title:",
-      name: "title",
-      type: "text",
-      placeholder: "Title",
-      className: "input-b-border",
-      required: true
-    });
+    const componentMap = {
+      input: InputField,
+      textarea: Textarea,
+    };
 
-    const descriptionTextfield = new Textarea({
-      label: "Task description:",
-      name: "description",
-      placeholder: "Write your description.",
-      className: "input-b-border",
-      rows: 5,
-      maxLength: 500,
-      required: true
-    });
+    const fields = createTaskFields.map(field =>
+      new componentMap[field.type](field.config).render()
+    );
 
-    firstsec.append(titleField.render(), descriptionTextfield.render());
+    firstsec.append(...fields);
     return firstsec;
   }
 
