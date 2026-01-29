@@ -1,6 +1,6 @@
 export interface ButtonOptions {
   id?: string;
-  class?: string;
+  class?: string | string[];
   type?: 'button' | 'submit';
   title?: string;
   text?: string;
@@ -19,7 +19,11 @@ export class Button {
   renderBtn(): HTMLButtonElement {
     if (this.btnOptions.id) this.btnElement.id = this.btnOptions.id;
 
-    if (this.btnOptions.class) this.btnElement.classList.add(this.btnOptions.class);
+    if(Array.isArray(this.btnOptions.class)) {
+      this.btnElement.classList.add(...this.btnOptions.class);
+    } else if (this.btnOptions.class) {
+      this.btnElement.classList.add(this.btnOptions.class);
+    }
 
     if (this.btnOptions.type) this.btnElement.type = this.btnOptions.type;
 

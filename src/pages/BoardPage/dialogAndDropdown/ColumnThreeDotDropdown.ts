@@ -1,8 +1,16 @@
 import { BaseDropdownMenu } from "../../../components/bases/BaseDropdownMenu";
 import { InputField } from "../../../components/common/InputField";
-import { columnRenameField, columnLimitField } from "../../../core/constants/appBoardFields.config";
+import {
+  columnRenameField,
+  columnLimitField,
+} from "../../../core/constants/appBoardFields.config";
 import { Button } from "../../../components/common/Button";
-import { threeDotFormBtns, threeDotRenameBtn, threeDotLimitBtn, threeDotDelBtn } from "../../../core/constants/appBoardBtns.config";
+import {
+  threeDotFormBtns,
+  threeDotRenameBtn,
+  threeDotLimitBtn,
+  threeDotDelBtn,
+} from "../../../core/constants/appThreeDot.config";
 
 import type { ButtonOptions } from "../../../components/common/Button";
 
@@ -45,9 +53,7 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
 
     if (!menuConfig) return menuElement;
 
-    const btns = menuConfig.config.map((btnConfig) =>
-      new Button(btnConfig).renderBtn(),
-    );
+    const btns = menuConfig.config.map((btnConfig) => this.renderMenuBtn(btnConfig));
 
     menuElement.append(...btns);
     return menuElement;

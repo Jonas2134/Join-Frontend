@@ -1,7 +1,8 @@
 import { Avatar } from "../../../components/common/Avatar";
+import { Button } from "../../../components/common/Button";
+import { editBoardBtn, moreIndicator } from "../../../core/constants/appBoardBtns.config";
 import type { Board } from "../../../core/types/board.types";
 import ToggleIcon from "../../../assets/icons/ToggleIcon.svg?raw";
-import EditIcon from "../../../assets/icons/edit.svg?raw";
 
 export class BoardHeaderRenderer {
   renderHeaderContent(header: HTMLElement, board: Board) {
@@ -82,30 +83,11 @@ export class BoardHeaderRenderer {
 
     if (remainingCount > 0) {
       const listItem = document.createElement("li");
-      const moreIndicator = this.createMoreIndicator(remainingCount);
-      listItem.appendChild(moreIndicator)
+      const moreIndicatorBtn = new Button({...moreIndicator, text: `+${remainingCount}`}).renderBtn();
+      listItem.appendChild(moreIndicatorBtn);
       membersList.appendChild(listItem);
     }
     return membersList;
-  }
-
-  createMoreIndicator(count: number) {
-    const moreButton = document.createElement("button");
-    moreButton.type = "button";
-    moreButton.id = "more-indicator";
-    moreButton.classList.add("round-base-btn", "more-indicator-btn");
-    moreButton.textContent = `+${count}`;
-    
-    return moreButton;
-  }
-
-  renderEditButton() {
-    const editButton = document.createElement("button");
-    editButton.id = "editBoardBtn";
-    editButton.classList.add("edit-btn");
-    editButton.title = "Edit board";
-    editButton.innerHTML = EditIcon;
-    return editButton;
   }
 
   renderDetailsContent(board: Board) {
@@ -114,7 +96,7 @@ export class BoardHeaderRenderer {
 
     const descriptionSection = this.renderDetailsDescriptionSection(board);
     const membersSection = this.renderDetailsMembersSection(board);
-    const editBtn = this.renderEditButton();
+    const editBtn = new Button(editBoardBtn).renderBtn();
 
     detailsContent.append(descriptionSection, membersSection, editBtn);
     return detailsContent;

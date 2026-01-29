@@ -1,6 +1,8 @@
 import { BoardTaskRenderer } from "./BoardTaskRenderer";
+import { Button } from "../../../components/common/Button";
+import { threeDotBtn } from "../../../core/constants/appThreeDot.config";
+import { boardAddTaskBtn } from "../../../core/constants/appBoardBtns.config";
 import type { Column } from "../../../core/types/board.types";
-import VerticalDotsIcon from "../../../assets/icons/menu-vertical.svg?raw";
 
 export class BoardColumnRenderer {
   private taskRenderer: BoardTaskRenderer;
@@ -34,13 +36,9 @@ export class BoardColumnRenderer {
     title.classList.add("text-xl", "text-(--color-light-blue)", "underline");
     title.textContent = column.name;
 
-    const verticalDots = document.createElement("button");
-    verticalDots.innerHTML = VerticalDotsIcon;
-    verticalDots.title = "Column menu";
-    verticalDots.type = "button";
-    verticalDots.classList.add("column-menu-btn");
+    const threeDot = new Button(threeDotBtn).renderBtn();
 
-    header.append(title, verticalDots);
+    header.append(title, threeDot);
     return header;
   }
 
@@ -48,11 +46,7 @@ export class BoardColumnRenderer {
     const footer = document.createElement("footer");
     footer.classList.add("flex", "justify-center");
 
-    const addTaskBtn = document.createElement("button");
-    addTaskBtn.classList.add("create-task-btn", "btn");
-    addTaskBtn.title = "Add Task";
-    addTaskBtn.type = "button";
-    addTaskBtn.textContent = "+ add Task";
+    const addTaskBtn = new Button(boardAddTaskBtn).renderBtn();
 
     footer.appendChild(addTaskBtn);
     return footer;
