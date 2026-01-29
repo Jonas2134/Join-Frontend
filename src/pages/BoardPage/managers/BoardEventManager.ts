@@ -88,7 +88,7 @@ export class BoardEventManager {
     
     e.stopPropagation();
     this.restoreButtonInMenuItem(btn, ".rename-column-form", "#rename-column-btn", () => 
-      this.dropdown?.renderRenameBtn()
+      this.dropdown?.renderMenuBtn(this.dropdown.renameConfig)
     );
   }
 
@@ -119,7 +119,7 @@ export class BoardEventManager {
     
     e.stopPropagation();
     this.restoreButtonInMenuItem(btn, ".set-limit-form", "#set-task-limit-btn", () => 
-      this.dropdown?.renderLimitBtn()
+      this.dropdown?.renderMenuBtn(this.dropdown.limitConfig)
     );
   }
 

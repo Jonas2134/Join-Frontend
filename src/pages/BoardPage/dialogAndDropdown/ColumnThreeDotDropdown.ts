@@ -1,10 +1,15 @@
 import { BaseDropdownMenu } from "../../../components/bases/BaseDropdownMenu";
 import { InputField } from "../../../components/common/InputField";
 import { columnRenameField, columnLimitField } from "../../../core/constants/appBoardFields.config";
+import { Button } from "../../../components/common/Button";
+import { threeDotFormBtns, threeDotRenameBtn, threeDotLimitBtn, threeDotDelBtn } from "../../../core/constants/appBoardBtns.config";
 
-import Editicon from "../../../assets/icons/edit.svg?raw";
+import type { ButtonOptions } from "../../../components/common/Button";
 
 export class ColumnThreeDotDropdown extends BaseDropdownMenu {
+  renameConfig = threeDotRenameBtn;
+  limitConfig = threeDotLimitBtn;
+
   constructor(btn: HTMLButtonElement) {
     super(btn, "column-dropdown-menu");
   }
@@ -12,56 +17,40 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
   protected renderMenu(): HTMLElement {
     const menu = this.menu;
 
-    const renameSec = document.createElement("li");
-    renameSec.classList.add("menu-item");
-    const renameBtn = this.renderRenameBtn();
-    renameSec.appendChild(renameBtn);
+    const renameItem = this.renderMenuListItem(this.renameConfig);
+    const setLimitItem = this.renderMenuListItem(this.limitConfig);
+    const deleteItem = this.renderMenuListItem(threeDotDelBtn);
 
-    const setLimitSec = document.createElement("li");
-    setLimitSec.classList.add("menu-item");
-    const setLimitBtn = this.renderLimitBtn();
-    setLimitSec.appendChild(setLimitBtn);
-
-    const deleteSec = this.renderDeleteSec();
-
-    menu.append(renameSec, setLimitSec, deleteSec);
+    menu.append(renameItem, setLimitItem, deleteItem);
     return menu;
   }
 
-  renderRenameBtn(): HTMLElement {
-    const renameBtn = document.createElement("button");
-    renameBtn.classList.add("dropdown-btn");
-    renameBtn.id = "rename-column-btn";
-    renameBtn.textContent = "Rename Column";
-    renameBtn.type = "button";
-    renameBtn.title = "Rename Column";
-    return renameBtn;
+  renderMenuListItem(btnConfig: ButtonOptions) {
+    const item = document.createElement("li");
+    item.classList.add("menu-item");
+    const btn = this.renderMenuBtn(btnConfig);
+    item.appendChild(btn);
+    return item;
   }
 
-  renderFormMenu(
-    menuClass: string,
-    subTitle: string,
-    cancelId: string,
-    cancelTitle: string,
-  ): HTMLElement {
-    const menu = document.createElement("menu");
-    menu.classList.add(menuClass);
+  renderMenuBtn(btnConfig: ButtonOptions) {
+    return new Button(btnConfig).renderBtn();
+  }
 
-    const submitBtn = document.createElement("button");
-    submitBtn.type = "submit";
-    submitBtn.classList.add("three-dot-btn");
-    submitBtn.innerHTML = Editicon;
-    submitBtn.title = subTitle;
+  renderFormMenu(menuClass: string, menuType: string): HTMLElement {
+    const menuElement = document.createElement("menu");
+    menuElement.classList.add(menuClass);
 
-    const cancelBtn = document.createElement("button");
-    cancelBtn.type = "button";
-    cancelBtn.classList.add("three-dot-btn");
-    cancelBtn.id = cancelId;
-    cancelBtn.innerHTML = "X";
-    cancelBtn.title = cancelTitle;
+    const menuConfig = threeDotFormBtns.find((btn) => btn.menu === menuType);
 
-    menu.append(submitBtn, cancelBtn);
-    return menu;
+    if (!menuConfig) return menuElement;
+
+    const btns = menuConfig.config.map((btnConfig) =>
+      new Button(btnConfig).renderBtn(),
+    );
+
+    menuElement.append(...btns);
+    return menuElement;
   }
 
   renderRenameForm(): HTMLElement {
@@ -69,26 +58,10 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
     form.classList.add("rename-column-form");
 
     const renameInput = new InputField(columnRenameField).render();
-
-    const menu = this.renderFormMenu(
-      "rename-form-menu",
-      "Rename Column",
-      "cancel-rename-btn",
-      "Cancel Renameing",
-    );
+    const menu = this.renderFormMenu("rename-form-menu", "rename");
 
     form.append(renameInput, menu);
     return form;
-  }
-
-  renderLimitBtn(): HTMLElement {
-    const setLimitBtn = document.createElement("button");
-    setLimitBtn.classList.add("dropdown-btn");
-    setLimitBtn.id = "set-task-limit-btn";
-    setLimitBtn.textContent = "Set Task Limit";
-    setLimitBtn.type = "button";
-    setLimitBtn.title = "Set Task Limit";
-    return setLimitBtn;
   }
 
   renderSetLimitForm(): HTMLElement {
@@ -96,30 +69,9 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
     form.classList.add("set-limit-form");
 
     const limitInput = new InputField(columnLimitField).render();
-
-    const menu = this.renderFormMenu(
-      "limit-form-menu",
-      "Set Task Limit",
-      "cancel-limit-btn",
-      "Cancel Setting Limit",
-    );
+    const menu = this.renderFormMenu("limit-form-menu", "limit");
 
     form.append(limitInput, menu);
     return form;
-  }
-
-  renderDeleteSec(): HTMLElement {
-    const deleteSec = document.createElement("li");
-    deleteSec.classList.add("menu-item");
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.classList.add("dropdown-btn");
-    deleteBtn.id = "delete-column-btn";
-    deleteBtn.textContent = "Delete Column";
-    deleteBtn.type = "button";
-    deleteBtn.title = "Delete Column";
-
-    deleteSec.appendChild(deleteBtn);
-    return deleteSec;
   }
 }
