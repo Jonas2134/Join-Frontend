@@ -1,4 +1,9 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
+import { Button } from "../../../components/common/Button";
+import { InputField } from "../../../components/common/InputField";
+import { Textarea } from "../../../components/common/Textarea";
+import { editBoardDialogBtns } from "../../../core/constants/appDialogBtns.config";
+import { editBoardDialogFields } from "../../../core/constants/appDialogFields.config";
 
 export class EditBoardDialog extends BaseDialog {
   boardId: string;
@@ -14,7 +19,7 @@ export class EditBoardDialog extends BaseDialog {
 
   renderLegend() {
     const legend = document.createElement("legend");
-    legend.classList.add("auth-legend");
+    legend.classList.add("base-legend");
     legend.textContent = "Edit Board";
     return legend;
   }
@@ -22,19 +27,29 @@ export class EditBoardDialog extends BaseDialog {
   renderMainSection() {
     const main = document.createElement("main");
     main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
-    
-    // TODO: add Inputfields
 
+    const componentMap = {
+      input: InputField,
+      textarea: Textarea,
+    };
+
+    const fields = editBoardDialogFields.map(field =>
+      new componentMap[field.type](field.config).render()
+    );
+
+    main.append(...fields);
     return main;
   }
 
   renderMenu() {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
-    menu.innerHTML = `
-      <button class="btn btn-blue" type="submit">Edit</button>
-      <button class="btn btn-white" type="button" id="cancel-btn">Cancel</button>
-    `;
+
+    const btns = editBoardDialogBtns.map((config) =>
+      new Button({ ...config }).renderBtn(),
+    );
+
+    menu.append(...btns);
     return menu;
   }
 
@@ -66,7 +81,5 @@ export class EditBoardDialog extends BaseDialog {
   // Mount Eventlistener
   // ============================================
 
-  protected override mount(): void {
-    
-  }
+  protected override mount(): void {}
 }
