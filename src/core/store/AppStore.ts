@@ -4,7 +4,7 @@ import type { ColumnUpdate, TaskUpdate } from "../types/board.types";
 
 class AppStore {
   boards: any[] = [];
-  singBoard: any
+  singBoard: any;
   columns: Record<number, any[]> = {};
   tasks: Record<number, any[]> = {};
 
@@ -16,7 +16,11 @@ class AppStore {
   }
 
   async createBoard(title: string, description?: string, members?: number) {
-    const response = await http.post(API_ROUTES.boards.list, { title, description, members });
+    const response = await http.post(API_ROUTES.boards.list, {
+      title,
+      description,
+      members,
+    });
     window.dispatchEvent(new CustomEvent("board:created"));
     return response;
   }
@@ -24,6 +28,15 @@ class AppStore {
   async loadBoard(id: string) {
     this.singBoard = await http.get(API_ROUTES.boards.detail(id));
     return this.singBoard;
+  }
+
+  async updateBoard(boardId: string, title?: string, description?: string) {
+    const response = http.patch(API_ROUTES.boards.detail(boardId), {
+      title,
+      description,
+    });
+    window.dispatchEvent(new CustomEvent("board:updated"));
+    return response;
   }
 
   async createColumn(boardId: string, name: string) {
@@ -38,8 +51,17 @@ class AppStore {
     await http.delete(API_ROUTES.columns.detail(columnId));
   }
 
-  async createTask(columnId: string, title: string, description?: string, assignee?: string) {
-    const response = await http.post(API_ROUTES.tasks.list(columnId), { title, description, assignee });
+  async createTask(
+    columnId: string,
+    title: string,
+    description?: string,
+    assignee?: string,
+  ) {
+    const response = await http.post(API_ROUTES.tasks.list(columnId), {
+      title,
+      description,
+      assignee,
+    });
     window.dispatchEvent(new CustomEvent("task:created"));
     return response;
   }

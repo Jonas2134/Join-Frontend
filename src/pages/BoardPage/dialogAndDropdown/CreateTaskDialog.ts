@@ -67,6 +67,8 @@ export class CreateTaskDialog extends BaseDialog {
     return main;
   }
 
+
+  // TODO: Optimase Button rendering
   renderMenu() {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
@@ -117,7 +119,6 @@ export class CreateTaskDialog extends BaseDialog {
       const title = formDate.get("title") as string;
       const description = formDate.get("description") as string;
       //const assignee = formDate.get("assignee") as string;
-      console.log(formDate);
       try {
         await appStore.createTask(this.columnId, title, description);
         this.close();

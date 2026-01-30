@@ -79,10 +79,14 @@ export class BoardPage extends BasePage {
   async mount() {
     await this.initLoadBoard();
 
+
+    // TODO: board:updated Custom Event does not work
     const boardEdit = document.getElementById("editBoardBtn");
-    if (boardEdit) {
-      this.events.on(boardEdit, "click", () => this.eventManager.registerEditBoardDialog(this.id));
+    if (!boardEdit) {
+      throw new Error("Edit Board button nor found!");
     }
+    this.events.on(boardEdit, "click", () => this.eventManager.registerEditBoardDialog(this.id));
+    this.events.on(window, "board:updated", async () => await this.initLoadBoard());
 
     const boardroot = document.getElementById("board-section");
     if (!boardroot) {

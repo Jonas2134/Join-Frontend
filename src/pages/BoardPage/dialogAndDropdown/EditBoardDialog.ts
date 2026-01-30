@@ -1,4 +1,5 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
+import { appStore } from "../../../core/store/AppStore";
 import { Button } from "../../../components/common/Button";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
@@ -81,5 +82,27 @@ export class EditBoardDialog extends BaseDialog {
   // Mount Eventlistener
   // ============================================
 
-  protected override mount(): void {}
+  // TODO: Fix Form Listener
+
+  protected override mount(): void {
+    const cancelBtn = this.dialog.querySelector("#cancel-btn") as HTMLFormElement;
+    const form = this.dialog.querySelector("#eform") as HTMLFormElement;
+
+    cancelBtn.addEventListener("click", () => this.close());
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formDate = new FormData(form);
+      const title = formDate.get("title") as string;
+      const description = formDate.get("description") as string;
+      console.log(formDate, title, description);
+      try {
+        await appStore.updateBoard(this.boardId, title, description);
+        this.close();
+        form.reset();
+      } catch (err: any) {
+        alert("Updating is failed: " + err.message);
+      }
+    });
+  }
 }
