@@ -8,7 +8,7 @@ export const editBoardDialogFields = [
       type: "text" as const,
       placeholder: "New Title",
       className: "input-b-border",
-      required: true,
+      required: false,
     },
   },
   {
@@ -36,7 +36,7 @@ export const editTaskDialogFields = [
       type: "text" as const,
       placeholder: "Title",
       className: "input-b-border",
-      required: true,
+      required: false,
     },
   },
   {

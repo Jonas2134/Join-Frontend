@@ -1,5 +1,6 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
 import { appStore } from "../../../core/store/AppStore";
+import { toastManager } from "../../../core/ToastManager";
 import { Button } from "../../../components/common/Button";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
@@ -101,10 +102,11 @@ export class EditBoardDialog extends BaseDialog {
       console.log(formDate, title, description);
       try {
         await appStore.updateBoard(this.board.id, title, description);
+        toastManager.success("Board erfolgreich aktualisiert");
         this.close();
         form.reset();
       } catch (err: any) {
-        alert("Updating is failed: " + err.message);
+        toastManager.error("Update fehlgeschlagen: " + err.message);
       }
     });
   }

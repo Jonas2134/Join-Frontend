@@ -1,5 +1,6 @@
 import { BaseDialog } from "../../components/bases/BaseDialog";
 import { appStore } from "../../core/store/AppStore";
+import { toastManager } from "../../core/ToastManager";
 import { InputField } from "../../components/common/InputField";
 import { Textarea } from "../../components/common/Textarea";
 import { dashboardFields } from "../../core/constants/appDashboardFields.config";
@@ -90,10 +91,11 @@ export class BoardCreateDialog extends BaseDialog {
           formDate.get("title") as string,
           formDate.get("description") as string
         );
+        toastManager.success("Board erfolgreich erstellt");
         this.close();
         form.reset();
       } catch (err: any) {
-        alert("Creation is failed: " + err.message);
+        toastManager.error("Erstellung fehlgeschlagen: " + err.message);
       }
     });
   }

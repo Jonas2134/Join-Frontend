@@ -1,5 +1,6 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
 import { appStore } from "../../../core/store/AppStore";
+import { toastManager } from "../../../core/ToastManager";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
 import { Button } from "../../../components/common/Button";
@@ -131,10 +132,11 @@ export class EditTaskDialog extends BaseDialog {
           title,
           description: description || null,
         });
+        toastManager.success("Task erfolgreich aktualisiert");
         window.dispatchEvent(new CustomEvent("task:updated"));
         this.close();
       } catch (err: any) {
-        alert("Update failed: " + err.message);
+        toastManager.error("Update fehlgeschlagen: " + err.message);
       }
     });
   }

@@ -1,5 +1,6 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
 import { appStore } from "../../../core/store/AppStore";
+import { toastManager } from "../../../core/ToastManager";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
 import { Button } from "../../../components/common/Button";
@@ -123,10 +124,11 @@ export class CreateTaskDialog extends BaseDialog {
       //const assignee = formDate.get("assignee") as string;
       try {
         await appStore.createTask(this.columnId, title, description);
+        toastManager.success("Task erfolgreich erstellt");
         this.close();
         form.reset();
       } catch (err: any) {
-        alert("Creation is failed: " + err.message);
+        toastManager.error("Erstellung fehlgeschlagen: " + err.message);
       }
     });
   }

@@ -1,6 +1,7 @@
 import { AuthLayout } from "../layouts/AuthLayout";
 import { router } from "../core/router";
 import { authStore } from "../core/store/AuthStore";
+import { toastManager } from "../core/ToastManager";
 import { InputField } from "../components/common/InputField";
 import { BasePage } from "../components/bases/BasePage";
 
@@ -135,7 +136,7 @@ export class LoginPage extends BasePage {
       await authStore.login(username, password);
       router.navigate("/dashboard");
     } catch (err: any) {
-      alert("Login failed: " + err.message);
+      toastManager.error("Login fehlgeschlagen: " + err.message);
     }
   }
 }

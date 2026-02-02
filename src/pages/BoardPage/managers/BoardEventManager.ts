@@ -1,4 +1,5 @@
 import { appStore } from "../../../core/store/AppStore";
+import { toastManager } from "../../../core/ToastManager";
 import { CreateTaskDialog } from "../dialogAndDropdown/CreateTaskDialog";
 import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
 import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
@@ -403,7 +404,7 @@ export class BoardEventManager {
       await operation();
       await this.initLoadBoard();
     } catch (err: any) {
-      alert(`${operationName} failed: ${err.message}`);
+      toastManager.error(`${operationName} fehlgeschlagen: ${err.message}`);
     }
   }
 }

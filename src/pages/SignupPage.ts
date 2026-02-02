@@ -1,6 +1,7 @@
 import { AuthLayout } from '../layouts/AuthLayout';
 import { router } from '../core/router';
 import { authStore } from '../core/store/AuthStore';
+import { toastManager } from '../core/ToastManager';
 import { InputField } from '../components/common/InputField';
 import { BasePage } from '../components/bases/BasePage';
 
@@ -122,9 +123,10 @@ export class SignupPage extends BasePage {
     const repeated_password = formData.get("confpassword") as string;
     try {
       await authStore.register(username, email, password, repeated_password);
+      toastManager.success("Registrierung erfolgreich");
       router.navigate('/login');
     } catch (err: any) {
-      alert("Registration failed: " + err.message);
+      toastManager.error("Registrierung fehlgeschlagen: " + err.message);
     }
   }
 }
