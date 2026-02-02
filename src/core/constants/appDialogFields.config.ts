@@ -1,6 +1,7 @@
 export const editBoardDialogFields = [
   {
     type: "input" as const,
+    value: "title" as const,
     config: {
       label: "Edit Board Title:",
       name: "title",
@@ -12,6 +13,7 @@ export const editBoardDialogFields = [
   },
   {
     type: "textarea" as const,
+    value: "description" as const,
     config: {
       label: "Edit Board description:",
       name: "description",

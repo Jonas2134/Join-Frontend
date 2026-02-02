@@ -34,9 +34,13 @@ export class EditBoardDialog extends BaseDialog {
       textarea: Textarea,
     };
 
-    const fields = editBoardDialogFields.map(field =>
-      new componentMap[field.type](field.config).render()
-    );
+    const fields = editBoardDialogFields.map(field =>{
+      const fieldValue = appStore.singleBoard![field.value];
+      return new componentMap[field.type]({
+        ...field.config,
+        value: fieldValue || undefined
+      }).render()
+    });
 
     main.append(...fields);
     return main;

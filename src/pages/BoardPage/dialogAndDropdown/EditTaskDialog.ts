@@ -88,7 +88,7 @@ export class EditTaskDialog extends BaseDialog {
 
   private renderFieldset() {
     const fieldset = document.createElement("fieldset");
-    fieldset.classList.add("flex", "flex-col", "items-center", "gap-4", "w-full");
+    fieldset.classList.add("fields-wrapper");
 
     const legend = this.renderLegend();
     const main = this.renderMainSection();
