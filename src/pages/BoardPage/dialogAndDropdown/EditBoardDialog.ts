@@ -82,8 +82,6 @@ export class EditBoardDialog extends BaseDialog {
   // Mount Eventlistener
   // ============================================
 
-  // TODO: Fix Form Listener
-
   protected override mount(): void {
     const cancelBtn = this.dialog.querySelector("#cancel-btn") as HTMLFormElement;
     const form = this.dialog.querySelector("#eform") as HTMLFormElement;

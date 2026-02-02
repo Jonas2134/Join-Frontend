@@ -52,9 +52,8 @@ export class BoardPage extends BasePage {
   updateBoardUI(): void {
     const header = document.getElementById("board-header");
     const section = document.getElementById("board-section");
-    if (!section || !header) return;
-
-    const board = appStore.singBoard;
+    const board = appStore.singleBoard;
+    if (!section || !header || !board) return;
 
     header.innerHTML = "";
     section.innerHTML = "";
@@ -68,7 +67,7 @@ export class BoardPage extends BasePage {
 
   async initLoadBoard() {
     await appStore.loadBoard(this.id);
-    console.log(appStore.singBoard);
+    console.log(appStore.singleBoard);
     this.updateBoardUI();
   }
 
@@ -79,8 +78,6 @@ export class BoardPage extends BasePage {
   async mount() {
     await this.initLoadBoard();
 
-
-    // TODO: board:updated Custom Event does not work
     const boardEdit = document.getElementById("editBoardBtn");
     if (!boardEdit) {
       throw new Error("Edit Board button nor found!");
