@@ -82,7 +82,10 @@ export class BoardPage extends BasePage {
     if (!boardEdit) {
       throw new Error("Edit Board button nor found!");
     }
-    this.events.on(boardEdit, "click", () => this.eventManager.registerEditBoardDialog(this.id));
+    this.events.on(boardEdit, "click", () => {
+      const board = appStore.singleBoard;
+      if (board) this.eventManager.registerEditBoardDialog(board);
+    });
     this.events.on(window, "board:updated", async () => await this.initLoadBoard());
 
     const boardroot = document.getElementById("board-section");

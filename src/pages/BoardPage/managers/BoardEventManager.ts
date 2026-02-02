@@ -5,7 +5,7 @@ import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropd
 import { TaskThreeDotDropdown } from "../dialogAndDropdown/TaskThreeDotDropdown";
 import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
 import { EditTaskDialog } from "../dialogAndDropdown/EditTaskDialog";
-import type { ColumnUpdate, Task } from "../../../core/types/board.types";
+import type { Board, ColumnUpdate, Task } from "../../../core/types/board.types";
 
 export class BoardEventManager {
   dialog: CreateTaskDialog | EditBoardDialog | TaskDetailDialog | EditTaskDialog | null = null;
@@ -21,8 +21,8 @@ export class BoardEventManager {
   // Public Event Listeners
   // ============================================
 
-  registerEditBoardDialog(id: string) {
-    this.dialog = new EditBoardDialog(id);
+  registerEditBoardDialog(board: Board) {
+    this.dialog = new EditBoardDialog(board);
     document.body.appendChild(this.dialog.render());
     this.dialog?.open();
   }

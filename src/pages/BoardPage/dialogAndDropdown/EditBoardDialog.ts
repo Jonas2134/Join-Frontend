@@ -5,13 +5,14 @@ import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
 import { editBoardDialogBtns } from "../../../core/constants/appDialogBtns.config";
 import { editBoardDialogFields } from "../../../core/constants/appDialogFields.config";
+import type { Board } from "../../../core/types/board.types";
 
 export class EditBoardDialog extends BaseDialog {
-  boardId: string;
+  board: Board;
 
-  constructor(Id: string) {
+  constructor(board: Board) {
     super("edit-board-dialog");
-    this.boardId = Id;
+    this.board = board;
   }
 
   // ============================================
@@ -35,7 +36,7 @@ export class EditBoardDialog extends BaseDialog {
     };
 
     const fields = editBoardDialogFields.map(field =>{
-      const fieldValue = appStore.singleBoard![field.value];
+      const fieldValue = this.board[field.value];
       return new componentMap[field.type]({
         ...field.config,
         value: fieldValue || undefined
@@ -99,7 +100,7 @@ export class EditBoardDialog extends BaseDialog {
       const description = formDate.get("description") as string;
       console.log(formDate, title, description);
       try {
-        await appStore.updateBoard(this.boardId, title, description);
+        await appStore.updateBoard(this.board.id, title, description);
         this.close();
         form.reset();
       } catch (err: any) {
