@@ -118,5 +118,12 @@ export class BoardPage extends BasePage {
   mountTaskListener(boardroot: HTMLElement) {
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskButtonListener(e));
     this.events.on(window, "task:created", async () => await this.initLoadBoard());
+    this.events.on(window, "task:deleted", async () => await this.initLoadBoard());
+    this.events.on(window, "task:updated", async () => await this.initLoadBoard());
+
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskThreeDotListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskViewDetailsListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskEditListener(e));
+    this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskDeleteListener(e));
   }
 }

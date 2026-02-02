@@ -2,11 +2,15 @@ import { appStore } from "../../../core/store/AppStore";
 import { CreateTaskDialog } from "../dialogAndDropdown/CreateTaskDialog";
 import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
 import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
-import type { ColumnUpdate } from "../../../core/types/board.types";
+import { TaskThreeDotDropdown } from "../dialogAndDropdown/TaskThreeDotDropdown";
+import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
+import { EditTaskDialog } from "../dialogAndDropdown/EditTaskDialog";
+import type { ColumnUpdate, Task } from "../../../core/types/board.types";
 
 export class BoardEventManager {
-  dialog: CreateTaskDialog | EditBoardDialog | null = null;
+  dialog: CreateTaskDialog | EditBoardDialog | TaskDetailDialog | EditTaskDialog | null = null;
   dropdown: ColumnThreeDotDropdown | null = null;
+  taskDropdown: TaskThreeDotDropdown | null = null;
   private initLoadBoard: () => Promise<void>;
 
   constructor(func: () => Promise<void>) {
@@ -132,6 +136,59 @@ export class BoardEventManager {
   }
 
   // ============================================
+  // Task Dropdown Listeners
+  // ============================================
+
+  registerTaskThreeDotListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".task-menu-btn");
+    if (!btn) return;
+
+    const task = this.findClosestElement<HTMLElement>(btn, ".task");
+    if (!task) return;
+
+    e.stopPropagation();
+    this.openTaskThreeDotDropdown(btn, task);
+  }
+
+  registerTaskViewDetailsListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#view-task-btn");
+    if (!btn) return;
+
+    const taskId = this.getTaskIdFromElement(btn);
+    if (!taskId) return;
+
+    const task = this.findTaskById(taskId);
+    if (task) {
+      this.taskDropdown?.close();
+      this.openTaskDetailDialog(task);
+    }
+  }
+
+  registerTaskDeleteListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#delete-task-btn");
+    if (!btn) return;
+
+    const taskId = this.getTaskIdFromElement(btn);
+    if (taskId) {
+      this.deleteTask(taskId);
+    }
+  }
+
+  registerTaskEditListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#edit-task-btn");
+    if (!btn) return;
+
+    const taskId = this.getTaskIdFromElement(btn);
+    if (!taskId) return;
+
+    const task = this.findTaskById(taskId);
+    if (task) {
+      this.taskDropdown?.close();
+      this.openEditTaskDialog(task);
+    }
+  }
+
+  // ============================================
   // Private Helper Methods
   // ============================================
 
@@ -151,6 +208,22 @@ export class BoardEventManager {
   private getColumnIdFromElement(element: HTMLElement): string | null {
     const column = element.closest<HTMLElement>(".board-column");
     return column?.dataset.columnId ?? null;
+  }
+
+  private getTaskIdFromElement(element: HTMLElement): string | null {
+    const task = element.closest<HTMLElement>(".task");
+    return task?.dataset.taskId ?? null;
+  }
+
+  private findTaskById(taskId: string): Task | null {
+    const board = appStore.singleBoard;
+    if (!board) return null;
+
+    for (const column of board.columns) {
+      const task = column.tasks.find(t => String(t.id) === taskId);
+      if (task) return task;
+    }
+    return null;
   }
 
   private getFormValue(form: HTMLFormElement, fieldName: string): string {
@@ -228,6 +301,36 @@ export class BoardEventManager {
     this.dropdown = null;
   }
 
+  private openTaskThreeDotDropdown(btn: HTMLButtonElement, task: HTMLElement) {
+    const taskId = task.dataset.taskId;
+    if (!taskId) return;
+
+    if (!this.taskDropdown) {
+      this.taskDropdown = new TaskThreeDotDropdown(btn, taskId);
+      this.taskDropdown.setOnCloseCallback(() => this.toggleTaskDropdown());
+      task.appendChild(this.taskDropdown.render());
+      this.taskDropdown.open();
+    } else {
+      this.taskDropdown.close();
+    }
+  }
+
+  private toggleTaskDropdown() {
+    this.taskDropdown = null;
+  }
+
+  private openTaskDetailDialog(task: Task) {
+    this.dialog = new TaskDetailDialog(task);
+    document.body.appendChild(this.dialog.render());
+    this.dialog.open();
+  }
+
+  private openEditTaskDialog(task: Task) {
+    this.dialog = new EditTaskDialog(task);
+    document.body.appendChild(this.dialog.render());
+    this.dialog.open();
+  }
+
   // ============================================
   // Add Column Form Management
   // ============================================
@@ -282,6 +385,13 @@ export class BoardEventManager {
     await this.performStoreOperation(
       () => appStore.deleteColumn(columnId),
       "Deletion",
+    );
+  }
+
+  private async deleteTask(taskId: string) {
+    await this.performStoreOperation(
+      () => appStore.deleteTask(taskId),
+      "Task deletion",
     );
   }
 

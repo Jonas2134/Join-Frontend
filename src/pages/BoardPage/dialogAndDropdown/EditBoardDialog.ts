@@ -56,7 +56,7 @@ export class EditBoardDialog extends BaseDialog {
 
   renderFieldset() {
     const fieldset = document.createElement("fieldset");
-    fieldset.classList.add("flex", "flex-col", "items-center", "w-full");
+    fieldset.classList.add("fields-wrapper");
 
     const legend = this.renderLegend();
     const main = this.renderMainSection();

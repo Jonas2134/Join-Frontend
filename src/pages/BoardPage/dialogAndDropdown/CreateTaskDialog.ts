@@ -2,7 +2,9 @@ import { BaseDialog } from "../../../components/bases/BaseDialog";
 import { appStore } from "../../../core/store/AppStore";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
+import { Button } from "../../../components/common/Button";
 import { createTaskFields } from "../../../core/constants/appBoardFields.config";
+import { createTaskDialogBtns } from "../../../core/constants/appDialogBtns.config";
 
 export class CreateTaskDialog extends BaseDialog {
   columnId: string;
@@ -32,8 +34,8 @@ export class CreateTaskDialog extends BaseDialog {
       textarea: Textarea,
     };
 
-    const fields = createTaskFields.map(field =>
-      new componentMap[field.type](field.config).render()
+    const fields = createTaskFields.map((field) =>
+      new componentMap[field.type](field.config).render(),
     );
 
     firstsec.append(...fields);
@@ -67,21 +69,21 @@ export class CreateTaskDialog extends BaseDialog {
     return main;
   }
 
-
-  // TODO: Optimase Button rendering
   renderMenu() {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
-    menu.innerHTML = `
-      <button class="btn btn-blue" type="submit">Create</button>
-      <button class="btn btn-white" type="button" id="cancel-btn">Cancel</button>
-    `;
+
+    const btns = createTaskDialogBtns.map((config) =>
+      new Button({ ...config }).renderBtn()
+    );
+
+    menu.append(...btns);
     return menu;
   }
 
   renderFieldset() {
     const fieldset = document.createElement("fieldset");
-    fieldset.classList.add("flex", "flex-col", "items-center", "gap-4", "w-full");
+    fieldset.classList.add("fields-wrapper");
 
     const legend = this.renderLegend();
     const main = this.renderMainSection();
@@ -98,7 +100,7 @@ export class CreateTaskDialog extends BaseDialog {
   protected renderContent(): HTMLElement {
     const form = document.createElement("form");
     form.id = "tform";
-    form.classList.add("p-6");    
+    form.classList.add("p-6");
     form.appendChild(this.renderFieldset());
     return form;
   }

@@ -8,6 +8,7 @@ export interface BaseFormFieldOptions {
   className?: string;
   hideLabel?: boolean;
   ariaDescribedBy?: string;
+  value?: string;
 }
 
 export abstract class BaseFormField<T extends HTMLInputElement | HTMLTextAreaElement> {
@@ -69,6 +70,10 @@ export abstract class BaseFormField<T extends HTMLInputElement | HTMLTextAreaEle
 
     if (this.options.ariaDescribedBy) {
       field.setAttribute("aria-describedby", this.options.ariaDescribedBy);
+    }
+
+    if (this.options.value) {
+      field.value = this.options.value;
     }
 
     inputWrapper.appendChild(field);

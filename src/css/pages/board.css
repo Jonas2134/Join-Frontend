@@ -19,9 +19,30 @@
         @apply p-2 border border-(--color-light-gray) rounded-lg bg-white shadow;
 
         &:hover {
-            @apply cursor-pointer border-(--color-blue-gray) shadow-2xl scale-99;
+            @apply cursor-grab border-(--color-blue-gray) shadow-2xl;
         }
     }
+
+    .task-header {
+        @apply flex justify-between items-start gap-2;
+    }
+
+    .task-title {
+        @apply font-medium text-sm flex-1;
+    }
+
+    .task-description {
+        @apply text-xs text-gray-500 mt-1;
+    }
+
+    .task-assignee {
+        @apply flex justify-end mt-2;
+    }
+
+    .task-assignee-avatar {
+        @apply w-6 h-6 rounded-full bg-(--color-light-blue) text-white text-xs flex items-center justify-center font-medium;
+    }
+
 
     .is-dragging {
         @apply scale-105 bg-(--color-light-gray) shadow-(--shadow-large);

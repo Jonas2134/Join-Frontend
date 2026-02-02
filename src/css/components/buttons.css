@@ -39,8 +39,10 @@
 
   .column-menu-btn,
   .three-dot-btn,
+  .task-menu-btn,
   .edit-btn,
-  .detail-header-summary-icon {
+  .detail-header-summary-icon,
+  .task-detail-close-btn {
     @apply p-1 cursor-pointer rounded-full transition-all;
 
     &:hover {
@@ -48,7 +50,7 @@
     }
   }
 
-  #cancel-rename-btn, #cancel-limit-btn {
+  #cancel-rename-btn, #cancel-limit-btn, #close-detail-btn {
     @apply font-bold;
   }
 

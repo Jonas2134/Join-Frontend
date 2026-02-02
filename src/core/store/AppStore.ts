@@ -83,6 +83,11 @@ class AppStore {
   async updateTask(taskId: string, data: TaskUpdate): Promise<Task> {
     return await http.patch<Task>(API_ROUTES.tasks.detail(taskId), data);
   }
+
+  async deleteTask(taskId: string): Promise<void> {
+    await http.delete<void>(API_ROUTES.tasks.detail(taskId));
+    window.dispatchEvent(new CustomEvent("task:deleted"));
+  }
 }
 
 export const appStore = new AppStore();

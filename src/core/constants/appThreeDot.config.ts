@@ -69,4 +69,44 @@ export const threeDotBtn = {
   type: "button" as const,
   title: "Column menu",
   icon: VerticalDotsIcon,
-}
+};
+
+// Task Dropdown Buttons
+export const taskThreeDotBtn = {
+  class: "task-menu-btn",
+  type: "button" as const,
+  title: "Task menu",
+  icon: VerticalDotsIcon,
+};
+
+export const taskViewDetailsBtn = {
+  id: "view-task-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "View Details",
+  text: "View Details",
+};
+
+export const taskDetailCloseBtn = {
+  id: "close-detail-btn",
+  class: "task-detail-close-btn",
+  type: "button" as const,
+  title: "Close",
+  text: "x",
+};
+
+export const taskEditBtn = {
+  id: "edit-task-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "Edit Task",
+  text: "Edit Task",
+};
+
+export const taskDeleteBtn = {
+  id: "delete-task-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "Delete Task",
+  text: "Delete Task",
+};
