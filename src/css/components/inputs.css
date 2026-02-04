@@ -1,5 +1,21 @@
 @layer components {
-	.input-field {
-    @apply flex items-center gap-2 w-full pb-2 mb-4 border-b-1 border-b-(--color-light-gray);
+  .form-field {
+    @apply flex flex-col justify-center gap-2 w-full;
+  }
+
+  .input-b-border {
+    @apply pb-2 mb-1 border-b-1 border-b-(--color-light-gray);
+  }
+
+  .input-label {
+    @apply text-(--color-dark-blue) underline font-semibold;
+  }
+
+  .input-wrapper {
+    @apply flex gap-1;
+  }
+
+	.form-input, .form-textarea {
+    @apply w-full;
   }
 }

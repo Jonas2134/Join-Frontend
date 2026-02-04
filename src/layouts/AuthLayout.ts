@@ -6,11 +6,12 @@ export class AuthLayout {
   private main: HTMLElement;
 
   constructor() {
-    this.element = document.createElement('div');
-    this.element.classList.add('auth-layout');
+    this.element = document.createElement("div");
+    this.element.classList.add("auth-layout");
 
     const header = new AuthHeader();
-    this.main = document.createElement('main');
+    this.main = document.createElement("main");
+    this.main.classList.add("auth-main");
     const footer = new AuthFooter();
 
     this.element.append(header.render(), this.main, footer.render());

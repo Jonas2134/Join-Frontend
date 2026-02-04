@@ -1,0 +1,21 @@
+@layer components {
+    .detail-header-summary {
+        @apply flex items-center justify-between cursor-pointer list-none;
+    }
+
+    .detail-header-summary-headline {
+        @apply text-(--color-light-blue) font-semibold underline;
+    }
+
+    .detail-content-headline {
+        @apply text-(--color-placeholder-gray) font-semibold underline mb-1;
+    }
+
+    .detail-main {
+        @apply flex items-start justify-between mt-4 px-3;
+    }
+
+    .detail-list {
+        @apply flex items-center gap-2 flex-wrap;
+    }
+}

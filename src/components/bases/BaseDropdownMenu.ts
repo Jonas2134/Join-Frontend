@@ -2,6 +2,7 @@ export abstract class BaseDropdownMenu {
   protected menu: HTMLElement;
   protected button: HTMLButtonElement;
   protected isOpen: boolean = false;
+  protected onClose: (() => void) | null = null;
 
   constructor(btn: HTMLButtonElement, menuClass?: string) {
     this.button = btn;
@@ -12,12 +13,7 @@ export abstract class BaseDropdownMenu {
     this.setupBaseBehavior();
   }
 
-  protected abstract renderMenu(): HTMLElement;
-
-  protected mount(): void {}
-
   protected setupBaseBehavior() {
-    this.button.addEventListener("click", () => this.toggle());
     document.addEventListener("click", (e) => this.handleDocumentClick(e));
   }
 
@@ -30,6 +26,8 @@ export abstract class BaseDropdownMenu {
       this.close();
     }
   }
+
+  protected abstract renderMenu(): HTMLElement;
 
   protected calculatePosition() {
     const buttonRect = this.button.getBoundingClientRect();
@@ -62,23 +60,23 @@ export abstract class BaseDropdownMenu {
     this.menu.style.top = `${top}px`;
   }
 
+  setOnCloseCallback(callback: () => void) {
+    this.onClose = callback;
+  }
+
   open() {
     if (this.isOpen) return;
-
-    if (this.menu) {
-      this.renderMenu();
-    }
+    if (this.menu) this.renderMenu();
 
     this.calculatePosition();
     this.isOpen = true;
-    this.mount();
   }
 
   close() {
     if (!this.isOpen || !this.menu) return;
-
-    this.menu.classList.remove("visible");
+    this.menu.remove();
     this.isOpen = false;
+    this.onClose?.();
   }
 
   toggle() {

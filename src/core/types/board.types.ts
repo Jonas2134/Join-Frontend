@@ -3,6 +3,7 @@ export interface Board {
   title: string;
   description?: string;
   members: Member[];
+  owner: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;

@@ -1,88 +1,282 @@
 import { appStore } from "../../../core/store/AppStore";
-import { CreateTaskDialog } from "../CreateTaskDialog";
-import { ColumnThreeDotDropdown } from "../ColumnThreeDotDropdown";
-import type { ColumnUpdate } from "../../../core/types/board.types";
+import { toastManager } from "../../../core/ToastManager";
+import { CreateTaskDialog } from "../dialogAndDropdown/CreateTaskDialog";
+import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
+import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
+import { TaskThreeDotDropdown } from "../dialogAndDropdown/TaskThreeDotDropdown";
+import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
+import { EditTaskDialog } from "../dialogAndDropdown/EditTaskDialog";
+import type { Board, ColumnUpdate, Task } from "../../../core/types/board.types";
 
 export class BoardEventManager {
-  dialog: CreateTaskDialog | null = null;
+  dialog: CreateTaskDialog | EditBoardDialog | TaskDetailDialog | EditTaskDialog | null = null;
   dropdown: ColumnThreeDotDropdown | null = null;
+  taskDropdown: TaskThreeDotDropdown | null = null;
   private initLoadBoard: () => Promise<void>;
 
   constructor(func: () => Promise<void>) {
     this.initLoadBoard = func;
   }
 
-  /* ---------- Eventlistener ---------- */
+  // ============================================
+  // Public Event Listeners
+  // ============================================
 
-  registerTaskButtonListener(e: Event) {
-    const target = e.target as HTMLElement;
-
-    const createTBtn = target.closest<HTMLButtonElement>(".create-task-btn");
-    if (!createTBtn) return;
-
-    const column = createTBtn.closest<HTMLElement>(".board-column");
-    if (!column) return;
-
-    const columnId = column.dataset.columnId;
-    if (!columnId) return;
-    this.openCreateTaskDialog(columnId);
+  registerEditBoardDialog(board: Board) {
+    this.dialog = new EditBoardDialog(board);
+    document.body.appendChild(this.dialog.render());
+    this.dialog?.open();
   }
 
-  registerColumnThreeDotListener(e: Event) {
-    const target = e.target as HTMLElement;
+  registerTaskButtonListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".create-task-btn");
+    if (!btn) return;
 
-    const threeDotBtn = target.closest<HTMLButtonElement>(".column-menu-btn");
-    if (!threeDotBtn) return;
-
-    const columnHeader = threeDotBtn.closest<HTMLElement>(".column-header");
-    if (!columnHeader) return;
-
-    const column = threeDotBtn.closest<HTMLElement>(".board-column");
-    if (!column) return;
-
-    const columnId = column.dataset.columnId;
-    if (!columnId) return;
-
-    if (threeDotBtn) {
-      console.log("Three dot button clicked! Column ID: ", columnId);
-      this.openColumnThreeDotDropdown(columnId, threeDotBtn, columnHeader);
-      return;
-    }
+    const columnId = this.getColumnIdFromElement(btn);
+    if (columnId) this.openCreateTaskDialog(columnId)
   }
 
   registerColumnButtonListener(e: Event, renderer?: any) {
-    const target = e.target as HTMLElement;
-    const createCBtn = target.closest<HTMLButtonElement>(".create-column-btn");
-    if (createCBtn) {
-      console.log("KLICK!!!");
-      this.showAddColumnForm(renderer);
-      return;
-    }
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".create-column-btn");
+    if (btn) this.showAddColumnForm(renderer);
   }
 
   registerColumnCancelButtonListener(e: Event, renderer?: any) {
-    const target = e.target as HTMLElement;
-    const cancelBtn = target.closest<HTMLButtonElement>(".cancel-column-btn");
-    if (cancelBtn) {
-      console.log("GECANCELT!!!!");
-      this.hideAddColumnForm(renderer);
-      return;
-    }
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".cancel-column-btn");
+    if (btn) this.hideAddColumnForm(renderer);
   }
 
   async registerColumnFormSubmitListener(e: Event, id: string) {
-    const target = e.target as HTMLElement;
-
-    const form = target.closest<HTMLFormElement>(".add-column-form");
+    const form = this.findClosestElement<HTMLFormElement>(e.target, ".add-column-form");
     if (!form) return;
-    e.preventDefault();
 
-    const formData = new FormData(form);
-    const columnName = formData.get("columnName") as string;
+    e.preventDefault();
+    const columnName = this.getFormValue(form, "columnName");
     if (columnName) await this.createColumn(columnName, id);
   }
 
-  /* ---------- Sub functions ---------- */
+  registerColumnThreeDotListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".column-menu-btn");
+    if (!btn) return;
+
+    const header = this.findClosestElement<HTMLElement>(btn, ".column-header");
+    if (!header) return;
+
+    e.stopPropagation();
+    this.openColumnThreeDotDropdown(btn, header);
+  }
+
+  registerColumnRenameToFormListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#rename-column-btn");
+    if (!btn) return;
+    
+    e.stopPropagation();
+    this.toggleFormInMenuItem(btn, ".rename-column-form", () => this.dropdown?.renderRenameForm());
+  }
+
+  async registerColumnRenameFromSubmitListener(e: Event) {
+    const form = this.findClosestElement<HTMLFormElement>(e.target, ".rename-column-form");
+    if (!form) return;
+    
+    e.preventDefault();
+    const columnId = this.getColumnIdFromElement(form);
+    const newName = this.getFormValue(form, "column-rename");
+    
+    if (columnId && newName) {
+      await this.updateColumn(columnId, { name: newName });
+    }
+  }
+
+  registerColumnRenameCancelButtonListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#cancel-rename-btn");
+    if (!btn) return;
+    
+    e.stopPropagation();
+    this.restoreButtonInMenuItem(btn, ".rename-column-form", "#rename-column-btn", () => 
+      this.dropdown?.renderMenuBtn(this.dropdown.renameConfig)
+    );
+  }
+
+  registerColumnSetLimitToFormListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#set-task-limit-btn");
+    if (!btn) return;
+    
+    e.stopPropagation();
+    this.toggleFormInMenuItem(btn, ".set-limit-form", () => this.dropdown?.renderSetLimitForm());
+  }
+
+  registerColumnSetLimitFormSubmitListener(e: Event) {
+    const form = this.findClosestElement<HTMLFormElement>(e.target, ".set-limit-form");
+    if (!form) return;
+    
+    e.preventDefault();
+    const columnId = this.getColumnIdFromElement(form);
+    const newLimit = this.getFormValue(form, "task-limit");
+    
+    if (columnId && newLimit) {
+      this.updateColumn(columnId, { wip_limit: newLimit });
+    }
+  }
+
+  registerColumnSetLimitCancelButtonListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#cancel-limit-btn");
+    if (!btn) return;
+    
+    e.stopPropagation();
+    this.restoreButtonInMenuItem(btn, ".set-limit-form", "#set-task-limit-btn", () => 
+      this.dropdown?.renderMenuBtn(this.dropdown.limitConfig)
+    );
+  }
+
+  registerColumnDotMenuDeleteButtonListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#delete-column-btn");
+    if (!btn) return;
+
+    const columnId = this.getColumnIdFromElement(btn);
+    if (columnId) this.deleteColumn(columnId);
+  }
+
+  // ============================================
+  // Task Dropdown Listeners
+  // ============================================
+
+  registerTaskThreeDotListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".task-menu-btn");
+    if (!btn) return;
+
+    const task = this.findClosestElement<HTMLElement>(btn, ".task");
+    if (!task) return;
+
+    e.stopPropagation();
+    this.openTaskThreeDotDropdown(btn, task);
+  }
+
+  registerTaskViewDetailsListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#view-task-btn");
+    if (!btn) return;
+
+    const taskId = this.getTaskIdFromElement(btn);
+    if (!taskId) return;
+
+    const task = this.findTaskById(taskId);
+    if (task) {
+      this.taskDropdown?.close();
+      this.openTaskDetailDialog(task);
+    }
+  }
+
+  registerTaskDeleteListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#delete-task-btn");
+    if (!btn) return;
+
+    const taskId = this.getTaskIdFromElement(btn);
+    if (taskId) {
+      this.deleteTask(taskId);
+    }
+  }
+
+  registerTaskEditListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#edit-task-btn");
+    if (!btn) return;
+
+    const taskId = this.getTaskIdFromElement(btn);
+    if (!taskId) return;
+
+    const task = this.findTaskById(taskId);
+    if (task) {
+      this.taskDropdown?.close();
+      this.openEditTaskDialog(task);
+    }
+  }
+
+  // ============================================
+  // Private Helper Methods
+  // ============================================
+
+  private findClosestElement<T extends HTMLElement>(
+    target: EventTarget | null,
+    selector: string,
+  ): T | null {
+    if (target instanceof HTMLElement) {
+      return target.closest<T>(selector);
+    }
+    if (target instanceof SVGElement) {
+      return (target.closest(selector) as T) || null;
+    }
+    return null;
+  }
+
+  private getColumnIdFromElement(element: HTMLElement): string | null {
+    const column = element.closest<HTMLElement>(".board-column");
+    return column?.dataset.columnId ?? null;
+  }
+
+  private getTaskIdFromElement(element: HTMLElement): string | null {
+    const task = element.closest<HTMLElement>(".task");
+    return task?.dataset.taskId ?? null;
+  }
+
+  private findTaskById(taskId: string): Task | null {
+    const board = appStore.singleBoard;
+    if (!board) return null;
+
+    for (const column of board.columns) {
+      const task = column.tasks.find(t => String(t.id) === taskId);
+      if (task) return task;
+    }
+    return null;
+  }
+
+  private getFormValue(form: HTMLFormElement, fieldName: string): string {
+    const formData = new FormData(form);
+    return (formData.get(fieldName) as string) || "";
+  }
+
+  private toggleFormInMenuItem(
+    button: HTMLButtonElement,
+    formSelector: string,
+    formRenderer: () => HTMLElement | undefined,
+  ) {
+    const item = button.closest<HTMLElement>(".menu-item");
+    if (!item) return;
+
+    button.remove();
+
+    const existingForm = item.querySelector(formSelector);
+    if (!existingForm) {
+      const form = formRenderer();
+      if (form) {
+        item.appendChild(form);
+        const input = form.querySelector("input");
+        input?.focus();
+      }
+    }
+  }
+
+  private restoreButtonInMenuItem(
+    cancelButton: HTMLButtonElement,
+    formSelector: string,
+    buttonSelector: string,
+    buttonRenderer: () => HTMLElement | undefined,
+  ) {
+    const form = cancelButton.closest<HTMLElement>(formSelector);
+    if (!form) return;
+
+    const item = form.closest<HTMLElement>(".menu-item");
+    if (!item) return;
+
+    form.remove();
+
+    const existingBtn = item.querySelector<HTMLButtonElement>(buttonSelector);
+    if (!existingBtn) {
+      const newBtn = buttonRenderer();
+      if (newBtn) item.appendChild(newBtn);
+    }
+  }
+
+  // ============================================
+  // Dialog & Dropdown Management
+  // ============================================
 
   private openCreateTaskDialog(id: string) {
     this.dialog = new CreateTaskDialog(id);
@@ -90,30 +284,69 @@ export class BoardEventManager {
     this.dialog?.open();
   }
 
-  private openColumnThreeDotDropdown(id: string, btn: HTMLButtonElement, header: HTMLElement) {
-    this.dropdown = new ColumnThreeDotDropdown(
-      btn,
-      (newName) => this.updateColumn(id, { name: newName }),
-      (limit) => this.updateColumn(id, { wip_limit: limit }),
-      () => this.deleteColumn(id)
-    );
-    header.appendChild(this.dropdown.render());
-    this.dropdown.toggle();
+  private openColumnThreeDotDropdown(
+    btn: HTMLButtonElement,
+    header: HTMLElement,
+  ) {
+    if (!this.dropdown) {
+      this.dropdown = new ColumnThreeDotDropdown(btn);
+      this.dropdown.setOnCloseCallback(() => this.toggelDropdown());
+      header.appendChild(this.dropdown.render());
+      this.dropdown.open();
+    } else {
+      this.dropdown.close();
+    }
   }
+
+  toggelDropdown() {
+    this.dropdown = null;
+  }
+
+  private openTaskThreeDotDropdown(btn: HTMLButtonElement, task: HTMLElement) {
+    const taskId = task.dataset.taskId;
+    if (!taskId) return;
+
+    if (!this.taskDropdown) {
+      this.taskDropdown = new TaskThreeDotDropdown(btn, taskId);
+      this.taskDropdown.setOnCloseCallback(() => this.toggleTaskDropdown());
+      task.appendChild(this.taskDropdown.render());
+      this.taskDropdown.open();
+    } else {
+      this.taskDropdown.close();
+    }
+  }
+
+  private toggleTaskDropdown() {
+    this.taskDropdown = null;
+  }
+
+  private openTaskDetailDialog(task: Task) {
+    this.dialog = new TaskDetailDialog(task);
+    document.body.appendChild(this.dialog.render());
+    this.dialog.open();
+  }
+
+  private openEditTaskDialog(task: Task) {
+    this.dialog = new EditTaskDialog(task);
+    document.body.appendChild(this.dialog.render());
+    this.dialog.open();
+  }
+
+  // ============================================
+  // Add Column Form Management
+  // ============================================
 
   private showAddColumnForm(renderer?: any) {
     const addColumnItem = document.querySelector(".add-column-item");
     if (!addColumnItem) return;
 
-    const addColumnSection = addColumnItem.querySelector(".add-column");
-    addColumnSection?.remove();
+    addColumnItem.querySelector(".add-column")?.remove();
 
     const existingForm = addColumnItem.querySelector(".add-column-form");
-    if (!existingForm) {
+    if (!existingForm && renderer) {
       const form = renderer.addColumnRenderer.renderAddColumnForm();
       addColumnItem.appendChild(form);
-      const input = form.querySelector("input");
-      input?.focus();
+      form.querySelector("input")?.focus();
     }
   }
 
@@ -121,42 +354,57 @@ export class BoardEventManager {
     const addColumnItem = document.querySelector(".add-column-item");
     if (!addColumnItem) return;
 
-    const form = addColumnItem.querySelector(".add-column-form");
-    form?.remove();
+    addColumnItem.querySelector(".add-column-form")?.remove();
 
-    const existingAddColumnSection = addColumnItem.querySelector(".add-column");
-    if (!existingAddColumnSection) {
+    const existingSection = addColumnItem.querySelector(".add-column");
+    if (!existingSection && renderer) {
       addColumnItem.appendChild(
-        renderer.addColumnRenderer.renderAddColumnSection()
+        renderer.addColumnRenderer.renderAddColumnSection(),
       );
     }
   }
 
+  // ============================================
+  // API Operations
+  // ============================================
+
   private async createColumn(columnName: string, id: string) {
-    console.log(columnName);
-    try {
-      await appStore.createColumn(id, columnName);
-      await this.initLoadBoard();
-    } catch (err: any) {
-      alert("Creation is failed: " + err.message);
-    }
+    await this.performStoreOperation(
+      () => appStore.createColumn(id, columnName),
+      "Creation",
+    );
   }
 
   private async updateColumn(columnId: string, data: ColumnUpdate) {
-    try {
-      await appStore.updateColumn(columnId, data);
-      await this.initLoadBoard();
-    } catch (err: any) {
-      alert("Update is failed: " + err.message);
-    }
+    await this.performStoreOperation(
+      () => appStore.updateColumn(columnId, data),
+      "Update",
+    );
   }
 
   private async deleteColumn(columnId: string) {
+    await this.performStoreOperation(
+      () => appStore.deleteColumn(columnId),
+      "Deletion",
+    );
+  }
+
+  private async deleteTask(taskId: string) {
+    await this.performStoreOperation(
+      () => appStore.deleteTask(taskId),
+      "Task deletion",
+    );
+  }
+
+  private async performStoreOperation(
+    operation: () => Promise<any>,
+    operationName: string,
+  ) {
     try {
-      await appStore.deleteColumn(columnId);
+      await operation();
       await this.initLoadBoard();
     } catch (err: any) {
-      alert("Deletion is failed: " + err.message);
+      toastManager.error(`${operationName} fehlgeschlagen: ${err.message}`);
     }
   }
 }

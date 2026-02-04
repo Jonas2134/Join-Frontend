@@ -1,6 +1,8 @@
+import { Avatar } from "../../../components/common/Avatar";
+import { Button } from "../../../components/common/Button";
+import { editBoardBtn, moreIndicator } from "../../../core/constants/appBoardBtns.config";
 import type { Board } from "../../../core/types/board.types";
 import ToggleIcon from "../../../assets/icons/ToggleIcon.svg?raw";
-import EditIcon from "../../../assets/icons/edit.svg?raw";
 
 export class BoardHeaderRenderer {
   renderHeaderContent(header: HTMLElement, board: Board) {
@@ -16,23 +18,14 @@ export class BoardHeaderRenderer {
 
   renderHeaderSummary(board: Board) {
     const summary = document.createElement("summary");
-    summary.classList.add(
-      "flex",
-      "items-center",
-      "justify-between",
-      "cursor-pointer",
-      "list-none"
-    );
+    summary.classList.add("detail-header-summary");
 
     const title = document.createElement("h3");
-    title.classList.add(
-      "text-(--color-light-blue)",
-      "font-semibold",
-      "underline"
-    );
+    title.classList.add("detail-header-summary-headline");
     title.textContent = board.title;
 
     const toggleIcon = document.createElement("span");
+    toggleIcon.classList.add("detail-header-summary-icon");
     toggleIcon.innerHTML = ToggleIcon;
 
     summary.append(title, toggleIcon);
@@ -43,12 +36,7 @@ export class BoardHeaderRenderer {
     const descriptionSection = document.createElement("section");
 
     const descriptionTitle = document.createElement("h4");
-    descriptionTitle.classList.add(
-      "text-(--color-placeholder-gray)",
-      "font-semibold",
-      "underline",
-      "mb-1"
-    );
+    descriptionTitle.classList.add("detail-content-headline");
     descriptionTitle.textContent = "Description";
 
     const descriptionText = document.createElement("p");
@@ -63,49 +51,52 @@ export class BoardHeaderRenderer {
     const membersSection = document.createElement("section");
 
     const membersTitle = document.createElement("h4");
-    membersTitle.classList.add(
-      "text-(--color-placeholder-gray)",
-      "font-semibold",
-      "underline",
-      "mb-1"
-    );
+    membersTitle.classList.add("detail-content-headline");
     membersTitle.textContent = "Members";
 
-    const membersList = document.createElement("ul");
-    membersList.classList.add("list-disc", "list-inside");
-
-    for (const member of board.members) {
-      const memberItem = document.createElement("li");
-      memberItem.textContent = member.username;
-      membersList.appendChild(memberItem);
-    }
+    const membersList = this.renderMemberList(board);
 
     membersSection.append(membersTitle, membersList);
     return membersSection;
   }
 
-  renderEditButton() {
-    const editButton = document.createElement("button");
-    editButton.id = "changeBoardBtn";
-    editButton.classList.add("cursor-pointer", "p-2", "rounded");
-    editButton.title = "Edit board";
-    editButton.innerHTML = EditIcon;
-    return editButton;
+  renderMemberList(board: Board) {
+    const membersList = document.createElement("ul");
+    membersList.classList.add("detail-list");
+
+    const maxVisibleMembers = 5;
+    const sortedMembers = [...board.members].sort((a, b) => {
+      if (a.id === board.owner) return -1;
+      if (b.id === board.owner) return 1;
+      return 0;
+    });
+    const visibleMembers = sortedMembers.slice(0, maxVisibleMembers);
+    const remainingCount = board.members.length - maxVisibleMembers;
+
+    visibleMembers.forEach((member) => {
+      const listItem = document.createElement("li");
+      const isOwner = member.id === board.owner;
+      const avatar = new Avatar({ size: "lg", isOwner });
+      listItem.appendChild(avatar.createAvatar(member.username));
+      membersList.appendChild(listItem);
+    });
+
+    if (remainingCount > 0) {
+      const listItem = document.createElement("li");
+      const moreIndicatorBtn = new Button({...moreIndicator, text: `+${remainingCount}`}).renderBtn();
+      listItem.appendChild(moreIndicatorBtn);
+      membersList.appendChild(listItem);
+    }
+    return membersList;
   }
 
   renderDetailsContent(board: Board) {
     const detailsContent = document.createElement("main");
-    detailsContent.classList.add(
-      "flex",
-      "items-start",
-      "justify-between",
-      "mt-4",
-      "px-3"
-    );
+    detailsContent.classList.add("detail-main");
 
     const descriptionSection = this.renderDetailsDescriptionSection(board);
     const membersSection = this.renderDetailsMembersSection(board);
-    const editBtn = this.renderEditButton();
+    const editBtn = new Button(editBoardBtn).renderBtn();
 
     detailsContent.append(descriptionSection, membersSection, editBtn);
     return detailsContent;

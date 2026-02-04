@@ -1,7 +1,11 @@
-import { BaseDialog } from "../../components/bases/BaseDialog";
-import { appStore } from "../../core/store/AppStore";
-import { InputField } from "../../components/common/InputField";
-import { Textarea } from "../../components/common/textarea";
+import { BaseDialog } from "../../../components/bases/BaseDialog";
+import { appStore } from "../../../core/store/AppStore";
+import { toastManager } from "../../../core/ToastManager";
+import { InputField } from "../../../components/common/InputField";
+import { Textarea } from "../../../components/common/Textarea";
+import { Button } from "../../../components/common/Button";
+import { createTaskFields } from "../../../core/constants/appBoardFields.config";
+import { createTaskDialogBtns } from "../../../core/constants/appDialogBtns.config";
 
 export class CreateTaskDialog extends BaseDialog {
   columnId: string;
@@ -11,10 +15,13 @@ export class CreateTaskDialog extends BaseDialog {
     this.columnId = id;
   }
 
-  /* render HTML excerpts */
+  // ============================================
+  // render HTML excerpts
+  // ============================================
+
   renderLegend() {
     const legend = document.createElement("legend");
-    legend.classList.add("auth-legend");
+    legend.classList.add("base-legend");
     legend.textContent = "Create Task";
     return legend;
   }
@@ -23,19 +30,16 @@ export class CreateTaskDialog extends BaseDialog {
     const firstsec = document.createElement("section");
     firstsec.classList.add("flex", "flex-col", "gap-3");
 
-    const titleField = new InputField({
-      type: 'text',
-      placeholder: 'Title',
-      name: 'title',
-      required: true,
-    });
+    const componentMap = {
+      input: InputField,
+      textarea: Textarea,
+    };
 
-    const descriptionTextfield = new Textarea({
-      nameId: 'description',
-      placeholder: 'Write your description.'
-    });
+    const fields = createTaskFields.map((field) =>
+      new componentMap[field.type](field.config).render(),
+    );
 
-    firstsec.append(titleField.render(), descriptionTextfield.render());
+    firstsec.append(...fields);
     return firstsec;
   }
 
@@ -69,16 +73,18 @@ export class CreateTaskDialog extends BaseDialog {
   renderMenu() {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
-    menu.innerHTML = `
-      <button class="btn-blue" type="submit">Create</button>
-      <button class="btn-white" type="button" id="cancel-btn">Cancel</button>
-    `;
+
+    const btns = createTaskDialogBtns.map((config) =>
+      new Button({ ...config }).renderBtn()
+    );
+
+    menu.append(...btns);
     return menu;
   }
 
   renderFieldset() {
     const fieldset = document.createElement("fieldset");
-    fieldset.classList.add("flex", "flex-col", "items-center", "w-full");
+    fieldset.classList.add("fields-wrapper");
 
     const legend = this.renderLegend();
     const main = this.renderMainSection();
@@ -88,16 +94,22 @@ export class CreateTaskDialog extends BaseDialog {
     return fieldset;
   }
 
-  /* render Dialog Content */
+  // ============================================
+  // render Dialog Content
+  // ============================================
+
   protected renderContent(): HTMLElement {
     const form = document.createElement("form");
     form.id = "tform";
-    form.classList.add("p-6");    
+    form.classList.add("p-6");
     form.appendChild(this.renderFieldset());
     return form;
   }
 
-  /* Mount Eventlistener */
+  // ============================================
+  // Mount Eventlistener
+  // ============================================
+
   protected override mount(): void {
     const cancelBtn = this.dialog.querySelector("#cancel-btn") as HTMLFormElement;
     const form = this.dialog.querySelector("#tform") as HTMLFormElement;
@@ -110,13 +122,13 @@ export class CreateTaskDialog extends BaseDialog {
       const title = formDate.get("title") as string;
       const description = formDate.get("description") as string;
       //const assignee = formDate.get("assignee") as string;
-      console.log(formDate);
       try {
         await appStore.createTask(this.columnId, title, description);
+        toastManager.success("Task erfolgreich erstellt");
         this.close();
         form.reset();
       } catch (err: any) {
-        alert("Creation is failed: " + err.message);
+        toastManager.error("Erstellung fehlgeschlagen: " + err.message);
       }
     });
   }

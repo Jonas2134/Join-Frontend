@@ -1,19 +1,21 @@
 @layer components {
   .auth-layout {
-		header {
-			@apply fixed top-0 right-0 left-0 px-10 py-5 flex justify-between items-center;
-		}
+    @apply grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen;
+  }
 
-		main {
-			@apply px-28 py-12 rounded-3xl shadow-large max-w-4xl w-full;
-		}
+  .auth-header {
+    @apply px-10 py-5 flex justify-between items-center;
+  }
 
-		footer {
-			@apply fixed bottom-0 right-0 left-0 px-10 py-5 flex justify-center;
-		}
-	}
+  .auth-main {
+    @apply flex items-center justify-center px-4 py-12;
+  }
 
-	.auth-legend {
-		@apply text-4xl w-full text-center font-semibold pb-2 mb-6 border-b-2 border-(--color-light-blue);
-	}
+  .auth-main-content {
+    @apply px-28 py-12 rounded-3xl shadow-large max-w-4xl w-full;
+  }
+
+  .auth-footer {
+    @apply px-10 py-5 flex justify-center;
+  }
 }

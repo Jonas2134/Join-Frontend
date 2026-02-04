@@ -1,54 +1,80 @@
 import { BaseDialog } from "../../components/bases/BaseDialog";
 import { appStore } from "../../core/store/AppStore";
+import { toastManager } from "../../core/ToastManager";
 import { InputField } from "../../components/common/InputField";
-import { Textarea } from "../../components/common/textarea";
-
-import User from "../../assets/icons/user.svg?raw";
-import Textareaicon from "../../assets/icons/textarea.svg?raw";
+import { Textarea } from "../../components/common/Textarea";
+import { dashboardFields } from "../../core/constants/appDashboardFields.config";
 
 export class BoardCreateDialog extends BaseDialog {
   constructor() {
     super("board-dialog");
   }
 
+  // ============================================
+  // render HTML excerpts
+  // ============================================
+
+  renderLegend() {
+    const legend = document.createElement("legend");
+    legend.classList.add("base-legend");
+    legend.textContent = "Create Board";
+    return legend;
+  }
+
+  renderBoardCreateFieldsWrapper() {
+    const fieldsWrapper = document.createElement("div");
+    fieldsWrapper.classList.add("fields-wrapper");
+
+    const componentMap = {
+      input: InputField,
+      textarea: Textarea,
+    };
+
+    const fields = dashboardFields.map(field =>
+      new componentMap[field.type](field.config).render()
+    );
+
+    fieldsWrapper.append(...fields);
+    return fieldsWrapper;
+  }
+
+  renderMenu() {
+    const menu = document.createElement("menu");
+    menu.classList.add("flex", "gap-6");
+    menu.innerHTML = `
+      <button class="btn btn-blue" type="submit">Create</button>
+      <button class="btn btn-white" type="button" id="cancel-btn">Cancel</button>
+    `;
+    return menu;
+  }
+
+  renderFieldset() {
+    const fieldset = document.createElement("fieldset");
+    fieldset.classList.add("base-fieldset");
+
+    const legend = this.renderLegend();
+    const fieldsWrapper = this.renderBoardCreateFieldsWrapper();
+    const menu = this.renderMenu();
+
+    fieldset.append(legend, fieldsWrapper, menu);
+    return fieldset;
+  }
+
+  // ============================================
+  // render Dialog Content
+  // ============================================
+
   protected renderContent() {
     const form = document.createElement("form");
     form.id = "cform";
     form.classList.add("p-6");
-
-    const fieldset = document.createElement("fieldset");
-    fieldset.classList.add('flex', 'flex-col', 'items-center', 'w-full');
-
-    const legend = document.createElement("legend");
-    legend.classList.add('auth-legend');
-    legend.textContent = 'Create Board';
-
-    const titleField = new InputField({
-      type: 'text',
-      placeholder: 'Title',
-      icon: User,
-      name: 'title',
-      required: true,
-    });
-
-
-    const descriptionTextfield = new Textarea({
-      nameId: 'description',
-      placeholder: 'Write your description.',
-      icon: Textareaicon,
-    });
-
-    const menu = document.createElement("menu");
-    menu.classList.add('flex', 'gap-6');
-    menu.innerHTML = `
-      <button class="btn-blue" type="submit">Create</button>
-      <button class="btn-blue" type="button" id="cancel-btn">Cancel</button>
-    `;
-
-    fieldset.append(legend, titleField.render(), descriptionTextfield.render(), menu);
-    form.appendChild(fieldset);
+    form.appendChild(this.renderFieldset());
     return form;
   }
+
+  // ============================================
+  // Mount Eventlistener
+  // ============================================
 
   protected override mount() {
     const cancelBtn = this.dialog.querySelector("#cancel-btn") as HTMLFormElement;
@@ -65,10 +91,11 @@ export class BoardCreateDialog extends BaseDialog {
           formDate.get("title") as string,
           formDate.get("description") as string
         );
+        toastManager.success("Board erfolgreich erstellt");
         this.close();
         form.reset();
       } catch (err: any) {
-        alert("Creation is failed: " + err.message);
+        toastManager.error("Erstellung fehlgeschlagen: " + err.message);
       }
     });
   }

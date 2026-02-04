@@ -5,7 +5,8 @@ export class AuthHeader {
   private colorLogo?: HTMLElement;
 
   constructor() {
-    this.element = document.createElement('header');
+    this.element = document.createElement("header");
+    this.element.classList.add("auth-header");
     this.colorLogo = this.createLogo();
   }
 

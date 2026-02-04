@@ -1,0 +1,13 @@
+@layer components {
+  .base-fieldset {
+    @apply flex flex-col items-center gap-4 w-full;
+  }
+
+  .base-legend {
+    @apply text-4xl w-full text-center font-semibold pb-2 mb-6 border-b-2 border-(--color-light-blue);
+  }
+
+  .fields-wrapper {
+    @apply flex flex-col items-center gap-2 px-2 w-full;
+  }
+}

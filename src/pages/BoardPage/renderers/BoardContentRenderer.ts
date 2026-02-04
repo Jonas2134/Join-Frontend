@@ -1,6 +1,6 @@
 import { BoardColumnRenderer } from "./BoardColumnRenderer";
 import { BoardAddColumnRenderer } from "./BoardAddColumnRenderer";
-import type { Board } from "../../interfaces/BoardInterface";
+import type { Board } from "../../../core/types/board.types";
 
 export class BoardContentRenderer {
   private columnRenderer: BoardColumnRenderer;

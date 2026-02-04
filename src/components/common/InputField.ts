@@ -1,68 +1,43 @@
-export interface InputFieldOptions {
-  type: string;
-  placeholder: string;
-  icon?: string;
-  name?: string;
-  required?: boolean;
+import { BaseFormField } from "../bases/BaseFormField";
+import type { BaseFormFieldOptions } from "../bases/BaseFormField";
+
+export interface InputFieldOptions extends BaseFormFieldOptions {
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
+  autocomplete?: AutoFillField;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
 }
 
-export class InputField {
-  private element!: HTMLElement;
-  private input!: HTMLInputElement;
-  private options: InputFieldOptions;
+export class InputField extends BaseFormField<HTMLInputElement>  {
+  private inputOptions: InputFieldOptions;
 
   constructor(options: InputFieldOptions) {
-    this.options = options;
+    super(options)
+    this.inputOptions = options;
   }
 
-  private createElement(): HTMLElement {
-    const wrapper = document.createElement('label');
-    wrapper.classList.add('input-field');
-
+  protected createFieldElement(): HTMLInputElement {
     const input = document.createElement('input');
-    input.type = this.options.type;
-    input.placeholder = this.options.placeholder;
-    if (this.options.name) input.name = this.options.name;
-    if (this.options.required) input.required = true;
+    input.type = this.inputOptions.type || 'text';
+    input.classList.add('form-input');
 
-    if (this.options.icon) {
-      const iconSpan = document.createElement('span');
-      iconSpan.innerHTML = this.options.icon;
-      wrapper.appendChild(iconSpan);
+    if (this.inputOptions.autocomplete) {
+      input.autocomplete = this.inputOptions.autocomplete;
     }
 
-    wrapper.appendChild(input);
-
-    this.input = input;
-    this.element = wrapper;
-
-    return wrapper;
-  }
-
-  render(): HTMLElement {
-    if (!this.element) {
-      this.createElement();
+    if (this.inputOptions.minLength) {
+      input.minLength = this.inputOptions.minLength;
     }
-    return this.element;
-  }
 
-  getValue(): string {
-    return this.input?.value ?? '';
-  }
+    if (this.inputOptions.maxLength) {
+      input.maxLength = this.inputOptions.maxLength;
+    }
 
-  setValue(value: string): void {
-    if (this.input) this.input.value = value;
-  }
+    if (this.inputOptions.pattern) {
+      input.pattern = this.inputOptions.pattern;
+    }
 
-  focus(): void {
-    this.input?.focus();
-  }
-
-  clear(): void {
-    if (this.input) this.input.value = '';
-  }
-
-  getInputElement(): HTMLInputElement | null {
-    return this.input ?? null;
+    return input;
   }
 }

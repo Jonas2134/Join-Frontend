@@ -14,8 +14,8 @@ export class StartPage extends BasePage {
       <main>
         <h1>StartPage</h1>
         <nav>
-          <a class="btn-blue" href="/login" data-link>Login</a>
-          <a class="btn-blue" href="/signup" data-link>Signup</a>
+          <a class="btn btn-blue" href="/login" data-link>Login</a>
+          <a class="btn btn-blue" href="/signup" data-link>Signup</a>
         </nav>
       </main>
     `;

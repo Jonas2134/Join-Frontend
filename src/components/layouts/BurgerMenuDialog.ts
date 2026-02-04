@@ -1,5 +1,6 @@
 import { BaseDialog } from "../bases/BaseDialog";
 import { authStore } from "../../core/store/AuthStore";
+import { toastManager } from "../../core/ToastManager";
 import { router } from "../../core/router";
 
 import Cross from "../../assets/icons/cross.svg?raw";
@@ -40,7 +41,7 @@ export class BurgerMenuDialog extends BaseDialog {
         this.dialog.close();
         router.navigate("/");
       } catch (err: any) {
-        alert("Logout is failed: " + err.message);
+        toastManager.error("Logout fehlgeschlagen: " + err.message);
       }
     });
 

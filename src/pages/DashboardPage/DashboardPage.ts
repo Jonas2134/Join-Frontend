@@ -13,14 +13,16 @@ export class DashboardPage extends BasePage {
     super(new AppLayout());
   }
 
-  /* ---------- Layout ---------- */
+  // ============================================
+  // Base render
+  // ============================================
 
   renderheader() {
     const header = document.createElement("header");
     header.classList.add("flex", "items-center", "justify-between");
     header.innerHTML = `
       <h1 class="text-(--color-light-blue) underline">My Boards</h1>
-      <button id="createBoardBtn" class="btn-blue">+ Create Board</button>
+      <button id="createBoardBtn" class="btn btn-blue">+ Create Board</button>
     `;
     return header;
   }
@@ -32,7 +34,9 @@ export class DashboardPage extends BasePage {
     return section;
   }
 
-  /* ---------- open Board section ---------- */
+  // ============================================
+  // render Board section
+  // ============================================
 
   renderOpenBoardsSection(container: HTMLElement, boards: Board[]) {
     const openBoards = boards.filter((b) => b.is_active === true);
@@ -55,8 +59,6 @@ export class DashboardPage extends BasePage {
     }
   }
 
-  /* ---------- closed Board section ---------- */
-
   renderClosedBoardsSection(container: HTMLElement, boards: Board[]) {
     const closedBoards = boards.filter((b) => b.is_active === false);
     if (closedBoards.length > 0) {
@@ -73,7 +75,9 @@ export class DashboardPage extends BasePage {
     }
   }
 
-  /* ---------- Lifecycle ---------- */
+  // ============================================
+  // Lifecycle
+  // ============================================
 
   updateDashboardUI() {
     const container = document.getElementById("dashboardsection");
@@ -98,6 +102,10 @@ export class DashboardPage extends BasePage {
     await appStore.loadDashboard();
     this.updateDashboardUI();
   }
+
+  // ============================================
+  // Mount Eventlistener
+  // ============================================
 
   async mount() {
     this.initLoadDashboard();
