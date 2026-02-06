@@ -46,7 +46,7 @@ export class BoardTaskRenderer {
     const descElement = document.createElement("p");
     descElement.classList.add("task-description");
 
-    const maxLength = 60;
+    const maxLength = 45;
     descElement.textContent =
       description.length > maxLength
         ? description.substring(0, maxLength) + "..."

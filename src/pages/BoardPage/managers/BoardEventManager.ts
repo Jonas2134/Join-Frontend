@@ -6,7 +6,7 @@ import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropd
 import { TaskThreeDotDropdown } from "../dialogAndDropdown/TaskThreeDotDropdown";
 import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
 import { EditTaskDialog } from "../dialogAndDropdown/EditTaskDialog";
-import type { Board, ColumnUpdate, Task } from "../../../core/types/board.types";
+import type { Board, Column, ColumnUpdate, Task } from "../../../core/types/board.types";
 
 export class BoardEventManager {
   dialog: CreateTaskDialog | EditBoardDialog | TaskDetailDialog | EditTaskDialog | null = null;
@@ -62,8 +62,14 @@ export class BoardEventManager {
     const header = this.findClosestElement<HTMLElement>(btn, ".column-header");
     if (!header) return;
 
+    const columnId = this.getColumnIdFromElement(btn);
+    const column = appStore.singleBoard?.columns.find(
+      (c) => String(c.id) === columnId,
+    );
+    if (!column) return;
+
     e.stopPropagation();
-    this.openColumnThreeDotDropdown(btn, header);
+    this.openColumnThreeDotDropdown(btn, header, column);
   }
 
   registerColumnRenameToFormListener(e: Event) {
@@ -287,9 +293,10 @@ export class BoardEventManager {
   private openColumnThreeDotDropdown(
     btn: HTMLButtonElement,
     header: HTMLElement,
+    column: Column,
   ) {
     if (!this.dropdown) {
-      this.dropdown = new ColumnThreeDotDropdown(btn);
+      this.dropdown = new ColumnThreeDotDropdown(btn, column);
       this.dropdown.setOnCloseCallback(() => this.toggelDropdown());
       header.appendChild(this.dropdown.render());
       this.dropdown.open();

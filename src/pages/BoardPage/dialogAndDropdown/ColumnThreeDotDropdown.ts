@@ -13,13 +13,22 @@ import {
 } from "../../../core/constants/appThreeDot.config";
 
 import type { ButtonOptions } from "../../../components/common/Button";
+import type { InputFieldOptions } from "../../../components/common/InputField";
+import type { Column } from "../../../core/types/board.types";
+
+interface ColumnFieldConfig {
+  value: keyof Column;
+  config: InputFieldOptions;
+}
 
 export class ColumnThreeDotDropdown extends BaseDropdownMenu {
   renameConfig = threeDotRenameBtn;
   limitConfig = threeDotLimitBtn;
+  private column: Column;
 
-  constructor(btn: HTMLButtonElement) {
+  constructor(btn: HTMLButtonElement, column: Column) {
     super(btn, "column-dropdown-menu");
+    this.column = column;
   }
 
   protected renderMenu(): HTMLElement {
@@ -60,24 +69,40 @@ export class ColumnThreeDotDropdown extends BaseDropdownMenu {
   }
 
   renderRenameForm(): HTMLElement {
-    const form = document.createElement("form");
-    form.classList.add("rename-column-form");
-
-    const renameInput = new InputField(columnRenameField).render();
-    const menu = this.renderFormMenu("rename-form-menu", "rename");
-
-    form.append(renameInput, menu);
-    return form;
+    return this.renderEditForm(
+      "rename-column-form",
+      columnRenameField,
+      "rename-form-menu",
+      "rename"
+    );
   }
 
   renderSetLimitForm(): HTMLElement {
+    return this.renderEditForm(
+      "set-limit-form",
+      columnLimitField,
+      "limit-form-menu",
+      "limit"
+    );
+  }
+
+  renderEditForm(
+    formClass: string,
+    inputConfig: ColumnFieldConfig,
+    menuClass: string,
+    menuType: string
+  ): HTMLElement {
     const form = document.createElement("form");
-    form.classList.add("set-limit-form");
+    form.classList.add(formClass);
 
-    const limitInput = new InputField(columnLimitField).render();
-    const menu = this.renderFormMenu("limit-form-menu", "limit");
+    const fieldValue = this.column[inputConfig.value];
+    const input = new InputField({
+      ...inputConfig.config,
+      value: fieldValue != null ? String(fieldValue) : undefined,
+    }).render();
+    const menu = this.renderFormMenu(menuClass, menuType);
 
-    form.append(limitInput, menu);
+    form.append(input, menu);
     return form;
   }
 }
