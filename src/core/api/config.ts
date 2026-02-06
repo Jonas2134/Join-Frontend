@@ -6,6 +6,9 @@ export const API_ROUTES = {
     register: "/register/",
     logout: "/logout/",
     refresh: "/token/refresh/",
+    guestLogin: "/guest-login/",
+    status: "/auth/status/",
+    passwordChange: "/password/change/",
   },
   boards: {
     list: "/boards/",
@@ -18,5 +21,14 @@ export const API_ROUTES = {
   tasks: {
     list: (columnId: string) => `/columns/${columnId}/tasks/`,
     detail: (taskId: string) => `/tasks/${taskId}/`,
+  },
+  profile: "/profile/",
+  users: {
+    list: "/users/",
+    addContact: (userId: string) => `/users/${userId}/add-contact/`,
+  },
+  contacts: {
+    list: "/contacts/",
+    detail: (userId: string) => `/contacts/${userId}/`,
   },
 } as const;

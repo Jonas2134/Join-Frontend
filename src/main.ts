@@ -1,4 +1,5 @@
 import { initRouter } from './core/router';
+import { authStore } from './core/store/AuthStore';
 import { StartPage } from './pages/StartPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
@@ -6,6 +7,8 @@ import { DashboardPage } from './pages/DashboardPage/DashboardPage';
 import { BoardPage } from './pages/BoardPage/BoardPage';
 
 import "./css/main.css";
+
+const AUTH_PAGES = ['/', '/login', '/signup'];
 
 const app = document.getElementById('app')!;
 
@@ -16,6 +19,19 @@ const router = initRouter(app, [
   { path: '/dashboard', component: DashboardPage },
   { path: '/board/:id', component: BoardPage },
 ]);
+
+async function checkAuthOnStart() {
+  const isAuthenticated = await authStore.checkAuthStatus();
+  const currentPath = location.pathname;
+
+  if (isAuthenticated && AUTH_PAGES.includes(currentPath)) {
+    router.navigate('/dashboard');
+  } else if (!isAuthenticated && !AUTH_PAGES.includes(currentPath)) {
+    router.navigate('/login');
+  }
+}
+
+checkAuthOnStart();
 
 document.body.addEventListener('click', (e) => {
   const target = e.target as HTMLElement;
