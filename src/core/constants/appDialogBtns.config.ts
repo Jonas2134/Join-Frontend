@@ -34,14 +34,21 @@ export const editTaskDialogBtns = [
   {
     class: ["btn", "btn-blue"],
     type: "submit" as const,
-    title: "Edit Task",
-    text: "Edit",
+    title: "Save Task",
+    text: "Save",
   },
   {
-    id: "cancel-btn",
+    id: "cancel-edit-btn",
     class: ["btn", "btn-white"],
     type: "button" as const,
     title: "Cancel Editing",
     text: "Cancel",
+  },
+  {
+    id: "switch-to-view-btn",
+    class: ["btn", "btn-white"],
+    type: "button" as const,
+    title: "Switch to View",
+    text: "Switch back",
   },
 ];

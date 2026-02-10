@@ -28,7 +28,7 @@
     }
 
     .task-title {
-        @apply font-medium text-sm flex-1;
+        @apply font-medium text-lg flex-1;
     }
 
     .task-description {

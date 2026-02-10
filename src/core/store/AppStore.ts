@@ -81,7 +81,9 @@ class AppStore {
   }
 
   async updateTask(taskId: string, data: TaskUpdate): Promise<Task> {
-    return await http.patch<Task>(API_ROUTES.tasks.detail(taskId), data);
+    const response = await http.patch<Task>(API_ROUTES.tasks.detail(taskId), data);
+    window.dispatchEvent(new CustomEvent("task:updated"));
+    return response;
   }
 
   async deleteTask(taskId: string): Promise<void> {

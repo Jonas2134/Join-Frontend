@@ -2,7 +2,6 @@
   .board-dialog,
   .create-task-dialog,
   .edit-board-dialog,
-  .edit-task-dialog,
   .task-detail-dialog {
     @apply fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-xl w-auto shadow-xl;
 
@@ -15,31 +14,23 @@
     @apply fixed top-24 left-[98%] -translate-x-[100%] rounded-xl;
   }
 
-  .task-detail-header {
-    @apply flex justify-between items-start gap-4 mb-4 border-b-1 border-b-(--color-light-gray);
-  }
-
-  .task-detail-title {
-    @apply font-semibold underline text-(--color-light-blue);
-  }
-
-  .task-detail-section {
-    @apply pb-1 mb-4 border-b-1 border-b-(--color-light-gray);
-  }
-
-  .task-detail-label {
-    @apply text-xl font-medium text-(--color-light-blue) mb-1;
-  }
-
   .task-detail-text {
     @apply text-(--color-blue-gray);
   }
 
-  .task-detail-metadata {
-    @apply flex gap-4 text-xs text-gray-400 border-t border-gray-200 pt-4 mt-4;
+  .task-detail-meta-item {
+    @apply text-xs text-gray-400 whitespace-nowrap;
   }
 
-  .task-detail-meta-item {
-    @apply whitespace-nowrap;
+  .edit-task-main {
+    @apply w-full grid grid-cols-2 gap-4;
+  }
+
+  .edit-task-fields {
+    @apply flex flex-col gap-3;
+  }
+
+  .edit-task-menu {
+    @apply flex gap-6;
   }
 }

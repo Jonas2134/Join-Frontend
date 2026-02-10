@@ -5,11 +5,11 @@ import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
 import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
 import { TaskThreeDotDropdown } from "../dialogAndDropdown/TaskThreeDotDropdown";
 import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
-import { EditTaskDialog } from "../dialogAndDropdown/EditTaskDialog";
+import type { TaskDetailMode } from "../dialogAndDropdown/TaskDetailDialog";
 import type { Board, Column, ColumnUpdate, Task } from "../../../core/types/board.types";
 
 export class BoardEventManager {
-  dialog: CreateTaskDialog | EditBoardDialog | TaskDetailDialog | EditTaskDialog | null = null;
+  dialog: CreateTaskDialog | EditBoardDialog | TaskDetailDialog | null = null;
   dropdown: ColumnThreeDotDropdown | null = null;
   taskDropdown: TaskThreeDotDropdown | null = null;
   private initLoadBoard: () => Promise<void>;
@@ -191,7 +191,7 @@ export class BoardEventManager {
     const task = this.findTaskById(taskId);
     if (task) {
       this.taskDropdown?.close();
-      this.openEditTaskDialog(task);
+      this.openTaskDetailDialog(task, "edit");
     }
   }
 
@@ -327,14 +327,8 @@ export class BoardEventManager {
     this.taskDropdown = null;
   }
 
-  private openTaskDetailDialog(task: Task) {
-    this.dialog = new TaskDetailDialog(task);
-    document.body.appendChild(this.dialog.render());
-    this.dialog.open();
-  }
-
-  private openEditTaskDialog(task: Task) {
-    this.dialog = new EditTaskDialog(task);
+  private openTaskDetailDialog(task: Task, mode: TaskDetailMode = "view") {
+    this.dialog = new TaskDetailDialog(task, mode);
     document.body.appendChild(this.dialog.render());
     this.dialog.open();
   }

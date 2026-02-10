@@ -87,12 +87,12 @@ export const taskViewDetailsBtn = {
   text: "View Details",
 };
 
-export const taskDetailCloseBtn = {
-  id: "close-detail-btn",
+export const taskDetailEditBtn = {
+  id: "edit-mode-btn",
   class: "task-detail-close-btn",
   type: "button" as const,
-  title: "Close",
-  text: "x",
+  title: "Edit Task",
+  icon: Editicon,
 };
 
 export const taskEditBtn = {
