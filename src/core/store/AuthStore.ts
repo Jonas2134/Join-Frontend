@@ -1,5 +1,6 @@
 import { http } from "../api/HttpClient";
-import { API_ROUTES } from "../api/config";
+import { API_BASE_URL, API_ROUTES } from "../api/config";
+import { PUBLIC_ROUTES } from "../constants/publicRoutes.config";
 import { router } from "../router";
 import type { AuthUser, AuthStatusResponse } from "../types/auth.types";
 
@@ -27,7 +28,11 @@ export class AuthStore {
   }
 
   async refresh() {
-    await this.client.post(API_ROUTES.auth.refresh);
+    const res = await fetch(API_BASE_URL + API_ROUTES.auth.refresh, {
+      method: 'POST',
+      credentials: 'include',
+    });
+    if (!res.ok) throw new Error(`Refresh failed: ${res.status}`);
   }
 
   async checkAuthStatus(): Promise<boolean> {
@@ -50,7 +55,9 @@ export class AuthStore {
       await this.refresh();
     } catch {
       this.currentUser = null;
-      router.navigate(`/login`);
+      if (!PUBLIC_ROUTES.includes(location.pathname)) {
+        router.navigate('/login');
+      }
     } finally {
       this.isRefreshing = false;
     }

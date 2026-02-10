@@ -6,9 +6,8 @@ import { SignupPage } from './pages/SignupPage';
 import { DashboardPage } from './pages/DashboardPage/DashboardPage';
 import { BoardPage } from './pages/BoardPage/BoardPage';
 
+import { PUBLIC_ROUTES } from './core/constants/publicRoutes.config';
 import "./css/main.css";
-
-const AUTH_PAGES = ['/', '/login', '/signup'];
 
 const app = document.getElementById('app')!;
 
@@ -24,9 +23,9 @@ async function checkAuthOnStart() {
   const isAuthenticated = await authStore.checkAuthStatus();
   const currentPath = location.pathname;
 
-  if (isAuthenticated && AUTH_PAGES.includes(currentPath)) {
+  if (isAuthenticated && PUBLIC_ROUTES.includes(currentPath)) {
     router.navigate('/dashboard');
-  } else if (!isAuthenticated && !AUTH_PAGES.includes(currentPath)) {
+  } else if (!isAuthenticated && !PUBLIC_ROUTES.includes(currentPath)) {
     router.navigate('/login');
   }
 }
