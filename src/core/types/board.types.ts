@@ -37,7 +37,7 @@ export interface Task {
   id: string;
   title: string;
   description: string | null;
-  assignee: string;
+  assignee: number | null;
   position: number;
   column: number;
   created_at: string;
@@ -47,7 +47,7 @@ export interface Task {
 export interface TaskUpdate {
   title?: string;
   description?: string | null;
-  assignee?: string;
+  assignee?: number | null;
   position?: number;
   column?: number;
 }

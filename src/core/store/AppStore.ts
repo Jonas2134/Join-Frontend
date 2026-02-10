@@ -24,7 +24,7 @@ class AppStore {
   async createBoard(
     title: string,
     description?: string,
-    members?: number,
+    members?: number[],
   ): Promise<Board> {
     const response = await http.post<Board>(API_ROUTES.boards.list, {
       title,
@@ -72,7 +72,7 @@ class AppStore {
     columnId: string,
     title: string,
     description?: string,
-    assignee?: string,
+    assignee?: number,
   ): Promise<Task> {
     const response = await http.post<Task>(API_ROUTES.tasks.list(columnId), {
       title,

@@ -4,8 +4,11 @@ import type { Member } from "../../core/types/board.types";
 import type { Contact } from "../../core/types/contact.types";
 
 interface MemberSelectOptions {
-  existingMembers: Member[];
-  ownerId: string | number;
+  existingMembers?: Member[];
+  ownerId?: string | number;
+  multiple?: boolean;
+  showSearch?: boolean;
+  label?: string;
 }
 
 interface SelectableMember {
@@ -20,16 +23,24 @@ export class MemberSelect {
   private optionsList: HTMLElement;
   private searchInput: HTMLInputElement;
 
-  private ownerId: number;
+  private ownerId: number | null;
+  private multiple: boolean;
+  private showSearch: boolean;
+  private label: string;
   private initialMemberIds: Set<number>;
   private selectedMembers: SelectableMember[] = [];
   private availableOptions: Contact[] = [];
 
   constructor(options: MemberSelectOptions) {
-    this.ownerId = Number(options.ownerId);
-    this.initialMemberIds = new Set(options.existingMembers.map(m => Number(m.id)));
+    this.ownerId = options.ownerId != null ? Number(options.ownerId) : null;
+    this.multiple = options.multiple ?? true;
+    this.showSearch = options.showSearch ?? true;
+    this.label = options.label ?? "Members:";
 
-    this.selectedMembers = options.existingMembers.map(m => ({
+    const existing = options.existingMembers ?? [];
+    this.initialMemberIds = new Set(existing.map(m => Number(m.id)));
+
+    this.selectedMembers = existing.map(m => ({
       id: Number(m.id),
       username: m.username,
       isNew: false,
@@ -53,12 +64,17 @@ export class MemberSelect {
   }
 
   render(): HTMLElement {
-    const label = document.createElement("label");
-    label.htmlFor = "member-search";
-    label.classList.add("member-select-label");
-    label.textContent = "Members:";
+    const labelEl = document.createElement("label");
+    labelEl.classList.add("member-select-label");
+    labelEl.textContent = this.label;
 
-    this.container.append(label, this.displayArea, this.searchInput, this.optionsList);
+    if (this.showSearch) {
+      labelEl.htmlFor = "member-search";
+      this.container.append(labelEl, this.displayArea, this.searchInput, this.optionsList);
+    } else {
+      this.container.append(labelEl, this.displayArea, this.optionsList);
+    }
+
     this.renderDisplay();
     this.renderOptions();
     this.mount();
@@ -70,7 +86,7 @@ export class MemberSelect {
     this.availableOptions = contacts.filter(c => !selectedIds.has(c.id));
     this.renderOptions();
   }
-  
+
   getAddedMemberIds(): number[] {
     return this.selectedMembers
       .filter(m => m.isNew)
@@ -86,12 +102,19 @@ export class MemberSelect {
     return this.selectedMembers.map(m => m.id);
   }
 
+  getSelectedId(): number | null {
+    const nonOwner = this.selectedMembers.find(m => m.id !== this.ownerId);
+    return nonOwner?.id ?? null;
+  }
+
   private renderDisplay(): void {
     this.displayArea.innerHTML = "";
 
     const sorted = [...this.selectedMembers].sort((a, b) => {
-      if (a.id === this.ownerId) return -1;
-      if (b.id === this.ownerId) return 1;
+      if (this.ownerId != null) {
+        if (a.id === this.ownerId) return -1;
+        if (b.id === this.ownerId) return 1;
+      }
       if (a.isNew !== b.isNew) return a.isNew ? 1 : -1;
       return 0;
     });
@@ -100,7 +123,7 @@ export class MemberSelect {
       const chip = document.createElement("div");
       chip.classList.add("member-select-chip");
 
-      const isOwner = member.id === this.ownerId;
+      const isOwner = this.ownerId != null && member.id === this.ownerId;
 
       const avatar = new Avatar({
         size: "lg",
@@ -146,6 +169,18 @@ export class MemberSelect {
     const alreadySelected = this.selectedMembers.some(m => m.id === contact.id);
     if (alreadySelected) return;
 
+    if (!this.multiple) {
+      const previous = this.selectedMembers.find(m => m.id !== this.ownerId);
+      if (previous) {
+        this.selectedMembers = this.selectedMembers.filter(m => m.id === this.ownerId);
+        this.availableOptions.push({
+          id: previous.id,
+          username: previous.username,
+          email: "",
+        });
+      }
+    }
+
     this.selectedMembers.push({
       id: contact.id,
       username: contact.username,
@@ -168,21 +203,23 @@ export class MemberSelect {
         email: "",
       });
     }
-    
+
     this.renderDisplay();
     this.renderOptions();
   }
 
   private mount(): void {
-    this.searchInput.addEventListener("input", () => {
-      const query = this.searchInput.value.trim();
-      this.container.dispatchEvent(
-        new CustomEvent("member-select:search", {
-          detail: { query },
-          bubbles: true,
-        })
-      );
-    });
+    if (this.showSearch) {
+      this.searchInput.addEventListener("input", () => {
+        const query = this.searchInput.value.trim();
+        this.container.dispatchEvent(
+          new CustomEvent("member-select:search", {
+            detail: { query },
+            bubbles: true,
+          })
+        );
+      });
+    }
 
     this.displayArea.addEventListener("click", (e: Event) => {
       const target = (e.target as HTMLElement).closest("[data-remove-id]") as HTMLElement | null;

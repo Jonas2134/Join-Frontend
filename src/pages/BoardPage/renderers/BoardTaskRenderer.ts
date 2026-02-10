@@ -1,4 +1,6 @@
 import { Button } from "../../../components/common/Button";
+import { Avatar } from "../../../components/common/Avatar";
+import { appStore } from "../../../core/store/AppStore";
 import { taskThreeDotBtn } from "../../../core/constants/appThreeDot.config";
 import type { Task } from "../../../core/types/board.types";
 
@@ -19,7 +21,7 @@ export class BoardTaskRenderer {
       taskItem.appendChild(description);
     }
 
-    if (task.assignee) {
+    if (task.assignee != null) {
       const assignee = this.renderTaskAssignee(task.assignee);
       taskItem.appendChild(assignee);
     }
@@ -55,14 +57,16 @@ export class BoardTaskRenderer {
     return descElement;
   }
 
-  private renderTaskAssignee(assignee: string) {
+  private renderTaskAssignee(assigneeId: number) {
     const assigneeElement = document.createElement("div");
     assigneeElement.classList.add("task-assignee");
 
-    const avatar = document.createElement("span");
-    avatar.classList.add("task-assignee-avatar");
-    avatar.textContent = assignee.charAt(0).toUpperCase();
+    const member = appStore.singleBoard?.members.find(
+      m => Number(m.id) === assigneeId
+    );
+    const username = member?.username ?? "?";
 
+    const avatar = new Avatar({ size: "sm" }).createAvatar(username);
     assigneeElement.appendChild(avatar);
     return assigneeElement;
   }

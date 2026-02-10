@@ -4,6 +4,7 @@ import { toastManager } from "../../../core/ToastManager";
 import { Button } from "../../../components/common/Button";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
+import { MemberSelect } from "../../../components/common/MemberSelect";
 import { taskDetailEditBtn } from "../../../core/constants/appThreeDot.config";
 import { editTaskDialogFields } from "../../../core/constants/appDialogFields.config";
 import { editTaskDialogBtns } from "../../../core/constants/appDialogBtns.config";
@@ -15,6 +16,7 @@ export class TaskDetailDialog extends BaseDialog {
   task: Task;
   private mode: TaskDetailMode;
   private container!: HTMLElement;
+  private memberSelect!: MemberSelect;
 
   constructor(task: Task, mode: TaskDetailMode = "view") {
     super("task-detail-dialog");
@@ -116,7 +118,15 @@ export class TaskDetailDialog extends BaseDialog {
 
     const content = document.createElement("p");
     content.classList.add("task-detail-text");
-    content.textContent = this.task.assignee || "Unassigned";
+
+    if (this.task.assignee != null) {
+      const member = appStore.singleBoard?.members.find(
+        m => Number(m.id) === this.task.assignee
+      );
+      content.textContent = member?.username ?? "Unknown";
+    } else {
+      content.textContent = "Unassigned";
+    }
 
     section.append(label, content);
     return section;
@@ -205,19 +215,28 @@ export class TaskDetailDialog extends BaseDialog {
   }
 
   private renderEditAssigneeSection(): HTMLElement {
-    const section = document.createElement("section");
-    section.innerHTML = `
-      <label for="assignee">Choose an assignee:</label>
-      <br>
-      <select name="assignee" id="assignee">
-        <option value="">--Please choose the assignee--</option>
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
-      </select>
-    `;
-    return section;
+    const boardMembers = appStore.singleBoard?.members ?? [];
+    const currentAssignee = boardMembers.find(
+      m => String(m.id) === String(this.task.assignee)
+    );
+
+    this.memberSelect = new MemberSelect({
+      existingMembers: currentAssignee ? [currentAssignee] : [],
+      multiple: false,
+      showSearch: false,
+      label: "Assignee:",
+    });
+
+    const el = this.memberSelect.render();
+
+    const options = boardMembers.map(m => ({
+      id: Number(m.id),
+      username: m.username,
+      email: "",
+    }));
+    this.memberSelect.setOptions(options);
+
+    return el;
   }
 
   private renderEditMenu(): HTMLElement {
@@ -268,17 +287,20 @@ export class TaskDetailDialog extends BaseDialog {
       const title = formData.get("title") as string;
       const description = formData.get("description") as string;
 
+      const assignee = this.memberSelect.getSelectedId();
       try {
         await appStore.updateTask(String(this.task.id), {
           title: title,
           description: description || null,
+          assignee: assignee ?? undefined,
         });
 
         toastManager.success("Task erfolgreich aktualisiert");
         this.close();
         form.reset();
-      } catch (err: any) {
-        toastManager.error("Update fehlgeschlagen: " + err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        toastManager.error("Update fehlgeschlagen: " + message);
       }
     });
   }
