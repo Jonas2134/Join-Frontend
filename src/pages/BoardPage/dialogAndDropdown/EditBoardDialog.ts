@@ -1,15 +1,18 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
 import { appStore } from "../../../core/store/AppStore";
+import { contactStore } from "../../../core/store/ContactStore";
 import { toastManager } from "../../../core/ToastManager";
 import { Button } from "../../../components/common/Button";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
+import { MemberSelect } from "../../../components/common/MemberSelect";
 import { editBoardDialogBtns } from "../../../core/constants/appDialogBtns.config";
 import { editBoardDialogFields } from "../../../core/constants/appDialogFields.config";
 import type { Board } from "../../../core/types/board.types";
 
 export class EditBoardDialog extends BaseDialog {
   board: Board;
+  private memberSelect!: MemberSelect;
 
   constructor(board: Board) {
     super("edit-board-dialog");
@@ -27,9 +30,8 @@ export class EditBoardDialog extends BaseDialog {
     return legend;
   }
 
-  renderMainSection() {
-    const main = document.createElement("main");
-    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
+  renderFieldSection(): HTMLElement {
+    const container = document.createElement("div");
 
     const componentMap = {
       input: InputField,
@@ -44,7 +46,27 @@ export class EditBoardDialog extends BaseDialog {
       }).render()
     });
 
-    main.append(...fields);
+    container.append(...fields);
+    return container;
+  }
+
+  renderMemberSection(): HTMLElement {
+    this.memberSelect = new MemberSelect({
+      existingMembers: this.board.members,
+      ownerId: this.board.owner,
+    });
+
+    return this.memberSelect.render();
+  }
+
+  renderMainSection() {
+    const main = document.createElement("main");
+    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
+
+    const firstSection = this.renderFieldSection();
+    const secondSection = this.renderMemberSection();
+
+    main.append(firstSection,secondSection);
     return main;
   }
 
@@ -85,6 +107,40 @@ export class EditBoardDialog extends BaseDialog {
   }
 
   // ============================================
+  // Data Loading
+  // ============================================
+
+  private async loadContacts(): Promise<void> {
+    try {
+      const contacts = await contactStore.loadContacts();
+      const memberIds = new Set(this.board.members.map(m => Number(m.id)));
+      const filtered = contacts.filter(c => !memberIds.has(c.id));
+      this.memberSelect.setOptions(filtered);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Kontakte konnten nicht geladen werden: " + message);
+    }
+  }
+
+  private async handleSearch(query: string): Promise<void> {
+    if (!query) {
+      const contacts = contactStore.contacts;
+      const selectedIds = new Set(this.memberSelect.getAllMemberIds());
+      this.memberSelect.setOptions(contacts.filter(c => !selectedIds.has(c.id)));
+      return;
+    }
+
+    try {
+      const results = await contactStore.searchUsers(query);
+      const selectedIds = new Set(this.memberSelect.getAllMemberIds());
+      this.memberSelect.setOptions(results.filter(r => !selectedIds.has(r.id)));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Suche fehlgeschlagen: " + message);
+    }
+  }
+
+  // ============================================
   // Mount Eventlistener
   // ============================================
 
@@ -94,20 +150,27 @@ export class EditBoardDialog extends BaseDialog {
 
     cancelBtn.addEventListener("click", () => this.close());
 
+    this.dialog.addEventListener("member-select:search", ((e: CustomEvent) => {
+      this.handleSearch(e.detail.query);
+    }) as EventListener);
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formDate = new FormData(form);
       const title = formDate.get("title") as string;
       const description = formDate.get("description") as string;
-      console.log(formDate, title, description);
+      const members = this.memberSelect.getAllMemberIds();
       try {
-        await appStore.updateBoard(this.board.id, title, description);
+        await appStore.updateBoard(this.board.id, title, description, members);
         toastManager.success("Board erfolgreich aktualisiert");
         this.close();
         form.reset();
-      } catch (err: any) {
-        toastManager.error("Update fehlgeschlagen: " + err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        toastManager.error("Update fehlgeschlagen: " + message);
       }
     });
+
+    this.loadContacts();
   }
 }

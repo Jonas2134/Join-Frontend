@@ -44,11 +44,14 @@ class AppStore {
     boardId: string,
     title?: string,
     description?: string,
+    members?: number[],
   ): Promise<Board> {
-    const response = await http.patch<Board>(API_ROUTES.boards.detail(boardId), {
-      title,
-      description,
-    });
+    const payload: Record<string, unknown> = {};
+    if (title !== undefined) payload.title = title;
+    if (description !== undefined) payload.description = description;
+    if (members !== undefined) payload.members = members;
+
+    const response = await http.patch<Board>(API_ROUTES.boards.detail(boardId), payload);
     window.dispatchEvent(new CustomEvent("board:updated"));
     return response;
   }

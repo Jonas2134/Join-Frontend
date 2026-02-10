@@ -78,11 +78,13 @@ export class BoardPage extends BasePage {
   async mount() {
     await this.initLoadBoard();
 
-    const boardEdit = document.getElementById("editBoardBtn");
-    if (!boardEdit) {
-      throw new Error("Edit Board button nor found!");
+    const boardHeader = document.getElementById("board-header");
+    if (!boardHeader) {
+      throw new Error("Board header not found!");
     }
-    this.events.on(boardEdit, "click", () => {
+    this.events.on(boardHeader, "click", (e: Event) => {
+      const target = (e.target as HTMLElement).closest("#editBoardBtn");
+      if (!target) return;
       const board = appStore.singleBoard;
       if (board) this.eventManager.registerEditBoardDialog(board);
     });
