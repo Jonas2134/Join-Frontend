@@ -4,11 +4,31 @@
     }
 
     .board-column, .add-column, .add-column-form {
-        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-column) shrink-0 min-w-70;
+        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-column) shrink-0 w-75;
     }
 
     .column-header {
         @apply flex justify-between items-center py-2;
+    }
+
+    .column-header-headline {
+        @apply text-lg text-(--color-light-blue) underline line-clamp-2;
+    }
+
+    .column-progress {
+        @apply flex items-center gap-2 px-1 pb-1;
+    }
+
+    .column-progress-bar {
+        @apply flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden;
+    }
+
+    .column-progress-fill {
+        @apply h-full rounded-full transition-all;
+    }
+
+    .column-progress-text {
+        @apply text-xs text-(--color-blue-gray) whitespace-nowrap;
     }
 
     .task-list {

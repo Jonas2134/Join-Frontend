@@ -403,9 +403,10 @@ export class BoardEventManager {
   ) {
     try {
       await operation();
+      toastManager.success(`${operationName} success.`);
       await this.initLoadBoard();
     } catch (err: any) {
-      toastManager.error(`${operationName} fehlgeschlagen: ${err.message}`);
+      toastManager.error(`${operationName} failed: ${err.message}`);
     }
   }
 }
