@@ -35,6 +35,14 @@
     &:hover {
       @apply text-(--color-dark-blue) border-(--color-light-blue) bg-white;
     }
+
+    &:disabled {
+      @apply text-(--color-blue-gray) border-(--color-blue-gray);
+
+      &:hover {
+        @apply bg-(--color-soft-blue) scale-100 cursor-not-allowed;
+      }
+    }
   }
 
   .column-menu-btn,

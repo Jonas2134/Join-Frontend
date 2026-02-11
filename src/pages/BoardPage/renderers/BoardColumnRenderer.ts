@@ -30,6 +30,7 @@ export class BoardColumnRenderer {
 
   renderColumnHeader(column: Column) {
     const header = document.createElement("header");
+    header.classList.add("border-b", "border-b-(--color-light-gray)");
 
     const headline = document.createElement("div");
     headline.classList.add("column-header");
