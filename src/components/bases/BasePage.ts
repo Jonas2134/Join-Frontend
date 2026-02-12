@@ -16,7 +16,10 @@ export abstract class BasePage {
 
   abstract render(): HTMLElement;
   mount?(): void;
-  unmount?(): void;
+
+  unmount() {
+    this.events.clearAll();
+  }
 
   protected wrapWithLayout(content: HTMLElement): HTMLElement {
     if (this.layout) {
@@ -28,8 +31,7 @@ export abstract class BasePage {
 
   public attachTo(root: HTMLElement): void {
     if (this.mounted) {
-      this.unmount?.();
-      this.events.clearAll();
+      this.unmount();
     }
 
     const pageElement = this.render();
