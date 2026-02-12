@@ -97,6 +97,7 @@ export class DashboardPage extends BasePage {
 
   async initLoadDashboard() {
     await appStore.loadDashboard();
+    console.log(appStore.boards);
     this.updateDashboardUI();
   }
 

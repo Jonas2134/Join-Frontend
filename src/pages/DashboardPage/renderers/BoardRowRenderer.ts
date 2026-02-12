@@ -23,7 +23,7 @@ export class BoardRow {
   renderMemberCountSpan() {
     const span = document.createElement("span");
     span.classList.add("board-row-members");
-    span.textContent = String(this.board.members?.length) ?? "0";
+    span.textContent = String(this.board.members?.length ?? 0);
     return span;
   }
 
@@ -45,14 +45,4 @@ export class BoardRow {
     this.element.append(titleSpan, memberSpan, rowMenu);
     return this.element;
   }
-
-  // mount() {
-  //   this.element.addEventListener("click", this.onClick);
-
-  //   const menuBtn = this.element.querySelector(".three-dot-btn");
-  //   menuBtn?.addEventListener("click", (e) => {
-  //     e.stopPropagation();
-  //     // TODO: Dropdown-Menü für Archivieren, Löschen, Bearbeiten
-  //   });
-  // }
 }

@@ -19,6 +19,8 @@ export class DashboardEventManager {
   }
 
   registerNavigateToBoardListener(e: Event) {
+    if (this.findClosestElement(e.target, ".three-dot-btn")) return;
+
     const listItem = this.findClosestElement<HTMLElement>(e.target, ".board-row");
     if (!listItem) return;
 
@@ -29,8 +31,10 @@ export class DashboardEventManager {
   registerDashboardThreeDotDropdown(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".three-dot-btn");
     if (!btn) return;
-    e.preventDefault();
-    console.log("Klicki")
+
+    const listItem = this.findClosestElement<HTMLElement>(btn, ".board-row");
+    const boardId = listItem?.dataset.boardId;
+    console.log("Board Id is: " + boardId);
   }
 
   redirectTo(path: string) {
