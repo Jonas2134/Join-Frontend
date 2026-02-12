@@ -295,12 +295,12 @@ export class TaskDetailDialog extends BaseDialog {
           assignee: assignee ?? undefined,
         });
 
-        toastManager.success("Task erfolgreich aktualisiert");
+        toastManager.success("Task successfully updated");
         this.close();
         form.reset();
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
-        toastManager.error("Update fehlgeschlagen: " + message);
+        toastManager.error("Update failed: " + message);
       }
     });
   }

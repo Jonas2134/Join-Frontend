@@ -6,7 +6,7 @@ import type { AuthUser, AuthStatusResponse } from "../types/auth.types";
 
 export class AuthStore {
   private client = http;
-  private isRefreshing = false;
+  private refreshPromise: Promise<void> | null = null;
   currentUser: AuthUser | null = null;
 
   constructor() {
@@ -47,19 +47,19 @@ export class AuthStore {
   }
 
   private async handleUnauthorized() {
-    if (this.isRefreshing) return;
-
-    this.isRefreshing = true;
+    if (!this.refreshPromise) {
+      this.refreshPromise = this.refresh()
+        .finally(() => { this.refreshPromise = null; });
+    }
 
     try {
-      await this.refresh();
+      await this.refreshPromise;
     } catch {
       this.currentUser = null;
       if (!PUBLIC_ROUTES.includes(location.pathname)) {
         router.navigate('/login');
       }
-    } finally {
-      this.isRefreshing = false;
+      throw new Error('Session expired');
     }
   }
 }
