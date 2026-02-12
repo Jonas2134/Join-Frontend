@@ -1,77 +1,76 @@
 import { AppLayout } from "../../layouts/AppLayout";
 import { BasePage } from "../../components/bases/BasePage";
-import { BoardCard } from "./renderers/BoardCardRenderer";
+import { BoardRow } from "./renderers/BoardRowRenderer";
 import { appStore } from "../../core/store/AppStore";
-import { router } from "../../core/router";
-import { BoardCreateDialog } from "./BoardCreateDialog";
+import { DashboardEventManager } from "./DashboardEventManager";
 import type { Board } from "../../core/types/board.types";
 
 export class DashboardPage extends BasePage {
-  dialog: BoardCreateDialog | null = null;
+  private eventManager!: DashboardEventManager;
 
   constructor() {
     super(new AppLayout());
+    this.eventManager = new DashboardEventManager();
   }
 
   // ============================================
   // Base render
   // ============================================
 
-  renderheader() {
+  renderHeader() {
     const header = document.createElement("header");
     header.classList.add("flex", "items-center", "justify-between");
     header.innerHTML = `
       <h1 class="text-(--color-light-blue) underline">My Boards</h1>
-      <button id="createBoardBtn" class="btn btn-blue">+ Create Board</button>
+      <div class="flex items-center gap-3">
+        <button id="archivedBoardsBtn" class="btn btn-white">Archived Boards</button>
+        <button id="createBoardBtn" class="btn btn-blue">+ Create Board</button>
+      </div>
     `;
     return header;
+  }
+
+  renderListHeader() {
+    const row = document.createElement("header");
+    row.classList.add("board-list-header");
+    row.innerHTML = `
+      <span>Title</span>
+      <span class="text-center">Members</span>
+      <span></span>
+    `;
+    return row;
   }
 
   renderDashboard() {
     const section = document.createElement("section");
     section.id = "dashboardsection";
-    section.classList.add("space-y-8");
+
+    section.appendChild(this.renderListHeader());
+
+    const listContainer = document.createElement("main");
+    listContainer.id = "boardListContainer";
+    section.appendChild(listContainer);
+
     return section;
   }
 
   // ============================================
-  // render Board section
+  // render Board list
   // ============================================
 
-  renderOpenBoardsSection(container: HTMLElement, boards: Board[]) {
-    const openBoards = boards.filter((b) => b.is_active === true);
-    const openSection = document.createElement("section");
-    openSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Open Boards</h2>`;
-    if (openBoards.length > 0) {
-      const openGrid = document.createElement("div");
-      openGrid.classList.add("grid", "grid-cols-3", "gap-4");
-      openBoards.forEach((board) => {
-        const card = new BoardCard(board, () => router.navigate(`/board/${board.id}`));
-        openGrid.appendChild(card.render());
-      });
-      openSection.appendChild(openGrid);
-      container.appendChild(openSection);
-    } else {
-      const noBoards = document.createElement("div");
-      noBoards.innerHTML = `<h2>No Boards</h2>`;
-      openSection.appendChild(noBoards);
-      container.appendChild(openSection);
-    }
-  }
+  renderBoardList(container: HTMLElement, boards: Board[]) {
+    const activeBoards = boards.filter((b) => b.is_active === true);
 
-  renderClosedBoardsSection(container: HTMLElement, boards: Board[]) {
-    const closedBoards = boards.filter((b) => b.is_active === false);
-    if (closedBoards.length > 0) {
-      const closedSection = document.createElement("section");
-      closedSection.innerHTML = `<h2 class="mb-4 underline text-(--color-light-blue)">Closed Boards</h2>`;
-      const closedGrid = document.createElement("div");
-      closedGrid.classList.add("grid", "grid-cols-3", "gap-4");
-      closedBoards.forEach((board) => {
-        const card = new BoardCard(board, () => router.navigate(`/board/${board.id}`));
-        closedGrid.appendChild(card.render());
+    if (activeBoards.length > 0) {
+      activeBoards.forEach((board) => {
+        const row = new BoardRow(board);
+        container.append(row.render());
       });
-      closedSection.appendChild(closedGrid);
-      container.appendChild(closedSection);
+    } else {
+      const empty = document.createElement("div");
+      empty.classList.add("px-4", "py-8", "text-center", "text-(--color-blue-gray)");
+      empty.textContent = "No active boards yet. Create your first board!";
+      container.appendChild(empty);
     }
   }
 
@@ -80,20 +79,18 @@ export class DashboardPage extends BasePage {
   // ============================================
 
   updateDashboardUI() {
-    const container = document.getElementById("dashboardsection");
+    const container = document.getElementById("boardListContainer");
     if (!container) return;
 
     container.innerHTML = "";
-    const boards = appStore.boards;
-
-    this.renderOpenBoardsSection(container, boards);
-    this.renderClosedBoardsSection(container, boards);
+    this.renderBoardList(container, appStore.boards);
   }
 
   render() {
-    const container = document.createElement("section");
+    const container = document.createElement("div");
+    container.id = "dashboardPage";
     container.classList.add("p-6", "space-y-8");
-    container.appendChild(this.renderheader());
+    container.appendChild(this.renderHeader());
     container.appendChild(this.renderDashboard());
     return this.wrapWithLayout(container);
   }
@@ -110,15 +107,14 @@ export class DashboardPage extends BasePage {
   async mount() {
     this.initLoadDashboard();
 
-    const createBoardBtn = document.getElementById("createBoardBtn");
-    if (!createBoardBtn) return;
+    const pageroot = document.getElementById("dashboardPage");
+    if (!pageroot) throw new Error("Dashboard not found!");
 
-    this.events.on(createBoardBtn, "click", () => {
-      this.dialog = new BoardCreateDialog();
-      document.body.appendChild(this.dialog.render());
-      this.dialog?.open();
-    });
+    this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerBoardCreateListerner(e));
+    this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerNavigateToArchivedBoardsListener(e));
+    this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerNavigateToBoardListener(e));
+    this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerDashboardThreeDotDropdown(e));
 
-    this.events.on(window, "board:created", async () => this.initLoadDashboard());
+    this.events.on(window, "dashboard:reload", async () => this.initLoadDashboard());
   }
 }

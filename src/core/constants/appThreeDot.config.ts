@@ -110,3 +110,10 @@ export const taskDeleteBtn = {
   title: "Delete Task",
   text: "Delete Task",
 };
+
+export const dashboardThreeDotBtn = {
+  class: "three-dot-btn",
+  type: "button" as const,
+  titel: "Board menu",
+  icon: VerticalDotsIcon,
+};

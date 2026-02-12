@@ -1,0 +1,29 @@
+@layer components {
+  .board-list-header {
+    @apply grid grid-cols-[1fr_100px_40px] items-center px-4 py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
+  }
+
+  .board-row {
+    @apply grid grid-cols-[1fr_100px_40px] items-center px-4 py-3 border-b border-(--color-pale-blue) cursor-pointer transition-all;
+
+    &:hover {
+      @apply bg-(--color-pale-blue);
+    }
+
+    &:active {
+      @apply scale-99;
+    }
+  }
+
+  .board-row-title {
+    @apply font-medium text-gray-800 truncate;
+  }
+
+  .board-row-members {
+    @apply text-sm text-(--color-blue-gray) text-center;
+  }
+
+  .board-row-menu {
+    @apply flex items-center justify-center;
+  }
+}
