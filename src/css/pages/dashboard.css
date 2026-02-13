@@ -1,10 +1,10 @@
 @layer components {
   .board-list-header {
-    @apply grid grid-cols-[1fr_100px_40px] items-center px-4 py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
+    @apply grid grid-cols-[1fr_100px_80px_40px] items-center px-4 py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
   }
 
   .board-row {
-    @apply grid grid-cols-[1fr_100px_40px] items-center px-4 py-3 border-b border-(--color-pale-blue) cursor-pointer transition-all;
+    @apply grid grid-cols-[1fr_100px_80px_40px] items-center px-4 py-3 border-b border-(--color-pale-blue) cursor-pointer transition-all;
 
     &:hover {
       @apply bg-(--color-pale-blue);
@@ -21,6 +21,14 @@
 
   .board-row-members {
     @apply text-sm text-(--color-blue-gray) text-center;
+  }
+
+  .board-row-role {
+    @apply text-sm text-(--color-blue-gray) text-center;
+  }
+
+  .board-row-role--owner {
+    @apply text-(--color-light-blue) font-semibold;
   }
 
   .board-row-menu {

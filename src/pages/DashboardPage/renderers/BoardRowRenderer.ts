@@ -1,14 +1,14 @@
 import { Button } from "../../../components/common/Button";
 import { dashboardThreeDotBtn } from "../../../core/constants/appThreeDot.config";
-import type { Board } from "../../../core/types/board.types";
+import type { Boards } from "../../../core/types/board.types";
 
 export class BoardRow {
-  private element: HTMLDivElement;
-  private board: Board;
+  private element: HTMLLIElement;
+  private board: Boards;
 
-  constructor(board: Board) {
+  constructor(board: Boards) {
     this.board = board;
-    this.element = document.createElement("div");
+    this.element = document.createElement("li");
     this.element.classList.add("board-row");
     this.element.dataset.boardId = String(this.board.id);
   }
@@ -23,7 +23,17 @@ export class BoardRow {
   renderMemberCountSpan() {
     const span = document.createElement("span");
     span.classList.add("board-row-members");
-    span.textContent = String(this.board.members?.length ?? 0);
+    span.textContent = String(this.board.member_count);
+    return span;
+  }
+
+  renderRoleSpan() {
+    const span = document.createElement("span");
+    span.classList.add("board-row-role");
+    span.textContent = this.board.is_user_owner ? "Owner" : "Member";
+    if (this.board.is_user_owner) {
+      span.classList.add("board-row-role--owner");
+    }
     return span;
   }
 
@@ -40,9 +50,10 @@ export class BoardRow {
   render() {
     const titleSpan = this.renderTitleSpan();
     const memberSpan = this.renderMemberCountSpan();
+    const roleSpan = this.renderRoleSpan();
     const rowMenu = this.renderMenuRow();
-    
-    this.element.append(titleSpan, memberSpan, rowMenu);
+
+    this.element.append(titleSpan, memberSpan, roleSpan, rowMenu);
     return this.element;
   }
 }

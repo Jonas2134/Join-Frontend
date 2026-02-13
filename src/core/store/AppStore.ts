@@ -1,6 +1,7 @@
 import { http } from "../api/HttpClient";
 import { API_ROUTES } from "../api/config";
 import type {
+  Boards,
   Board,
   Column,
   ColumnUpdate,
@@ -9,15 +10,15 @@ import type {
 } from "../types/board.types";
 
 class AppStore {
-  boards: Board[] = [];
+  boards: Boards[] = [];
   singleBoard: Board | null = null;
   columns: Record<number, Column[]> = {};
   tasks: Record<number, Task[]> = {};
 
   constructor() {}
 
-  async loadDashboard(): Promise<Board[]> {
-    this.boards = await http.get<Board[]>(API_ROUTES.boards.list);
+  async loadDashboard(): Promise<Boards[]> {
+    this.boards = await http.get<Boards[]>(API_ROUTES.boards.list);
     return this.boards;
   }
 

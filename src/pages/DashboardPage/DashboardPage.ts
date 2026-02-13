@@ -3,7 +3,7 @@ import { BasePage } from "../../components/bases/BasePage";
 import { BoardRow } from "./renderers/BoardRowRenderer";
 import { appStore } from "../../core/store/AppStore";
 import { DashboardEventManager } from "./DashboardEventManager";
-import type { Board } from "../../core/types/board.types";
+import type { Boards } from "../../core/types/board.types";
 
 export class DashboardPage extends BasePage {
   private eventManager!: DashboardEventManager;
@@ -36,6 +36,7 @@ export class DashboardPage extends BasePage {
     row.innerHTML = `
       <span>Title</span>
       <span class="text-center">Members</span>
+      <span class="text-center">Role</span>
       <span></span>
     `;
     return row;
@@ -47,7 +48,7 @@ export class DashboardPage extends BasePage {
 
     section.appendChild(this.renderListHeader());
 
-    const listContainer = document.createElement("main");
+    const listContainer = document.createElement("ol");
     listContainer.id = "boardListContainer";
     section.appendChild(listContainer);
 
@@ -58,7 +59,7 @@ export class DashboardPage extends BasePage {
   // render Board list
   // ============================================
 
-  renderBoardList(container: HTMLElement, boards: Board[]) {
+  renderBoardList(container: HTMLElement, boards: Boards[]) {
     const activeBoards = boards.filter((b) => b.is_active === true);
 
     if (activeBoards.length > 0) {

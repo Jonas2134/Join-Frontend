@@ -1,3 +1,11 @@
+export interface Boards {
+  id: string;
+  title: string;
+  is_active: boolean;
+  member_count: number;
+  is_user_owner: boolean;
+}
+
 export interface Board {
   id: string;
   title: string;
