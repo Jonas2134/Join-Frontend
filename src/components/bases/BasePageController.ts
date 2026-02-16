@@ -1,8 +1,9 @@
 import { router } from "../../core/router";
 import { toastManager } from "../../core/ToastManager";
 import type { BaseDialog } from "./BaseDialog";
+import type { BaseDropdownMenu } from "./BaseDropdownMenu";
 
-export abstract class BasePageController {
+export class BasePageController {
 
   // ============================================
   // DOM Traversal
@@ -82,6 +83,27 @@ export abstract class BasePageController {
     if (!existingBtn) {
       const newBtn = buttonRenderer();
       if (newBtn) item.appendChild(newBtn);
+    }
+  }
+
+  // ============================================
+  // Dropdown Management
+  // ============================================
+
+  protected toggleDropdown<T extends BaseDropdownMenu>(
+    current: T | null,
+    factory: () => T,
+    container: HTMLElement,
+    setter: (dropdown: T | null) => void,
+  ) {
+    if (!current) {
+      const dropdown = factory();
+      dropdown.setOnCloseCallback(() => setter(null));
+      container.appendChild(dropdown.render());
+      dropdown.open();
+      setter(dropdown);
+    } else {
+      current.close();
     }
   }
 

@@ -5,7 +5,6 @@ import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
 import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
 import { TaskThreeDotDropdown } from "../dialogAndDropdown/TaskThreeDotDropdown";
 import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
-import type { TaskDetailMode } from "../dialogAndDropdown/TaskDetailDialog";
 import type { Board, Column, ColumnUpdate, Task } from "../../../core/types/board.types";
 
 export class BoardPageController extends BasePageController {
@@ -18,8 +17,7 @@ export class BoardPageController extends BasePageController {
   // ============================================
 
   registerEditBoardDialog(board: Board) {
-    this.dialog = new EditBoardDialog(board);
-    this.openDialog(this.dialog);
+    this.openDialog(new EditBoardDialog(board));
   }
 
   registerTaskButtonListener(e: Event) {
@@ -28,8 +26,7 @@ export class BoardPageController extends BasePageController {
 
     const columnId = this.getDatasetFromClosest(btn, ".board-column", "columnId");
     if (columnId) {
-      this.dialog = new CreateTaskDialog(columnId);
-      this.openDialog(this.dialog);
+      this.openDialog(new CreateTaskDialog(columnId));
     }
   }
 
@@ -155,10 +152,6 @@ export class BoardPageController extends BasePageController {
     }
   }
 
-  // ============================================
-  // Task Dropdown Listeners
-  // ============================================
-
   registerTaskThreeDotListener(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".task-menu-btn");
     if (!btn) return;
@@ -180,7 +173,7 @@ export class BoardPageController extends BasePageController {
     const task = this.findTaskById(taskId);
     if (task) {
       this.taskDropdown?.close();
-      this.openTaskDetailDialog(task);
+      this.openDialog(new TaskDetailDialog(task));
     }
   }
 
@@ -207,7 +200,7 @@ export class BoardPageController extends BasePageController {
     const task = this.findTaskById(taskId);
     if (task) {
       this.taskDropdown?.close();
-      this.openTaskDetailDialog(task, "edit");
+      this.openDialog(new TaskDetailDialog(task, "edit"));
     }
   }
 
@@ -235,33 +228,24 @@ export class BoardPageController extends BasePageController {
     header: HTMLElement,
     column: Column,
   ) {
-    if (!this.dropdown) {
-      this.dropdown = new ColumnThreeDotDropdown(btn, column);
-      this.dropdown.setOnCloseCallback(() => { this.dropdown = null; });
-      header.appendChild(this.dropdown.render());
-      this.dropdown.open();
-    } else {
-      this.dropdown.close();
-    }
+    this.toggleDropdown(
+      this.dropdown,
+      () => new ColumnThreeDotDropdown(btn, column),
+      header,
+      (d) => { this.dropdown = d; },
+    );
   }
 
   private openTaskThreeDotDropdown(btn: HTMLButtonElement, task: HTMLElement) {
     const taskId = task.dataset.taskId;
     if (!taskId) return;
 
-    if (!this.taskDropdown) {
-      this.taskDropdown = new TaskThreeDotDropdown(btn, taskId);
-      this.taskDropdown.setOnCloseCallback(() => { this.taskDropdown = null; });
-      task.appendChild(this.taskDropdown.render());
-      this.taskDropdown.open();
-    } else {
-      this.taskDropdown.close();
-    }
-  }
-
-  private openTaskDetailDialog(task: Task, mode: TaskDetailMode = "view") {
-    this.dialog = new TaskDetailDialog(task, mode);
-    this.openDialog(this.dialog);
+    this.toggleDropdown(
+      this.taskDropdown,
+      () => new TaskThreeDotDropdown(btn, taskId),
+      task,
+      (d) => { this.taskDropdown = d; },
+    );
   }
 
   // ============================================

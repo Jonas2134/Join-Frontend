@@ -17,7 +17,7 @@ export class DashboardPageController extends BasePageController {
   registerBoardCreateListerner(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#createBoardBtn");
     if (!btn) return;
-    this.openBoardCreateDialog();
+    this.openDialog(new BoardCreateDialog());
   }
 
   registerNavigateToArchivedBoardsListener(e: Event) {
@@ -48,21 +48,12 @@ export class DashboardPageController extends BasePageController {
     const boardTitle = listItem.dataset.boardTitle ?? "";
     if (!boardId) return;
 
-    this.activeDropdown?.close();
-    this.activeDropdown = new DashboardBoardDropdown(btn, boardId, isOwner, boardTitle);
-    document.body.appendChild(this.activeDropdown.render());
-    this.activeDropdown.toggle();
-    this.activeDropdown.setOnCloseCallback(() => {
-      this.activeDropdown = null;
-    });
+    this.toggleDropdown(
+      this.activeDropdown,
+      () => new DashboardBoardDropdown(btn, boardId, isOwner, boardTitle),
+      document.body,
+      (d) => { this.activeDropdown = d; },
+    );
   }
 
-  // ============================================
-  // Dialog & Dropdown Management
-  // ============================================
-
-  openBoardCreateDialog() {
-    this.dialog = new BoardCreateDialog();
-    this.openDialog(this.dialog);
-  }
 }
