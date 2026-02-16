@@ -39,6 +39,18 @@ export class BoardRow {
     return span;
   }
 
+  renderDateSpan(dateStr?: string) {
+    const span = document.createElement("span");
+    span.classList.add("board-row-date");
+    if (dateStr) {
+      const date = new Date(dateStr);
+      span.textContent = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+    } else {
+      span.textContent = "-";
+    }
+    return span;
+  }
+
   renderMenuRow() {
     const menu = document.createElement("menu");
     menu.classList.add("board-row-menu");
@@ -50,12 +62,14 @@ export class BoardRow {
   }
 
   render() {
-    const titleSpan = this.renderTitleSpan();
-    const memberSpan = this.renderMemberCountSpan();
-    const roleSpan = this.renderRoleSpan();
-    const rowMenu = this.renderMenuRow();
-
-    this.element.append(titleSpan, memberSpan, roleSpan, rowMenu);
+    this.element.append(
+      this.renderTitleSpan(),
+      this.renderMemberCountSpan(),
+      this.renderRoleSpan(),
+      this.renderDateSpan(this.board.created_at),
+      this.renderDateSpan(this.board.updated_at),
+      this.renderMenuRow(),
+    );
     return this.element;
   }
 }

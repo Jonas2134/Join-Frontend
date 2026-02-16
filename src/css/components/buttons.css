@@ -58,7 +58,9 @@
     }
   }
 
-  #cancel-rename-btn, #cancel-limit-btn, #close-detail-btn {
+  #cancel-rename-btn,
+  #cancel-limit-btn,
+  #close-detail-btn {
     @apply font-bold;
   }
 
@@ -72,6 +74,10 @@
     &:active {
       @apply scale-99;
     }
+  }
+
+  .dropdown-btn--danger {
+    @apply text-red-500;
   }
 
   .round-base-btn {

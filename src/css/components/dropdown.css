@@ -9,14 +9,6 @@
         @apply border-b border-(--color-light-gray) last:border-0;
     }
 
-    .dropdown-btn--danger {
-        @apply text-red-500;
-
-        &:hover {
-            @apply bg-red-50;
-        }
-    }
-
     .rename-column-form, .set-limit-form {
         @apply flex gap-1;
     }

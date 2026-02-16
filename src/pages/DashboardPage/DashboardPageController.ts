@@ -60,10 +60,18 @@ export class DashboardPageController extends BasePageController {
     if (!boardId) return;
 
     this.activeDropdown?.close();
-    this.performStoreOperation(
-      () => appStore.archiveBoard(boardId, false),
-      "Archive",
-    );
+    const dialog = new ConfirmDialog({
+      title: "Archived Board",
+      message: "Are you sure you want to archive the board?",
+      confirmText: "Confirmed",
+      onConfirm: async () => {
+        await this.performStoreOperation(
+          () => appStore.archiveBoard(boardId, false),
+          "Archive",
+        );
+      },
+    });
+    this.openDialog(dialog);
   }
 
   registerDeleteBoardListener(e: Event) {

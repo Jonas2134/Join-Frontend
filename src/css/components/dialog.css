@@ -40,11 +40,11 @@
   }
 
   .confirm-dialog-title {
-    @apply text-lg font-semibold text-gray-800;
+    @apply font-semibold text-(--color-dark-blue) underline;
   }
 
   .confirm-dialog-message {
-    @apply text-sm text-(--color-blue-gray);
+    @apply text-lg text-(--color-blue-gray);
   }
 
   .confirm-dialog-menu {

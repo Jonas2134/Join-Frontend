@@ -16,14 +16,14 @@
   }
 
   .board-list-header {
-    @apply grid grid-cols-[100px_100px_100px_1fr] items-center px-4 py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
+    @apply grid grid-cols-[100px_100px_100px_150px_150px_1fr] items-center px-4 py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
   }
 
   .board-row {
-    @apply grid grid-cols-[100px_100px_100px_1fr] items-center px-4 py-3 border-b border-(--color-pale-blue) transition-all;
+    @apply grid grid-cols-[100px_100px_100px_150px_150px_1fr] items-center px-4 py-3 border-b border-(--color-pale-blue) transition-all;
 
     &:hover {
-      @apply bg-(--color-pale-blue);
+      @apply bg-(--color-pale-blue) cursor-pointer;
     }
   }
 
@@ -41,6 +41,10 @@
 
   .board-row-role--owner {
     @apply text-(--color-light-blue) font-semibold;
+  }
+
+  .board-row-date {
+    @apply text-sm text-(--color-blue-gray) text-center;
   }
 
   .board-row-menu {

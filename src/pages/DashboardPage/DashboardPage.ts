@@ -23,7 +23,7 @@ export class DashboardPage extends BasePage {
     const header = document.createElement("header");
     header.classList.add("flex", "items-center", "justify-between");
     header.innerHTML = `
-      <h1 class="text-(--color-light-blue) underline">My Boards</h1>
+      <h1 class="text-(--color-light-blue) underline">My Dashboard</h1>
       <div class="flex items-center gap-3">
         <button id="archivedBoardsBtn" class="btn btn-white">Archived Boards</button>
         <button id="createBoardBtn" class="btn btn-blue">+ Create Board</button>
@@ -39,6 +39,8 @@ export class DashboardPage extends BasePage {
       <span>Title</span>
       <span class="text-center">Members</span>
       <span class="text-center">Role</span>
+      <span class="text-center">Created</span>
+      <span class="text-center">Updated</span>
       <span></span>
     `;
     return row;

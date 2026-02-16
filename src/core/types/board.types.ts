@@ -4,6 +4,7 @@ export interface Boards {
   is_active: boolean;
   member_count: number;
   is_user_owner: boolean;
+  created_at?: string;
   updated_at?: string;
 }
 
