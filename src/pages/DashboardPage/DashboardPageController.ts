@@ -1,14 +1,11 @@
 import { BasePageController } from "../../components/bases/BasePageController";
 import { BoardCreateDialog } from "./BoardCreateDialog";
+import { ConfirmDialog } from "../../components/common/ConfirmDialog";
 import { DashboardBoardDropdown } from "./DashboardBoardDropdown";
+import { appStore } from "../../core/store/AppStore";
 
 export class DashboardPageController extends BasePageController {
-  dialog: BoardCreateDialog | null = null;
   private activeDropdown: DashboardBoardDropdown | null = null;
-
-  constructor() {
-    super();
-  }
 
   // ============================================
   // Public Event Listeners
@@ -43,17 +40,54 @@ export class DashboardPageController extends BasePageController {
     const listItem = this.findClosestElement<HTMLLIElement>(btn, ".board-row");
     if (!listItem) return;
 
-    const boardId = listItem.dataset.boardId;
     const isOwner = listItem.dataset.isOwner === "true";
-    const boardTitle = listItem.dataset.boardTitle ?? "";
-    if (!boardId) return;
+    if (!listItem.dataset.boardId) return;
 
     this.toggleDropdown(
       this.activeDropdown,
-      () => new DashboardBoardDropdown(btn, boardId, isOwner, boardTitle),
-      document.body,
+      () => new DashboardBoardDropdown(btn, isOwner),
+      listItem,
       (d) => { this.activeDropdown = d; },
     );
   }
 
+  // TODO: Listener cannot be clicked on
+  registerArchiveBoardListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#archive-board-btn");
+    if (!btn) return;
+
+    const boardId = this.getDatasetFromClosest(btn, ".board-row", "boardId");
+    if (!boardId) return;
+
+    this.activeDropdown?.close();
+    this.performStoreOperation(
+      () => appStore.archiveBoard(boardId, false),
+      "Archive",
+    );
+  }
+
+  // TODO: Listener cannot be clicked on
+  registerDeleteBoardListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#delete-board-btn");
+    if (!btn) return;
+
+    const listItem = this.findClosestElement<HTMLElement>(btn, ".board-row");
+    const boardId = listItem?.dataset.boardId;
+    const boardTitle = listItem?.dataset.boardTitle ?? "";
+    if (!boardId) return;
+
+    this.activeDropdown?.close();
+    const dialog = new ConfirmDialog({
+      title: "Delete Board",
+      message: `Are you sure you want to delete "${boardTitle}"? All columns and tasks will be permanently deleted.`,
+      confirmText: "Delete",
+      onConfirm: async () => {
+        await this.performStoreOperation(
+          () => appStore.deleteBoard(boardId),
+          "Deletion",
+        );
+      },
+    });
+    this.openDialog(dialog);
+  }
 }

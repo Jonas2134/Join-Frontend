@@ -4,14 +4,10 @@
   }
 
   .board-row {
-    @apply grid grid-cols-[1fr_100px_80px_40px] items-center px-4 py-3 border-b border-(--color-pale-blue) cursor-pointer transition-all;
+    @apply grid grid-cols-[1fr_100px_80px_40px] items-center px-4 py-3 border-b border-(--color-pale-blue) transition-all;
 
     &:hover {
       @apply bg-(--color-pale-blue);
-    }
-
-    &:active {
-      @apply scale-99;
     }
   }
 

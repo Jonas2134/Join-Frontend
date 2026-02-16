@@ -1,8 +1,5 @@
 import Editicon from "../../assets/icons/edit.svg?raw";
 import VerticalDotsIcon from "../../assets/icons/menu-vertical.svg?raw";
-import ArchiveIcon from "../../assets/icons/archive.svg?raw";
-import TrashIcon from "../../assets/icons/trash.svg?raw";
-import LeaveIcon from "../../assets/icons/leave.svg?raw";
 
 export const threeDotFormBtns = [
   {
@@ -127,7 +124,6 @@ export const dashboardArchiveBtn = {
   type: "button" as const,
   title: "Archive board",
   text: "Archive",
-  icon: ArchiveIcon,
 };
 
 export const dashboardDeleteBtn = {
@@ -136,7 +132,6 @@ export const dashboardDeleteBtn = {
   type: "button" as const,
   title: "Delete board",
   text: "Delete",
-  icon: TrashIcon,
 };
 
 export const dashboardLeaveBtn = {
@@ -145,5 +140,4 @@ export const dashboardLeaveBtn = {
   type: "button" as const,
   title: "Leave board",
   text: "Leave Board",
-  icon: LeaveIcon,
 };
