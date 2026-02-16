@@ -86,6 +86,26 @@
     }
   }
 
+  .btn-danger {
+    @apply text-white bg-red-500;
+
+    &:hover {
+      @apply bg-red-600;
+    }
+  }
+
+  .btn-disabled {
+    @apply text-gray-400 bg-gray-100 cursor-not-allowed shadow-none;
+
+    &:hover {
+      @apply scale-100 cursor-not-allowed bg-gray-100;
+    }
+
+    &:active {
+      @apply scale-100;
+    }
+  }
+
   .avatar-normal {
     @apply bg-(--color-light-blue);
 

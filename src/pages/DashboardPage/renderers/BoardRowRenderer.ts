@@ -11,6 +11,8 @@ export class BoardRow {
     this.element = document.createElement("li");
     this.element.classList.add("board-row");
     this.element.dataset.boardId = String(this.board.id);
+    this.element.dataset.isOwner = String(this.board.is_user_owner);
+    this.element.dataset.boardTitle = this.board.title;
   }
 
   renderTitleSpan() {

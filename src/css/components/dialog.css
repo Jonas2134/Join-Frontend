@@ -2,7 +2,8 @@
   .board-dialog,
   .create-task-dialog,
   .edit-board-dialog,
-  .task-detail-dialog {
+  .task-detail-dialog,
+  .confirm-dialog {
     @apply fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-xl w-auto shadow-xl;
 
     &::backdrop {
@@ -32,5 +33,21 @@
 
   .edit-task-menu {
     @apply flex gap-6;
+  }
+
+  .confirm-dialog-content {
+    @apply flex flex-col gap-4 p-6 min-w-80;
+  }
+
+  .confirm-dialog-title {
+    @apply text-lg font-semibold text-gray-800;
+  }
+
+  .confirm-dialog-message {
+    @apply text-sm text-(--color-blue-gray);
+  }
+
+  .confirm-dialog-menu {
+    @apply flex justify-end gap-3 mt-2;
   }
 }

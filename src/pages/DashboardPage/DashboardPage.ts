@@ -2,15 +2,15 @@ import { AppLayout } from "../../layouts/AppLayout";
 import { BasePage } from "../../components/bases/BasePage";
 import { BoardRow } from "./renderers/BoardRowRenderer";
 import { appStore } from "../../core/store/AppStore";
-import { DashboardEventManager } from "./DashboardEventManager";
+import { DashboardPageController } from "./DashboardPageController";
 import type { Boards } from "../../core/types/board.types";
 
 export class DashboardPage extends BasePage {
-  private eventManager!: DashboardEventManager;
+  private eventManager!: DashboardPageController;
 
   constructor() {
     super(new AppLayout());
-    this.eventManager = new DashboardEventManager();
+    this.eventManager = new DashboardPageController();
   }
 
   // ============================================
@@ -117,6 +117,9 @@ export class DashboardPage extends BasePage {
     this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerNavigateToBoardListener(e));
     this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerDashboardThreeDotDropdown(e));
 
-    this.events.on(window, "dashboard:reload", async () => this.initLoadDashboard());
+    const reload = async () => this.initLoadDashboard();
+    this.events.on(window, "board:created", reload);
+    this.events.on(window, "board:updated", reload);
+    this.events.on(window, "board:deleted", reload);
   }
 }

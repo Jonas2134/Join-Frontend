@@ -1,5 +1,8 @@
 import Editicon from "../../assets/icons/edit.svg?raw";
-import VerticalDotsIcon from "../../assets/icons/menu-vertical.svg?raw"
+import VerticalDotsIcon from "../../assets/icons/menu-vertical.svg?raw";
+import ArchiveIcon from "../../assets/icons/archive.svg?raw";
+import TrashIcon from "../../assets/icons/trash.svg?raw";
+import LeaveIcon from "../../assets/icons/leave.svg?raw";
 
 export const threeDotFormBtns = [
   {
@@ -114,6 +117,33 @@ export const taskDeleteBtn = {
 export const dashboardThreeDotBtn = {
   class: "three-dot-btn",
   type: "button" as const,
-  titel: "Board menu",
+  title: "Board menu",
   icon: VerticalDotsIcon,
+};
+
+export const dashboardArchiveBtn = {
+  id: "archive-board-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "Archive board",
+  text: "Archive",
+  icon: ArchiveIcon,
+};
+
+export const dashboardDeleteBtn = {
+  id: "delete-board-btn",
+  class: ["dropdown-btn", "dropdown-btn--danger"],
+  type: "button" as const,
+  title: "Delete board",
+  text: "Delete",
+  icon: TrashIcon,
+};
+
+export const dashboardLeaveBtn = {
+  id: "leave-board-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "Leave board",
+  text: "Leave Board",
+  icon: LeaveIcon,
 };

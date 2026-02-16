@@ -3,21 +3,21 @@ import { BasePage } from "../../components/bases/BasePage";
 import { BoardHeaderRenderer } from "./renderers/BoardHeaderRenderer";
 import { BoardContentRenderer } from "./renderers/BoardContentRenderer";
 import { BoardDragAndDrop } from "./managers/BoardDragAndDrop";
-import { BoardEventManager } from "./managers/BoardEventManager";
+import { BoardPageController } from "./managers/BoardPageController";
 import { appStore } from "../../core/store/AppStore";
 
 export class BoardPage extends BasePage {
   id: string;
   private headerRenderer: BoardHeaderRenderer;
   private contentRenderer: BoardContentRenderer;
-  private eventManager: BoardEventManager;
+  private eventManager: BoardPageController;
 
   constructor(params: { id: string }) {
     super(new AppLayout());
     this.id = params.id;
     this.headerRenderer = new BoardHeaderRenderer();
     this.contentRenderer = new BoardContentRenderer();
-    this.eventManager = new BoardEventManager(this.initLoadBoard.bind(this));
+    this.eventManager = new BoardPageController();
   }
 
   // ============================================
@@ -88,16 +88,27 @@ export class BoardPage extends BasePage {
       const board = appStore.singleBoard;
       if (board) this.eventManager.registerEditBoardDialog(board);
     });
-    this.events.on(window, "board:updated", async () => await this.initLoadBoard());
 
     const boardroot = document.getElementById("board-section");
     if (!boardroot) {
       throw new Error("board-root not found");
     }
 
+    this.mountStoreEventListeners();
     this.mountThreeDotListener(boardroot);
     this.mountAddColumnListener(boardroot);
     this.mountTaskListener(boardroot);
+  }
+
+  mountStoreEventListeners() {
+    const reload = async () => await this.initLoadBoard();
+    this.events.on(window, "board:updated", reload);
+    this.events.on(window, "column:created", reload);
+    this.events.on(window, "column:updated", reload);
+    this.events.on(window, "column:deleted", reload);
+    this.events.on(window, "task:created", reload);
+    this.events.on(window, "task:updated", reload);
+    this.events.on(window, "task:deleted", reload);
   }
 
   mountThreeDotListener(boardroot: HTMLElement) {
@@ -122,10 +133,6 @@ export class BoardPage extends BasePage {
 
   mountTaskListener(boardroot: HTMLElement) {
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskButtonListener(e));
-    this.events.on(window, "task:created", async () => await this.initLoadBoard());
-    this.events.on(window, "task:deleted", async () => await this.initLoadBoard());
-    this.events.on(window, "task:updated", async () => await this.initLoadBoard());
-
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskThreeDotListener(e));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskViewDetailsListener(e));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskEditListener(e));

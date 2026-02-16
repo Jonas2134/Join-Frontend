@@ -1,11 +1,20 @@
 @layer components {
     .column-dropdown-menu,
-    .task-dropdown-menu {
+    .task-dropdown-menu,
+    .dashboard-dropdown-menu {
         @apply fixed w-65 bg-white shadow-lg rounded-md z-50 border border-(--color-light-gray) p-3;
     }
 
     .menu-item {
         @apply border-b border-(--color-light-gray) last:border-0;
+    }
+
+    .dropdown-btn--danger {
+        @apply text-red-500;
+
+        &:hover {
+            @apply bg-red-50;
+        }
     }
 
     .rename-column-form, .set-limit-form {

@@ -57,16 +57,34 @@ class AppStore {
     return response;
   }
 
+  async deleteBoard(boardId: string): Promise<void> {
+    await http.delete<void>(API_ROUTES.boards.detail(boardId));
+    window.dispatchEvent(new CustomEvent("board:deleted"));
+  }
+
+  async archiveBoard(boardId: string, isActive: boolean): Promise<Board> {
+    const data = await http.patch<Board>(API_ROUTES.boards.detail(boardId), {
+      is_active: isActive,
+    });
+    window.dispatchEvent(new CustomEvent("board:updated"));
+    return data;
+  }
+
   async createColumn(boardId: string, name: string): Promise<Column> {
-    return await http.post<Column>(API_ROUTES.columns.list(boardId), { name });
+    const response = await http.post<Column>(API_ROUTES.columns.list(boardId), { name });
+    window.dispatchEvent(new CustomEvent("column:created"));
+    return response;
   }
 
   async updateColumn(columnId: string, data: ColumnUpdate): Promise<Column> {
-    return await http.patch<Column>(API_ROUTES.columns.detail(columnId), data);
+    const response = await http.patch<Column>(API_ROUTES.columns.detail(columnId), data);
+    window.dispatchEvent(new CustomEvent("column:updated"));
+    return response;
   }
 
   async deleteColumn(columnId: string): Promise<void> {
     await http.delete<void>(API_ROUTES.columns.detail(columnId));
+    window.dispatchEvent(new CustomEvent("column:deleted"));
   }
 
   async createTask(
