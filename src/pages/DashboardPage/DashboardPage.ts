@@ -1,12 +1,14 @@
 import { AppLayout } from "../../layouts/AppLayout";
 import { BasePage } from "../../components/bases/BasePage";
 import { BoardRow } from "./renderers/BoardRowRenderer";
+import { DashboardStatsRenderer } from "./renderers/DashboardStatsRenderer";
 import { appStore } from "../../core/store/AppStore";
 import { DashboardPageController } from "./DashboardPageController";
 import type { Boards } from "../../core/types/board.types";
 
 export class DashboardPage extends BasePage {
   private eventManager!: DashboardPageController;
+  private statsRenderer = new DashboardStatsRenderer();
 
   constructor() {
     super(new AppLayout());
@@ -80,6 +82,12 @@ export class DashboardPage extends BasePage {
   // ============================================
 
   updateDashboardUI() {
+    const statsContainer = document.getElementById("dashboardStats");
+    if (statsContainer) {
+      const newStats = this.statsRenderer.renderStats(appStore.boards);
+      statsContainer.replaceWith(newStats);
+    }
+
     const container = document.getElementById("boardListContainer");
     if (!container) return;
 
@@ -92,6 +100,7 @@ export class DashboardPage extends BasePage {
     container.id = "dashboardPage";
     container.classList.add("p-6", "space-y-8");
     container.appendChild(this.renderHeader());
+    container.appendChild(this.statsRenderer.renderStats([]));
     container.appendChild(this.renderDashboard());
     return this.wrapWithLayout(container);
   }

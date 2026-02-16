@@ -25,6 +25,7 @@ export class DashboardPageController extends BasePageController {
 
   registerNavigateToBoardListener(e: Event) {
     if (this.findClosestElement(e.target, ".three-dot-btn")) return;
+    if (this.findClosestElement(e.target, ".dashboard-dropdown-menu")) return;
 
     const listItem = this.findClosestElement<HTMLElement>(e.target, ".board-row");
     if (!listItem) return;
@@ -51,7 +52,6 @@ export class DashboardPageController extends BasePageController {
     );
   }
 
-  // TODO: Listener cannot be clicked on
   registerArchiveBoardListener(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#archive-board-btn");
     if (!btn) return;
@@ -66,7 +66,6 @@ export class DashboardPageController extends BasePageController {
     );
   }
 
-  // TODO: Listener cannot be clicked on
   registerDeleteBoardListener(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#delete-board-btn");
     if (!btn) return;

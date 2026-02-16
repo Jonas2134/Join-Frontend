@@ -1,10 +1,26 @@
 @layer components {
+  .stats-grid {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  .stat-card {
+    @apply flex flex-col items-center justify-center gap-1 rounded-lg border border-(--color-soft-blue) bg-white p-5 shadow-sm;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold text-(--color-light-blue);
+  }
+
+  .stat-label {
+    @apply text-sm text-(--color-blue-gray);
+  }
+
   .board-list-header {
-    @apply grid grid-cols-[1fr_100px_80px_40px] items-center px-4 py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
+    @apply grid grid-cols-[100px_100px_100px_1fr] items-center px-4 py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
   }
 
   .board-row {
-    @apply grid grid-cols-[1fr_100px_80px_40px] items-center px-4 py-3 border-b border-(--color-pale-blue) transition-all;
+    @apply grid grid-cols-[100px_100px_100px_1fr] items-center px-4 py-3 border-b border-(--color-pale-blue) transition-all;
 
     &:hover {
       @apply bg-(--color-pale-blue);
@@ -28,6 +44,6 @@
   }
 
   .board-row-menu {
-    @apply flex items-center justify-center;
+    @apply flex items-center justify-end;
   }
 }
