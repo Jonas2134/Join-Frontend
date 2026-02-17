@@ -55,29 +55,42 @@ export class DashboardPage extends BasePage {
     return header;
   }
 
+  renderRadioInput(name: string, id: string, value: string, mode: string) {
+    const radioInput = document.createElement("input");
+    radioInput.type = "radio";
+    radioInput.name = name;
+    radioInput.id = id;
+    radioInput.value = value;
+    radioInput.classList.add("sr-only");
+    if (this.currentView === mode) radioInput.checked = true;
+    return radioInput;
+  }
+
+  renderInputLabel(labelFor: string, labelTitle: string, element: string) {
+    const label = document.createElement("label");
+    label.htmlFor = labelFor;
+    label.title = labelTitle;
+    label.classList.add("view-toggle-label");
+    label.innerHTML = element;
+    return label;
+  }
+
   renderViewToggle() {
-    const toggle = document.createElement("div");
-    toggle.id = "viewToggle";
-    toggle.classList.add("view-toggle");
+    const fieldset = document.createElement("fieldset");
+    fieldset.id = "viewToggle";
+    fieldset.classList.add("view-toggle");
 
-    const listBtn = document.createElement("button");
-    listBtn.type = "button";
-    listBtn.dataset.view = "list";
-    listBtn.title = "List view";
-    listBtn.classList.add("view-toggle-btn");
-    if (this.currentView === "list") listBtn.classList.add("view-toggle-btn--active");
-    listBtn.innerHTML = ListViewIcon;
+    const legend = document.createElement("legend");
+    legend.classList.add("sr-only");
+    legend.textContent = "View mode";
 
-    const cardBtn = document.createElement("button");
-    cardBtn.type = "button";
-    cardBtn.dataset.view = "card";
-    cardBtn.title = "Card view";
-    cardBtn.classList.add("view-toggle-btn");
-    if (this.currentView === "card") cardBtn.classList.add("view-toggle-btn--active");
-    cardBtn.innerHTML = GridViewIcon;
+    const listInput = this.renderRadioInput("dashboard-view", "viewList", "list", "list");
+    const listLabel = this.renderInputLabel("viewList", "List view", ListViewIcon);
+    const cardInput = this.renderRadioInput("dashboard-view", "viewCard", "card", "card");
+    const cardLabel = this.renderInputLabel("viewCard", "Card view", GridViewIcon);
 
-    toggle.append(listBtn, cardBtn);
-    return toggle;
+    fieldset.append(legend, listInput, listLabel, cardInput, cardLabel);
+    return fieldset;
   }
 
   renderListHeader() {
@@ -184,22 +197,7 @@ export class DashboardPage extends BasePage {
     if (view === this.currentView) return;
     this.currentView = view;
     localStorage.setItem(STORAGE_KEY, view);
-    this.updateViewToggleUI();
     this.updateDashboardUI();
-  }
-
-  private updateViewToggleUI() {
-    const toggle = document.getElementById("viewToggle");
-    if (!toggle) return;
-
-    toggle.querySelectorAll(".view-toggle-btn").forEach((btn) => {
-      const el = btn as HTMLButtonElement;
-      if (el.dataset.view === this.currentView) {
-        el.classList.add("view-toggle-btn--active");
-      } else {
-        el.classList.remove("view-toggle-btn--active");
-      }
-    });
   }
 
   render() {
@@ -234,7 +232,7 @@ export class DashboardPage extends BasePage {
     this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerDashboardThreeDotDropdown(e));
     this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerArchiveBoardListener(e));
     this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerDeleteBoardListener(e));
-    this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerViewToggleListener(e, (view) => this.switchView(view)));
+    this.events.on(pageroot, "change", (e: Event) => this.eventManager.registerViewToggleListener(e, (view) => this.switchView(view)));
 
     const reload = async () => this.initLoadDashboard();
     this.events.on(window, "board:created", reload);

@@ -56,7 +56,7 @@
     @apply flex items-center border border-(--color-light-gray) rounded-lg overflow-hidden;
   }
 
-  .view-toggle-btn {
+  .view-toggle-label {
     @apply p-2 cursor-pointer transition-all text-(--color-blue-gray);
 
     &:hover {
@@ -64,7 +64,7 @@
     }
   }
 
-  .view-toggle-btn--active {
+  .view-toggle input:checked + .view-toggle-label {
     @apply bg-(--color-light-blue) text-white;
 
     &:hover {

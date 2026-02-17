@@ -101,10 +101,11 @@ export class DashboardPageController extends BasePageController {
   }
 
   registerViewToggleListener(e: Event, onSwitch: (view: "list" | "card") => void) {
-    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".view-toggle-btn");
-    if (!btn) return;
+    const target = e.target;
+    if (!(target instanceof HTMLInputElement)) return;
+    if (target.name !== "dashboard-view") return;
 
-    const view = btn.dataset.view as "list" | "card" | undefined;
-    if (view) onSwitch(view);
+    const view = target.value as "list" | "card";
+    onSwitch(view);
   }
 }
