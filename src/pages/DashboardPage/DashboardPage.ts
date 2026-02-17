@@ -3,9 +3,13 @@ import { BasePage } from "../../components/bases/BasePage";
 import { BoardRow } from "./renderers/BoardRowRenderer";
 import { BoardCard } from "./renderers/BoardCardRenderer";
 import { DashboardStatsRenderer } from "./renderers/DashboardStatsRenderer";
+import { Button } from "../../components/common/Button";
 import { appStore } from "../../core/store/AppStore";
 import { DashboardPageController } from "./DashboardPageController";
+import { dashboardHeaderBtns } from "../../core/constants/appDashboardBtns.config";
+
 import type { Boards } from "../../core/types/board.types";
+
 import ListViewIcon from "../../assets/icons/list-view.svg?raw";
 import GridViewIcon from "../../assets/icons/grid-view.svg?raw";
 
@@ -38,19 +42,11 @@ export class DashboardPage extends BasePage {
     const controls = document.createElement("div");
     controls.classList.add("flex", "items-center", "gap-3");
 
-    controls.appendChild(this.renderViewToggle());
+    const btns = dashboardHeaderBtns.map((config) =>
+      new Button({ ...config }).renderBtn(),
+    );
 
-    const archivedBtn = document.createElement("button");
-    archivedBtn.id = "archivedBoardsBtn";
-    archivedBtn.classList.add("btn", "btn-white");
-    archivedBtn.textContent = "Archived Boards";
-
-    const createBtn = document.createElement("button");
-    createBtn.id = "createBoardBtn";
-    createBtn.classList.add("btn", "btn-blue");
-    createBtn.textContent = "+ Create Board";
-
-    controls.append(archivedBtn, createBtn);
+    controls.append(this.renderViewToggle(), ...btns);
     header.append(title, controls);
     return header;
   }
@@ -112,10 +108,9 @@ export class DashboardPage extends BasePage {
     section.id = "dashboardsection";
 
     if (this.currentView === "list") {
-      section.appendChild(this.renderListHeader());
       const listContainer = document.createElement("ol");
       listContainer.id = "boardListContainer";
-      section.appendChild(listContainer);
+      section.append(this.renderListHeader(), listContainer);
     } else {
       const cardContainer = document.createElement("div");
       cardContainer.id = "boardCardContainer";
