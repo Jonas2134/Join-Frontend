@@ -4,6 +4,8 @@ import { ConfirmDialog } from "../../components/common/ConfirmDialog";
 import { DashboardBoardDropdown } from "./DashboardBoardDropdown";
 import { appStore } from "../../core/store/AppStore";
 
+const BOARD_ITEM_SELECTOR = ".board-row, .board-card";
+
 export class DashboardPageController extends BasePageController {
   private activeDropdown: DashboardBoardDropdown | null = null;
 
@@ -27,7 +29,7 @@ export class DashboardPageController extends BasePageController {
     if (this.findClosestElement(e.target, ".three-dot-btn")) return;
     if (this.findClosestElement(e.target, ".dashboard-dropdown-menu")) return;
 
-    const listItem = this.findClosestElement<HTMLElement>(e.target, ".board-row");
+    const listItem = this.findClosestElement<HTMLElement>(e.target, BOARD_ITEM_SELECTOR);
     if (!listItem) return;
 
     const boardId = listItem.dataset.boardId;
@@ -38,7 +40,7 @@ export class DashboardPageController extends BasePageController {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".three-dot-btn");
     if (!btn) return;
 
-    const listItem = this.findClosestElement<HTMLLIElement>(btn, ".board-row");
+    const listItem = this.findClosestElement<HTMLElement>(btn, BOARD_ITEM_SELECTOR);
     if (!listItem) return;
 
     const isOwner = listItem.dataset.isOwner === "true";
@@ -56,7 +58,7 @@ export class DashboardPageController extends BasePageController {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#archive-board-btn");
     if (!btn) return;
 
-    const boardId = this.getDatasetFromClosest(btn, ".board-row", "boardId");
+    const boardId = this.getDatasetFromClosest(btn, BOARD_ITEM_SELECTOR, "boardId");
     if (!boardId) return;
 
     this.activeDropdown?.close();
@@ -78,7 +80,7 @@ export class DashboardPageController extends BasePageController {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#delete-board-btn");
     if (!btn) return;
 
-    const listItem = this.findClosestElement<HTMLElement>(btn, ".board-row");
+    const listItem = this.findClosestElement<HTMLElement>(btn, BOARD_ITEM_SELECTOR);
     const boardId = listItem?.dataset.boardId;
     const boardTitle = listItem?.dataset.boardTitle ?? "";
     if (!boardId) return;
@@ -96,5 +98,13 @@ export class DashboardPageController extends BasePageController {
       },
     });
     this.openDialog(dialog);
+  }
+
+  registerViewToggleListener(e: Event, onSwitch: (view: "list" | "card") => void) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".view-toggle-btn");
+    if (!btn) return;
+
+    const view = btn.dataset.view as "list" | "card" | undefined;
+    if (view) onSwitch(view);
   }
 }
