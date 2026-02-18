@@ -5,6 +5,7 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { DashboardPage } from './pages/DashboardPage/DashboardPage';
 import { BoardPage } from './pages/BoardPage/BoardPage';
+import { ArchivedBoardsPage } from './pages/ArchivedBoardsPage/ArchivedBoardsPage';
 
 import { PUBLIC_ROUTES } from './core/constants/publicRoutes.config';
 import "./css/main.css";
@@ -17,6 +18,7 @@ const router = initRouter(app, [
   { path: '/signup', component: SignupPage },
   { path: '/dashboard', component: DashboardPage },
   { path: '/board/:id', component: BoardPage },
+  { path: '/archived-boards', component: ArchivedBoardsPage },
 ]);
 
 async function checkAuthOnStart() {

@@ -141,3 +141,11 @@ export const dashboardLeaveBtn = {
   title: "Leave board",
   text: "Leave Board",
 };
+
+export const unarchiveBoardBtn = {
+  id: "unarchive-board-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "Unarchive board",
+  text: "Unarchive",
+};
