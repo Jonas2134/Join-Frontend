@@ -52,24 +52,17 @@ export class BoardCard {
     members.classList.add("board-card-meta-item");
     members.textContent = `${this.board.member_count} Member${this.board.member_count !== 1 ? "s" : ""}`;
 
-    meta.appendChild(members);
+    const created = document.createElement("span");
+    created.classList.add("board-card-meta-item");
+    const createDate = new Date(this.board.created_at);
+    created.textContent = `Created: ${createDate.toLocaleDateString()}`;
 
-    if (this.board.created_at) {
-      const created = document.createElement("span");
-      created.classList.add("board-card-meta-item");
-      const date = new Date(this.board.created_at);
-      created.textContent = `Created: ${date.toLocaleDateString()}`;
-      meta.appendChild(created);
-    }
+    const updated = document.createElement("span");
+    updated.classList.add("board-card-meta-item");
+    const updateDate = new Date(this.board.updated_at);
+    updated.textContent = `Updated: ${updateDate.toLocaleDateString()}`;
 
-    if (this.board.updated_at) {
-      const updated = document.createElement("span");
-      updated.classList.add("board-card-meta-item");
-      const date = new Date(this.board.updated_at);
-      updated.textContent = `Updated: ${date.toLocaleDateString()}`;
-      meta.appendChild(updated);
-    }
-
+    meta.append(members, created, updated);
     return meta;
   }
 

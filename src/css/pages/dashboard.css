@@ -78,10 +78,10 @@
   }
 
   .board-card {
-    @apply flex flex-col gap-3 rounded-lg border border-(--color-soft-blue) bg-white p-5 shadow-sm transition-all cursor-pointer;
+    @apply flex flex-col gap-3 rounded-lg border border-(--color-soft-blue) bg-white py-5 pl-5 pr-2 shadow-sm transition-all cursor-pointer;
 
     &:hover {
-      @apply shadow-md border-(--color-light-blue) -translate-y-0.5;
+      @apply shadow-md border-(--color-light-blue);
     }
   }
 
