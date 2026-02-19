@@ -1,21 +1,21 @@
-import { BaseDropdownMenu } from "../../components/bases/BaseDropdownMenu";
-import { Button } from "../../components/common/Button";
+import { BaseDropdownMenu } from "../../../components/bases/BaseDropdownMenu";
+import { Button } from "../../../components/common/Button";
 import {
-  dashboardArchiveBtn,
+  unarchiveBoardBtn,
   dashboardDeleteBtn,
   dashboardLeaveBtn,
-} from "../../core/constants/appThreeDot.config";
+} from "../../../core/constants/appThreeDot.config";
 
-import type { ButtonOptions } from "../../components/common/Button";
+import type { ButtonOptions } from "../../../components/common/Button";
 
-export class DashboardBoardDropdown extends BaseDropdownMenu {
+export class ArchivedBoardsDropdown extends BaseDropdownMenu {
   private isOwner: boolean;
 
   constructor(
     btn: HTMLButtonElement,
     isOwner: boolean,
   ) {
-    super(btn, "dashboard-dropdown-menu");
+    super(btn, "archived-boards-dropdown-menu");
     this.isOwner = isOwner;
   }
 
@@ -25,7 +25,7 @@ export class DashboardBoardDropdown extends BaseDropdownMenu {
 
     if (this.isOwner) {
       menu.append(
-        this.renderMenuListItem(dashboardArchiveBtn),
+        this.renderMenuListItem(unarchiveBoardBtn),
         this.renderMenuListItem(dashboardDeleteBtn),
       );
     } else {

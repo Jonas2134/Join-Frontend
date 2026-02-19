@@ -3,9 +3,9 @@ import { authStore } from './core/store/AuthStore';
 import { StartPage } from './pages/StartPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
-import { DashboardPage } from './pages/DashboardPage/DashboardPage';
+import { DashboardPage } from './pages/boards/DashboardPage/DashboardPage';
 import { BoardPage } from './pages/BoardPage/BoardPage';
-import { ArchivedBoardsPage } from './pages/ArchivedBoardsPage/ArchivedBoardsPage';
+import { ArchivedBoardsPage } from './pages/boards/ArchivedBoardsPage/ArchivedBoardsPage';
 
 import { PUBLIC_ROUTES } from './core/constants/publicRoutes.config';
 import "./css/main.css";

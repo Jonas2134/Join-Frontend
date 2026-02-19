@@ -1,13 +1,13 @@
-import { BaseDialog } from "../../components/bases/BaseDialog";
-import { appStore } from "../../core/store/AppStore";
-import { contactStore } from "../../core/store/ContactStore";
-import { authStore } from "../../core/store/AuthStore";
-import { toastManager } from "../../core/ToastManager";
-import { InputField } from "../../components/common/InputField";
-import { Textarea } from "../../components/common/Textarea";
-import { MemberSelect } from "../../components/common/MemberSelect";
-import { dashboardFields } from "../../core/constants/appDashboardFields.config";
-import type { Member } from "../../core/types/board.types";
+import { BaseDialog } from "../../../components/bases/BaseDialog";
+import { appStore } from "../../../core/store/AppStore";
+import { contactStore } from "../../../core/store/ContactStore";
+import { authStore } from "../../../core/store/AuthStore";
+import { toastManager } from "../../../core/ToastManager";
+import { InputField } from "../../../components/common/InputField";
+import { Textarea } from "../../../components/common/Textarea";
+import { MemberSelect } from "../../../components/common/MemberSelect";
+import { dashboardFields } from "../../../core/constants/appDashboardFields.config";
+import type { Member } from "../../../core/types/board.types";
 
 export class BoardCreateDialog extends BaseDialog {
   private memberSelect!: MemberSelect;

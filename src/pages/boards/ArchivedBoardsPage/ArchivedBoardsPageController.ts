@@ -1,7 +1,7 @@
-import { BasePageController } from "../../components/bases/BasePageController";
-import { ConfirmDialog } from "../../components/common/ConfirmDialog";
+import { BasePageController } from "../../../components/bases/BasePageController";
+import { ConfirmDialog } from "../../../components/common/ConfirmDialog";
 import { ArchivedBoardsDropdown } from "./ArchivedBoardsDropdown";
-import { appStore } from "../../core/store/AppStore";
+import { appStore } from "../../../core/store/AppStore";
 
 const BOARD_ITEM_SELECTOR = ".board-row, .board-card";
 

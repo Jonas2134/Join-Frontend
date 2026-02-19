@@ -1,4 +1,4 @@
-import type { Boards } from "../../../core/types/board.types";
+import type { Boards } from "../../../../core/types/board.types";
 
 interface StatCard {
   label: string;

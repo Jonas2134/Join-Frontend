@@ -1,8 +1,8 @@
-import { BasePageController } from "../../components/bases/BasePageController";
+import { BasePageController } from "../../../components/bases/BasePageController";
 import { BoardCreateDialog } from "./BoardCreateDialog";
-import { ConfirmDialog } from "../../components/common/ConfirmDialog";
+import { ConfirmDialog } from "../../../components/common/ConfirmDialog";
 import { DashboardBoardDropdown } from "./DashboardBoardDropdown";
-import { appStore } from "../../core/store/AppStore";
+import { appStore } from "../../../core/store/AppStore";
 
 const BOARD_ITEM_SELECTOR = ".board-row, .board-card";
 

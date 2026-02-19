@@ -1,6 +1,6 @@
-import { Button } from "../../../components/common/Button";
-import { dashboardThreeDotBtn } from "../../../core/constants/appThreeDot.config";
-import type { Boards } from "../../../core/types/board.types";
+import { Button } from "../../../../components/common/Button";
+import { dashboardThreeDotBtn } from "../../../../core/constants/appThreeDot.config";
+import type { Boards } from "../../../../core/types/board.types";
 
 export class BoardRow {
   private element: HTMLLIElement;
