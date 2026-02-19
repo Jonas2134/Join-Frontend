@@ -3,6 +3,7 @@ import { BaseBoardListPage } from "../shared/BaseBoardListPage";
 import { Button } from "../../../components/common/Button";
 import { appStore } from "../../../core/store/AppStore";
 import { ArchivedBoardsPageController } from "./ArchivedBoardsPageController";
+import { archivedBoardsBtn } from "../../../core/constants/appArchivedBoardsBtns.config";
 
 import type { Boards } from "../../../core/types/board.types";
 
@@ -39,13 +40,7 @@ export class ArchivedBoardsPage extends BaseBoardListPage {
     const controls = document.createElement("div");
     controls.classList.add("flex", "items-center", "gap-3");
 
-    const backBtn = new Button({
-      id: "backToDashboardBtn",
-      class: ["btn", "btn-white"],
-      type: "button",
-      title: "Back to Dashboard",
-      text: "Back to Dashboard",
-    }).renderBtn();
+    const backBtn = new Button(archivedBoardsBtn).renderBtn();
 
     controls.append(this.renderViewToggle(), backBtn);
     header.append(title, controls);
@@ -64,8 +59,7 @@ export class ArchivedBoardsPage extends BaseBoardListPage {
     const container = document.createElement("div");
     container.id = "archivedBoardsPage";
     container.classList.add("p-6", "space-y-8");
-    container.appendChild(this.renderHeader());
-    container.appendChild(this.renderBoardSection());
+    container.append(this.renderHeader(), this.renderBoardSection());
     return this.wrapWithLayout(container);
   }
 

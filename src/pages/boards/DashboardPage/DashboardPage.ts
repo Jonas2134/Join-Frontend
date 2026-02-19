@@ -15,7 +15,9 @@ export class DashboardPage extends BaseBoardListPage {
   protected storageKey = "dashboard-view";
   protected sectionId = "dashboardsection";
   protected radioName = "dashboard-view";
-  protected emptyStateMessage = "No active boards yet. Create your first board!";
+  protected emptyStateMessage = "No active boards yet. Create your first board to get started!";
+  protected emptyStateCTAText = "Create Board";
+  protected emptyStateCTAId = "createBoardBtn";
 
   constructor() {
     super(new AppLayout());
@@ -68,10 +70,12 @@ export class DashboardPage extends BaseBoardListPage {
   render() {
     const container = document.createElement("div");
     container.id = "dashboardPage";
-    container.classList.add("p-6", "space-y-8");
-    container.appendChild(this.renderHeader());
-    container.appendChild(this.statsRenderer.renderStats([]));
-    container.appendChild(this.renderBoardSection());
+    container.classList.add("space-y-6");
+    container.append(
+      this.renderHeader(),
+      this.statsRenderer.renderStats([]),
+      this.renderBoardSection()
+    );
     return this.wrapWithLayout(container);
   }
 

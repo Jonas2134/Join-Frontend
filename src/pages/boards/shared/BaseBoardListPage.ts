@@ -1,8 +1,10 @@
 import { BasePage, type Layout } from "../../../components/bases/BasePage";
 import { BoardRow } from "./renderers/BoardRowRenderer";
 import { BoardCard } from "./renderers/BoardCardRenderer";
+import { Button } from "../../../components/common/Button";
 import { ViewToggle, type ViewMode } from "../../../components/common/ViewToggle";
 import { appStore } from "../../../core/store/AppStore";
+import EmptyBoardIcon from "../../../assets/icons/empty-board.svg?raw";
 
 import type { Boards } from "../../../core/types/board.types";
 
@@ -13,6 +15,9 @@ export abstract class BaseBoardListPage extends BasePage {
   protected abstract sectionId: string;
   protected abstract radioName: string;
   protected abstract emptyStateMessage: string;
+
+  protected emptyStateCTAText?: string;
+  protected emptyStateCTAId?: string;
 
   protected abstract filterBoards(boards: Boards[]): Boards[];
 
@@ -71,8 +76,28 @@ export abstract class BaseBoardListPage extends BasePage {
 
   protected renderEmptyState(container: HTMLElement) {
     const empty = document.createElement("div");
-    empty.classList.add("px-4", "py-8", "text-center", "text-(--color-blue-gray)");
-    empty.textContent = this.emptyStateMessage;
+    empty.classList.add("empty-state");
+
+    const iconWrapper = document.createElement("div");
+    iconWrapper.innerHTML = EmptyBoardIcon;
+    empty.appendChild(iconWrapper);
+
+    const text = document.createElement("p");
+    text.classList.add("empty-state-text");
+    text.textContent = this.emptyStateMessage;
+    empty.appendChild(text);
+
+    if (this.emptyStateCTAText && this.emptyStateCTAId) {
+      const cta = new Button({
+        id: this.emptyStateCTAId,
+        class: ["btn", "btn-blue"],
+        type: "button",
+        title: this.emptyStateCTAText,
+        text: this.emptyStateCTAText,
+      }).renderBtn();
+      empty.appendChild(cta);
+    }
+
     container.appendChild(empty);
   }
 
@@ -98,6 +123,7 @@ export abstract class BaseBoardListPage extends BasePage {
         container.append(card.render());
       });
     } else {
+      container.classList.remove("board-card-grid");
       this.renderEmptyState(container);
     }
   }

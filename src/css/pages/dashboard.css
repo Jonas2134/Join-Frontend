@@ -116,4 +116,22 @@
   .board-card-meta-item {
     @apply truncate;
   }
+
+  /* Greeting */
+  .dashboard-greeting {
+    @apply text-xl text-center text-(--color-blue-gray) pb-2;
+  }
+
+  .greet-text {
+    @apply text-3xl text-(--color-dark-blue);
+  }
+
+  /* Empty State */
+  .empty-state {
+    @apply flex flex-col items-center justify-center gap-4 py-16 text-center;
+  }
+
+  .empty-state-text {
+    @apply text-lg text-(--color-blue-gray);
+  }
 }
