@@ -22,12 +22,13 @@ const router = initRouter(app, [
 ]);
 
 async function checkAuthOnStart() {
-  const isAuthenticated = await authStore.checkAuthStatus();
   const currentPath = location.pathname;
 
-  if (isAuthenticated && PUBLIC_ROUTES.includes(currentPath)) {
-    router.navigate('/dashboard');
-  } else if (!isAuthenticated && !PUBLIC_ROUTES.includes(currentPath)) {
+  if (PUBLIC_ROUTES.includes(currentPath)) return;
+
+  const isAuthenticated = await authStore.checkAuthStatus();
+
+  if (!isAuthenticated) {
     router.navigate('/login');
   }
 }
