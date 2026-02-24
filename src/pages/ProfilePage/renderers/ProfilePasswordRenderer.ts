@@ -1,13 +1,14 @@
 import { InputField } from "../../../components/common/InputField";
 import { Button } from "../../../components/common/Button";
 import { passwordFields } from "../../../core/constants/profileFields.config";
-import { changePasswordBtn } from "../../../core/constants/profileBtns.config";
+import { submitChangePasswordBtn, cancelChangePasswordBtn } from "../../../core/constants/profileBtns.config";
 
 export class ProfilePasswordRenderer {
 
   renderPasswordSection(): HTMLElement {
     const section = document.createElement("section");
-    section.classList.add("profile-section");
+    section.id = "passwordSection";
+    section.classList.add("profile-section", "hidden");
 
     const title = document.createElement("h2");
     title.classList.add("profile-section-title");
@@ -34,7 +35,10 @@ export class ProfilePasswordRenderer {
 
     const actions = document.createElement("menu");
     actions.classList.add("profile-actions");
-    actions.appendChild(new Button({ ...changePasswordBtn }).renderBtn());
+    actions.append(
+      new Button({ ...submitChangePasswordBtn }).renderBtn(),
+      new Button({ ...cancelChangePasswordBtn }).renderBtn(),
+    );
 
     fieldset.append(fieldsWrapper, actions);
     form.appendChild(fieldset);

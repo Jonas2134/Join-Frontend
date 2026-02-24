@@ -41,11 +41,18 @@ export class ProfilePage extends BasePage {
   // ============================================
 
   mount() {
+    const user = authStore.currentUser;
+    if (user) {
+      this.infoRenderer.updateProfileHeader(user.username, user.email);
+    }
+
     const pageroot = document.getElementById("profilePage");
     if (!pageroot) throw new Error("ProfilePage not found!");
 
     this.events.on(pageroot, "click", (e: Event) => this.controller.registerEditToggleListener(e));
     this.events.on(pageroot, "click", (e: Event) => this.controller.registerCancelEditListener(e));
+    this.events.on(pageroot, "click", (e: Event) => this.controller.registerShowPasswordSectionListener(e));
+    this.events.on(pageroot, "click", (e: Event) => this.controller.registerCancelPasswordSectionListener(e));
 
     const profileForm = document.getElementById("profileForm") as HTMLFormElement;
     if (profileForm) {

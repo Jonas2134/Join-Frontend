@@ -2,23 +2,15 @@ import User from "../../assets/icons/user.svg?raw";
 import Email from "../../assets/icons/email.svg?raw";
 import LockOn from "../../assets/icons/lock-on.svg?raw";
 
+export const profileEmailField = {
+  label: "Email:",
+  name: "email",
+  type: "email" as const,
+  placeholder: "Email",
+  icon: Email,
+};
+
 export const profileInfoFields = [
-  {
-    label: "Username:",
-    name: "username",
-    type: "text" as const,
-    placeholder: "Username",
-    icon: User,
-    disabled: true,
-  },
-  {
-    label: "Email:",
-    name: "email",
-    type: "email" as const,
-    placeholder: "Email",
-    icon: Email,
-    disabled: true,
-  },
   {
     label: "First Name:",
     name: "first_name",

@@ -1,13 +1,14 @@
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
 import { Button } from "../../../components/common/Button";
-import { profileInfoFields, profileBioField } from "../../../core/constants/profileFields.config";
-import { editProfileBtn, saveProfileBtn, cancelProfileBtn } from "../../../core/constants/profileBtns.config";
+import { profileInfoFields, profileEmailField, profileBioField } from "../../../core/constants/profileFields.config";
+import { editProfileBtn, saveProfileBtn, cancelProfileBtn, showChangePasswordBtn } from "../../../core/constants/profileBtns.config";
 
 export class ProfileInfoRenderer {
 
   renderProfileHeader(username: string, email: string): HTMLElement {
     const header = document.createElement("div");
+    header.id = "profileHeader";
     header.classList.add("profile-header");
 
     const avatar = document.createElement("div");
@@ -25,13 +26,30 @@ export class ProfileInfoRenderer {
     emailEl.classList.add("profile-email");
     emailEl.textContent = email;
 
+    const changePasswordBtn = new Button({ ...showChangePasswordBtn }).renderBtn();
+
     info.append(nameEl, emailEl);
-    header.append(avatar, info);
+    header.append(avatar, info, changePasswordBtn);
     return header;
+  }
+
+  updateProfileHeader(username: string, email: string) {
+    const header = document.getElementById("profileHeader");
+    if (!header) return;
+
+    const avatar = header.querySelector(".profile-avatar");
+    if (avatar) avatar.textContent = this.getInitials(username);
+
+    const nameEl = header.querySelector(".profile-username");
+    if (nameEl) nameEl.textContent = username;
+
+    const emailEl = header.querySelector(".profile-email");
+    if (emailEl) emailEl.textContent = email;
   }
 
   renderProfileForm(): HTMLElement {
     const section = document.createElement("section");
+    section.id = "profileInfoSection";
     section.classList.add("profile-section");
 
     const title = document.createElement("h2");
@@ -47,7 +65,15 @@ export class ProfileInfoRenderer {
     const fieldsWrapper = document.createElement("div");
     fieldsWrapper.classList.add("fields-wrapper");
 
+    const emailField = new InputField({
+      ...profileEmailField,
+      className: "input-b-border",
+    }).render();
+    emailField.classList.add("hidden");
+    emailField.id = "emailFieldWrapper";
+
     fieldsWrapper.append(
+      emailField,
       ...profileInfoFields.map(config =>
         new InputField({
           ...config,
