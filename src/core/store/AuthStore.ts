@@ -42,6 +42,10 @@ export class AuthStore {
     if (!res.ok) throw new Error(`Refresh failed: ${res.status}`);
   }
 
+  async changePassword(old_password: string, new_password: string, repeated_new_password: string) {
+    await this.client.post(API_ROUTES.auth.passwordChange, { old_password, new_password, repeated_new_password });
+  }
+
   async checkAuthStatus(): Promise<boolean> {
     try {
       const response = await this.client.get<AuthStatusResponse>(API_ROUTES.auth.status);

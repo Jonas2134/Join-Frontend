@@ -1,4 +1,6 @@
 import { BasePageController } from "../../components/bases/BasePageController";
+import { profileStore } from "../../core/store/ProfileStore";
+import { authStore } from "../../core/store/AuthStore";
 
 export class ProfilePageController extends BasePageController {
 
@@ -14,14 +16,29 @@ export class ProfilePageController extends BasePageController {
     if (!btn) return;
 
     this.toggleEditMode(false);
+    this.populateFormFields();
   }
 
-  registerSaveProfileListener(e: Event) {
+  async registerSaveProfileListener(e: Event) {
     const form = this.findClosestElement<HTMLFormElement>(e.target, "#profileForm");
     if (!form) return;
 
     e.preventDefault();
-    // TODO: API-Call zum Speichern
+
+    const formData = new FormData(form);
+
+    await this.performStoreOperation(
+      () => profileStore.updateProfile({
+        email: formData.get("email") as string,
+        first_name: formData.get("first_name") as string,
+        last_name: formData.get("last_name") as string,
+        tele_number: formData.get("tele_number") as string,
+        bio: formData.get("bio") as string,
+      }),
+      "Profile update",
+    );
+
+    this.toggleEditMode(false);
   }
 
   registerShowPasswordSectionListener(e: Event) {
@@ -38,12 +55,46 @@ export class ProfilePageController extends BasePageController {
     this.togglePasswordSection(false);
   }
 
-  registerChangePasswordListener(e: Event) {
+  async registerChangePasswordListener(e: Event) {
     const form = this.findClosestElement<HTMLFormElement>(e.target, "#changePasswordForm");
     if (!form) return;
 
     e.preventDefault();
-    // TODO: API-Call zum Passwort ändern
+
+    const formData = new FormData(form);
+
+    await this.performStoreOperation(
+      () => authStore.changePassword(
+        formData.get("old_password") as string,
+        formData.get("new_password") as string,
+        formData.get("repeated_new_password") as string,
+      ),
+      "Password change",
+    );
+
+    form.reset();
+    this.togglePasswordSection(false);
+  }
+
+  populateFormFields() {
+    const profile = profileStore.profile;
+    if (!profile) return;
+
+    const form = document.getElementById("profileForm") as HTMLFormElement | null;
+    if (!form) return;
+
+    const fields: Record<string, string> = {
+      email: profile.email,
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      tele_number: profile.tele_number,
+      bio: profile.bio,
+    };
+
+    for (const [name, value] of Object.entries(fields)) {
+      const field = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`);
+      if (field) field.value = value ?? "";
+    }
   }
 
   private togglePasswordSection(showPassword: boolean) {

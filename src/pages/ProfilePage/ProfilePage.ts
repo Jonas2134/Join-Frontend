@@ -1,6 +1,7 @@
 import { BasePage } from "../../components/bases/BasePage";
 import { AppLayout } from "../../layouts/AppLayout";
 import { authStore } from "../../core/store/AuthStore";
+import { profileStore } from "../../core/store/ProfileStore";
 import { ProfileInfoRenderer } from "./renderers/ProfileInfoRenderer";
 import { ProfilePasswordRenderer } from "./renderers/ProfilePasswordRenderer";
 import { ProfilePageController } from "./ProfilePageController";
@@ -37,14 +38,25 @@ export class ProfilePage extends BasePage {
   }
 
   // ============================================
+  // Lifecycle
+  // ============================================
+
+  private async initLoadProfile() {
+    await profileStore.loadProfile();
+    console.log(profileStore.profile);
+    const profile = profileStore.profile;
+    if (profile) {
+      this.infoRenderer.updateProfileHeader(profile.username, profile.email);
+      this.controller.populateFormFields();
+    }
+  }
+
+  // ============================================
   // Mount Eventlistener
   // ============================================
 
   mount() {
-    const user = authStore.currentUser;
-    if (user) {
-      this.infoRenderer.updateProfileHeader(user.username, user.email);
-    }
+    this.initLoadProfile();
 
     const pageroot = document.getElementById("profilePage");
     if (!pageroot) throw new Error("ProfilePage not found!");
@@ -63,5 +75,7 @@ export class ProfilePage extends BasePage {
     if (passwordForm) {
       this.events.on(passwordForm, "submit", (e: Event) => this.controller.registerChangePasswordListener(e));
     }
+
+    this.events.on(window, "profile:updated", () => this.initLoadProfile());
   }
 }
