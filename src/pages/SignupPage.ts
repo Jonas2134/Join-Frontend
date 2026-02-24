@@ -1,11 +1,12 @@
+import { BasePage } from '../components/bases/BasePage';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { router } from '../core/router';
 import { authStore } from '../core/store/AuthStore';
 import { toastManager } from '../core/ToastManager';
 import { InputField } from '../components/common/InputField';
-import { BasePage } from '../components/bases/BasePage';
-
+import { Button } from '../components/common/Button';
 import { signupFields } from '../core/constants/authFields.config';
+import { signupBtn } from '../core/constants/authBtns.config';
 
 export class SignupPage extends BasePage {
   constructor() {
@@ -71,11 +72,7 @@ export class SignupPage extends BasePage {
     const legend = this.renderSignupLegend();
     const fieldsWrapper = this.renderSignupFieldsWrapper();
     const checkboxWrapper = this.renderPrivacyCheckboxWrapper();
-
-    const subBtn = document.createElement("button");
-    subBtn.type = "submit";
-    subBtn.classList.add("btn", "btn-blue");
-    subBtn.textContent = "Signup";
+    const subBtn = new Button(signupBtn).renderBtn();
 
     fieldset.append(legend, fieldsWrapper, checkboxWrapper, subBtn);
     return fieldset;

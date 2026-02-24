@@ -13,3 +13,10 @@ export const loginBtns = [
     text: "Guest Login",
   },
 ];
+
+export const signupBtn = {
+  class: ["btn", "btn-blue"],
+  type: "submit" as const,
+  title: "Signup",
+  text: "Signup",
+};

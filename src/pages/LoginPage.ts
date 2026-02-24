@@ -1,5 +1,5 @@
-import { AuthLayout } from "../layouts/AuthLayout";
 import { BasePage } from "../components/bases/BasePage";
+import { AuthLayout } from "../layouts/AuthLayout";
 import { router } from "../core/router";
 import { authStore } from "../core/store/AuthStore";
 import { toastManager } from "../core/ToastManager";
