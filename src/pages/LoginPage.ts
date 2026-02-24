@@ -1,11 +1,12 @@
 import { AuthLayout } from "../layouts/AuthLayout";
+import { BasePage } from "../components/bases/BasePage";
 import { router } from "../core/router";
 import { authStore } from "../core/store/AuthStore";
 import { toastManager } from "../core/ToastManager";
 import { InputField } from "../components/common/InputField";
-import { BasePage } from "../components/bases/BasePage";
-
+import { Button } from "../components/common/Button";
 import { loginFields } from "../core/constants/authFields.config";
+import { loginBtns } from "../core/constants/authBtns.config";
 
 export class LoginPage extends BasePage {
   constructor() {
@@ -67,20 +68,11 @@ export class LoginPage extends BasePage {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
 
-    const subBtn = document.createElement("button");
-    subBtn.type = "submit";
-    subBtn.classList.add("btn", "btn-blue");
-    subBtn.title = "Login";
-    subBtn.textContent = "Login";
+    const btns = loginBtns.map((config) =>
+      new Button({ ...config }).renderBtn(),
+    );
 
-    const guestBtn = document.createElement("button");
-    guestBtn.type = "button";
-    guestBtn.id = "guestLoginBtn";
-    guestBtn.classList.add("btn", "btn-white");
-    guestBtn.title = "Guest login";
-    guestBtn.textContent = "Guest Login";
-
-    menu.append(subBtn, guestBtn);
+    menu.append(...btns);
     return menu;
   }
 
