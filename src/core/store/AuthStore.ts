@@ -8,6 +8,7 @@ export class AuthStore {
   private client = http;
   private refreshPromise: Promise<void> | null = null;
   currentUser: AuthUser | null = null;
+  isGuest: boolean = false;
 
   constructor() {
     this.client.setUnauthorizedHandler(this.handleUnauthorized.bind(this));
@@ -22,9 +23,15 @@ export class AuthStore {
     await this.checkAuthStatus();
   }
 
+  async guestLogin() {
+    await this.client.post(API_ROUTES.auth.guestLogin);
+    await this.checkAuthStatus();
+  }
+
   async logout() {
     await this.client.post(API_ROUTES.auth.logout);
     this.currentUser = null;
+    this.isGuest = false;
   }
 
   async refresh() {
@@ -39,6 +46,7 @@ export class AuthStore {
     try {
       const response = await this.client.get<AuthStatusResponse>(API_ROUTES.auth.status);
       this.currentUser = response.user;
+      this.isGuest = response.user.is_guest;
       return response.is_authenticated;
     } catch {
       this.currentUser = null;

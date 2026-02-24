@@ -75,6 +75,7 @@ export class LoginPage extends BasePage {
 
     const guestBtn = document.createElement("button");
     guestBtn.type = "button";
+    guestBtn.id = "guestLoginBtn";
     guestBtn.classList.add("btn", "btn-white");
     guestBtn.title = "Guest login";
     guestBtn.textContent = "Guest Login";
@@ -124,6 +125,20 @@ export class LoginPage extends BasePage {
     const form = document.getElementById("loginForm") as HTMLFormElement;
     if (!form) throw new Error("form not found!");
     this.events.on(form, "submit", async (e: Event) => this.registerLoginFormListener(e, form));
+
+    const guestBtn = document.getElementById("guestLoginBtn");
+    if (guestBtn) {
+      this.events.on(guestBtn, "click", async () => this.handleGuestLogin());
+    }
+  }
+
+  async handleGuestLogin() {
+    try {
+      await authStore.guestLogin();
+      router.navigate("/dashboard");
+    } catch (err: any) {
+      toastManager.error("Guest Login fehlgeschlagen: " + err.message);
+    }
   }
 
   async registerLoginFormListener(e: Event, form: HTMLFormElement) {
