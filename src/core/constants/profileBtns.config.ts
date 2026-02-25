@@ -6,21 +6,21 @@ export const editProfileBtn = {
   text: "Edit Profile",
 };
 
-export const saveProfileBtn = {
-  id: "saveProfileBtn",
-  class: ["btn", "btn-blue"],
-  type: "submit" as const,
-  title: "Save",
-  text: "Save",
-};
-
-export const cancelProfileBtn = {
-  id: "cancelProfileBtn",
-  class: ["btn", "btn-white"],
-  type: "button" as const,
-  title: "Cancel",
-  text: "Cancel",
-};
+export const profileMenuBtns = [
+  {
+    class: ["btn", "btn-blue"],
+    type: "submit" as const,
+    title: "Save",
+    text: "Save",
+  },
+  {
+    id: "cancelProfileBtn",
+    class: ["btn", "btn-white"],
+    type: "button" as const,
+    title: "Cancel",
+    text: "Cancel",
+  },
+];
 
 export const showChangePasswordBtn = {
   id: "showChangePasswordBtn",

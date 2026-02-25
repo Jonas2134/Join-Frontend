@@ -1,22 +1,29 @@
 import { BasePageController } from "../../components/bases/BasePageController";
 import { profileStore } from "../../core/store/ProfileStore";
 import { authStore } from "../../core/store/AuthStore";
+import { ProfileInfoRenderer } from "./renderers/ProfileInfoRenderer";
+import { ProfilePasswordRenderer } from "./renderers/ProfilePasswordRenderer";
 
 export class ProfilePageController extends BasePageController {
+  private infoRenderer = new ProfileInfoRenderer();
+  private passwordRenderer = new ProfilePasswordRenderer();
+
+  // ============================================
+  // Event Listeners
+  // ============================================
 
   registerEditToggleListener(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#editProfileBtn");
     if (!btn) return;
 
-    this.toggleEditMode(true);
+    this.enableEditMode();
   }
 
   registerCancelEditListener(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#cancelProfileBtn");
     if (!btn) return;
 
-    this.toggleEditMode(false);
-    this.populateFormFields();
+    this.rerenderProfileSection();
   }
 
   async registerSaveProfileListener(e: Event) {
@@ -38,21 +45,21 @@ export class ProfilePageController extends BasePageController {
       "Profile update",
     );
 
-    this.toggleEditMode(false);
+    window.dispatchEvent(new Event("profile:updated"));
   }
 
   registerShowPasswordSectionListener(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#showChangePasswordBtn");
     if (!btn) return;
 
-    this.togglePasswordSection(true);
+    this.showPasswordSection();
   }
 
   registerCancelPasswordSectionListener(e: Event) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#cancelChangePasswordBtn");
     if (!btn) return;
 
-    this.togglePasswordSection(false);
+    this.rerenderProfileSection();
   }
 
   async registerChangePasswordListener(e: Event) {
@@ -72,60 +79,50 @@ export class ProfilePageController extends BasePageController {
       "Password change",
     );
 
-    form.reset();
-    this.togglePasswordSection(false);
+    this.rerenderProfileSection();
   }
 
-  populateFormFields() {
-    const profile = profileStore.profile;
-    if (!profile) return;
+  // ============================================
+  // DOM Manipulation
+  // ============================================
 
-    const form = document.getElementById("profileForm") as HTMLFormElement | null;
-    if (!form) return;
-
-    const fields: Record<string, string> = {
-      email: profile.email,
-      first_name: profile.first_name,
-      last_name: profile.last_name,
-      tele_number: profile.tele_number,
-      bio: profile.bio,
-    };
-
-    for (const [name, value] of Object.entries(fields)) {
-      const field = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`);
-      if (field) field.value = value ?? "";
-    }
-  }
-
-  private togglePasswordSection(showPassword: boolean) {
-    const profileSection = document.getElementById("profileInfoSection");
-    const passwordSection = document.getElementById("passwordSection");
-
-    if (profileSection) profileSection.classList.toggle("hidden", showPassword);
-    if (passwordSection) passwordSection.classList.toggle("hidden", !showPassword);
-  }
-
-  private toggleEditMode(isEditing: boolean) {
+  private enableEditMode() {
     const form = document.getElementById("profileForm") as HTMLFormElement | null;
     if (!form) return;
 
     const editableFields = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
       'input[name="first_name"], input[name="last_name"], input[name="tele_number"], textarea[name="bio"]'
     );
+    editableFields.forEach(field => field.disabled = false);
 
-    editableFields.forEach(field => {
-      field.disabled = !isEditing;
-    });
+    const fieldsWrapper = form.querySelector(".fields-wrapper");
+    if (fieldsWrapper) {
+      const emailField = this.infoRenderer.renderEmailField(profileStore.profile?.email);
+      fieldsWrapper.prepend(emailField);
+    }
 
-    const emailFieldWrapper = document.getElementById("emailFieldWrapper");
-    if (emailFieldWrapper) emailFieldWrapper.classList.toggle("hidden", !isEditing);
+    const menu = form.querySelector(".profile-actions");
+    if (menu) {
+      menu.innerHTML = "";
+      const btns = this.infoRenderer.renderSubmitBtnMenu();
+      menu.append(...btns);
+    }
+  }
 
-    const editBtn = document.getElementById("editProfileBtn");
-    const saveBtn = document.getElementById("saveProfileBtn");
-    const cancelBtn = document.getElementById("cancelProfileBtn");
+  private showPasswordSection() {
+    const section = document.getElementById("profileSection");
+    if (!section) return;
 
-    if (editBtn) editBtn.classList.toggle("hidden", isEditing);
-    if (saveBtn) saveBtn.classList.toggle("hidden", !isEditing);
-    if (cancelBtn) cancelBtn.classList.toggle("hidden", !isEditing);
+    section.innerHTML = "";
+    this.passwordRenderer.renderPasswordSection(section);
+  }
+
+  rerenderProfileSection() {
+    const section = document.getElementById("profileSection");
+    const profile = profileStore.profile;
+    if (!section || !profile) return;
+
+    section.innerHTML = "";
+    this.infoRenderer.renderProfileForm(section, profile);
   }
 }
