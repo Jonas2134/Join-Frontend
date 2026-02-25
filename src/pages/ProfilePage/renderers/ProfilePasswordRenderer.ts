@@ -1,7 +1,7 @@
 import { InputField } from "../../../components/common/InputField";
 import { Button } from "../../../components/common/Button";
 import { passwordFields } from "../../../core/constants/profileFields.config";
-import { submitChangePasswordBtn, cancelChangePasswordBtn } from "../../../core/constants/profileBtns.config";
+import { changePasswordBtns } from "../../../core/constants/profileBtns.config";
 
 export class ProfilePasswordRenderer {
 
@@ -35,26 +35,23 @@ export class ProfilePasswordRenderer {
     const fieldsWrapper = document.createElement("div");
     fieldsWrapper.classList.add("fields-wrapper");
 
-    fieldsWrapper.append(
-      ...passwordFields.map(config =>
-        new InputField({
-          ...config,
-          className: "input-b-border",
-          required: true,
-        }).render()
-      )
+    const fields = passwordFields.map(config =>
+      new InputField({ ...config }).render(),
     );
 
+    fieldsWrapper.append(...fields);
     return fieldsWrapper;
   }
 
   private renderPasswordMenu(): HTMLElement {
     const actions = document.createElement("menu");
     actions.classList.add("profile-actions");
-    actions.append(
-      new Button({ ...submitChangePasswordBtn }).renderBtn(),
-      new Button({ ...cancelChangePasswordBtn }).renderBtn(),
+
+    const btns = changePasswordBtns.map((config) =>
+      new Button({ ...config }).renderBtn()
     );
+
+    actions.append(...btns);
     return actions;
   }
 }

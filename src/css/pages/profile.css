@@ -4,11 +4,11 @@
   }
 
   .profile-header {
-    @apply flex items-center gap-6;
+    @apply flex justify-between;
   }
 
-  .profile-avatar {
-    @apply flex items-center justify-center w-20 h-20 rounded-full bg-(--color-light-blue) text-white text-3xl font-bold shrink-0;
+  .profile-info-wrapper {
+    @apply flex items-center gap-6;
   }
 
   .profile-user-info {

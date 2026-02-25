@@ -67,14 +67,19 @@ export class ProfilePage extends BasePage {
   }
 
   updateProfileHeader(header: HTMLElement, profile: Profile) {
+    const infoWrapper = document.createElement("div");
+    infoWrapper.classList.add("profile-info-wrapper");
+
     const avatar = new Avatar({ size: "lg" }).createAvatar(profile.username);
     const info = this.renderProfileHeaderInfoContainer(
       profile.username,
       profile.email
     );
+
     const changePasswordBtn = new Button(showChangePasswordBtn).renderBtn();
 
-    header.append(avatar, info, changePasswordBtn);
+    infoWrapper.append(avatar, info);
+    header.append(infoWrapper, changePasswordBtn);
   }
 
   // ============================================

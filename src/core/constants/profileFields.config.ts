@@ -71,6 +71,8 @@ export const passwordFields = [
     placeholder: "Current Password",
     icon: LockOn,
     autocomplete: "current-password" as const,
+    className: "input-b-border",
+    required: true,
   },
   {
     label: "New Password:",
@@ -79,6 +81,8 @@ export const passwordFields = [
     placeholder: "New Password",
     icon: LockOn,
     autocomplete: "new-password" as const,
+    className: "input-b-border",
+    required: true,
   },
   {
     label: "Repeat New Password:",
@@ -87,5 +91,7 @@ export const passwordFields = [
     placeholder: "Repeat New Password",
     icon: LockOn,
     autocomplete: "new-password" as const,
+    className: "input-b-border",
+    required: true,
   },
 ];

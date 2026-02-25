@@ -30,17 +30,19 @@ export const showChangePasswordBtn = {
   text: "Change Password",
 };
 
-export const submitChangePasswordBtn = {
-  class: ["btn", "btn-blue"],
-  type: "submit" as const,
-  title: "Change Password",
-  text: "Change Password",
-};
+export const changePasswordBtns = [
+  {
+    class: ["btn", "btn-blue"],
+    type: "submit" as const,
+    title: "Change Password",
+    text: "Change Password",
+  },
+  {
+    id: "cancelChangePasswordBtn",
+    class: ["btn", "btn-white"],
+    type: "button" as const,
+    title: "Cancel",
+    text: "Cancel",
+  },
+];
 
-export const cancelChangePasswordBtn = {
-  id: "cancelChangePasswordBtn",
-  class: ["btn", "btn-white"],
-  type: "button" as const,
-  title: "Cancel",
-  text: "Cancel",
-};
