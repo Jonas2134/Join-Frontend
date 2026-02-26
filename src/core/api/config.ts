@@ -25,6 +25,7 @@ export const API_ROUTES = {
   profile: "/profile/",
   users: {
     list: "/users/",
+    detail: (userId: string) => `/users/${userId}/`,
     addContact: (userId: string) => `/users/${userId}/add-contact/`,
   },
   contacts: {

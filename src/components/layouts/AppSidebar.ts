@@ -9,9 +9,8 @@ export class AppSidebar {
   render(): HTMLElement {
     this.element.innerHTML = /*html*/ `
       <nav class="flex flex-col items-center gap-3">
-        <a href="/dashboard" data-link>My Dashboard</a>
-        <a href="/open-tasks" data-link>Open Tasks</a>
-        <a href="/contacts" data-link>My Contacts</a>
+        <a href="/dashboard" data-link>Dashboard</a>
+        <a href="/contacts" data-link>Contacts</a>
       </nav>
       <nav class="flex flex-col items-center gap-3">
         <a href="/privacy" data-link>Privacy Policy</a>

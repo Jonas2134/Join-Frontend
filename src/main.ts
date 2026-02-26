@@ -7,6 +7,7 @@ import { DashboardPage } from './pages/boards/DashboardPage/DashboardPage';
 import { BoardPage } from './pages/BoardPage/BoardPage';
 import { ArchivedBoardsPage } from './pages/boards/ArchivedBoardsPage/ArchivedBoardsPage';
 import { ProfilePage } from './pages/ProfilePage/ProfilePage';
+import { ContactsPage } from './pages/ContactsPage/ContactsPage';
 
 import { PUBLIC_ROUTES } from './core/constants/publicRoutes.config';
 import "./css/main.css";
@@ -21,6 +22,7 @@ const router = initRouter(app, [
   { path: '/board/:id', component: BoardPage },
   { path: '/archived-boards', component: ArchivedBoardsPage },
   { path: '/profile', component: ProfilePage },
+  { path: '/contacts', component: ContactsPage },
 ]);
 
 async function checkAuthOnStart() {

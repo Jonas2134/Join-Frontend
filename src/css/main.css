@@ -16,6 +16,7 @@
 @import "./pages/board.css";
 @import "./pages/dashboard.css";
 @import "./pages/profile.css";
+@import "./pages/contacts.css";
 
 /* import component styles */
 @import "./components/form.css";
