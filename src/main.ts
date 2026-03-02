@@ -8,6 +8,8 @@ import { BoardPage } from './pages/BoardPage/BoardPage';
 import { ArchivedBoardsPage } from './pages/boards/ArchivedBoardsPage/ArchivedBoardsPage';
 import { ProfilePage } from './pages/ProfilePage/ProfilePage';
 import { ContactsPage } from './pages/ContactsPage/ContactsPage';
+import { PrivacyPage } from './pages/static/PrivacyPage';
+import { LegalPage } from './pages/static/LegalPage';
 
 import { PUBLIC_ROUTES } from './core/constants/publicRoutes.config';
 import "./css/main.css";
@@ -23,6 +25,8 @@ const router = initRouter(app, [
   { path: '/archived-boards', component: ArchivedBoardsPage },
   { path: '/profile', component: ProfilePage },
   { path: '/contacts', component: ContactsPage },
+  { path: '/privacy', component: PrivacyPage },
+  { path: '/legal', component: LegalPage },
 ]);
 
 async function checkAuthOnStart() {
