@@ -1,6 +1,6 @@
 @layer components {
   .contacts-page {
-    @apply space-y-6;
+    @apply flex flex-col gap-6 h-full;
   }
 
   .contacts-tabs {
@@ -21,7 +21,7 @@
   }
 
   .contacts-split {
-    @apply grid grid-cols-1 gap-6 md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1.5fr];
+    @apply grid grid-cols-1 gap-6 md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1.5fr] flex-1 min-h-0;
   }
 
   .contacts-list-panel {
@@ -34,7 +34,7 @@
   }
 
   .contacts-list {
-    @apply flex flex-col gap-1 overflow-y-auto max-h-[60vh];
+    @apply flex flex-col gap-1 overflow-y-auto h-full;
   }
 
   .contacts-list-item {
@@ -58,7 +58,7 @@
   }
 
   .contacts-detail-panel {
-    @apply rounded-lg border border-(--color-soft-blue) bg-white p-6 shadow-sm min-h-[300px];
+    @apply rounded-lg border border-(--color-soft-blue) bg-white p-6 shadow-sm h-full;
   }
 
   .contacts-empty-state {
@@ -67,6 +67,10 @@
 
   .contacts-detail-header {
     @apply flex items-center gap-4 mb-6 pb-4 border-b border-(--color-pale-blue);
+  }
+
+  .constacts-detail-info-wrapper {
+    @apply flex flex-col;
   }
 
   .contacts-detail-username {

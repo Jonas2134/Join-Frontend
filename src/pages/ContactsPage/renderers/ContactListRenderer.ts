@@ -11,17 +11,13 @@ export class ContactListRenderer {
     panel.id = "contactsListPanel";
     panel.classList.add("contacts-list-panel");
 
-    const searchbar = this.renderSearchbar();
+    const searchbar = new InputField(contactSearchField).render();
     const list = document.createElement("ul");
     list.id = "contactsList";
     list.classList.add("contacts-list");
 
     panel.append(searchbar, list);
     return panel;
-  }
-
-  renderSearchbar(): HTMLElement {
-    return new InputField(contactSearchField).render();
   }
 
   renderList(contacts: Contact[], showToggle: boolean): HTMLElement {

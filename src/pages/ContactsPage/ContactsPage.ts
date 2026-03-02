@@ -30,7 +30,7 @@ export class ContactsPage extends BasePage {
     container.classList.add("contacts-page");
 
     container.append(
-      this.tabsRenderer.renderTabs(),
+      this.tabsRenderer.renderHeader(),
       this.renderContentArea(),
     );
 

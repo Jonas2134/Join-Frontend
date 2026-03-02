@@ -52,6 +52,7 @@ export class ContactDetailRenderer {
     avatar.tabIndex = -1;
 
     const info = document.createElement("div");
+    info.classList.add("constacts-detail-info-wrapper");
 
     const username = document.createElement("span");
     username.classList.add("contacts-detail-username");
