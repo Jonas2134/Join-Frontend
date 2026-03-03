@@ -9,7 +9,7 @@ import { appStore } from "../../core/store/AppStore";
 export class BoardPage extends BasePage {
   id: string;
   private headerRenderer: BoardHeaderRenderer;
-  private contentRenderer: BoardContentRenderer;
+  private contentRenderer!: BoardContentRenderer;
   private eventManager: BoardPageController;
 
   constructor(params: { id: string }) {
@@ -58,11 +58,16 @@ export class BoardPage extends BasePage {
     header.innerHTML = "";
     section.innerHTML = "";
 
+    const readonly = !board.is_active;
+    this.contentRenderer = new BoardContentRenderer(readonly);
+
     this.headerRenderer.renderHeaderContent(header, board);
     this.contentRenderer.renderBoardContent(section, board);
 
-    const dnd = new BoardDragAndDrop(this.initLoadBoard.bind(this));
-    dnd.init(section);
+    if (!readonly) {
+      const dnd = new BoardDragAndDrop(this.initLoadBoard.bind(this));
+      dnd.init(section);
+    }
   }
 
   async initLoadBoard() {

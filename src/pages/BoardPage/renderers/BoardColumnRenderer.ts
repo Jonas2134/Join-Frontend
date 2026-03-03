@@ -6,9 +6,11 @@ import type { Column } from "../../../core/types/board.types";
 
 export class BoardColumnRenderer {
   private taskRenderer: BoardTaskRenderer;
+  private readonly: boolean;
 
-  constructor() {
-    this.taskRenderer = new BoardTaskRenderer();
+  constructor(readonly = false) {
+    this.readonly = readonly;
+    this.taskRenderer = new BoardTaskRenderer(readonly);
   }
 
   renderColumn(column: Column): HTMLElement {
@@ -21,9 +23,14 @@ export class BoardColumnRenderer {
 
     const header = this.renderColumnHeader(column);
     const taskList = this.renderColumnTaskContent(column);
-    const footer = this.renderColumnFooter(column);
 
-    columnContainer.append(header, taskList, footer);
+    columnContainer.append(header, taskList);
+
+    if (!this.readonly) {
+      const footer = this.renderColumnFooter(column);
+      columnContainer.append(footer);
+    }
+
     columnItem.appendChild(columnContainer);
     return columnItem;
   }
@@ -39,9 +46,13 @@ export class BoardColumnRenderer {
     title.classList.add("column-header-headline");
     title.textContent = column.name;
 
-    const threeDot = new Button(threeDotBtn).renderBtn();
+    headline.append(title);
 
-    headline.append(title, threeDot);
+    if (!this.readonly) {
+      const threeDot = new Button(threeDotBtn).renderBtn();
+      headline.append(threeDot);
+    }
+
     header.append(headline, this.renderColumnProgress(column));
     return header;
   }

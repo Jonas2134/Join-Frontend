@@ -3,11 +3,13 @@ import { BoardAddColumnRenderer } from "./BoardAddColumnRenderer";
 import type { Board } from "../../../core/types/board.types";
 
 export class BoardContentRenderer {
-  private columnRenderer: BoardColumnRenderer;
+  private columnRenderer!: BoardColumnRenderer;
   addColumnRenderer: BoardAddColumnRenderer;
+  private readonly: boolean;
 
-  constructor() {
-    this.columnRenderer = new BoardColumnRenderer();
+  constructor(readonly = false) {
+    this.readonly = readonly;
+    this.columnRenderer = new BoardColumnRenderer(readonly);
     this.addColumnRenderer = new BoardAddColumnRenderer();
   }
 
@@ -19,8 +21,11 @@ export class BoardContentRenderer {
       columnsList.appendChild(this.columnRenderer.renderColumn(column));
     }
 
-    const addColumnItem = this.addColumnRenderer.renderAddColumn();
-    columnsList.appendChild(addColumnItem);
+    if (!this.readonly) {
+      const addColumnItem = this.addColumnRenderer.renderAddColumn();
+      columnsList.appendChild(addColumnItem);
+    }
+
     container.appendChild(columnsList);
   }
 }

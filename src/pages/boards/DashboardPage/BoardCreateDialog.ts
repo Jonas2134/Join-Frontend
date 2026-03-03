@@ -63,12 +63,21 @@ export class BoardCreateDialog extends BaseDialog {
     return this.memberSelect.render();
   }
 
+  private renderGuestMemberHint(): HTMLElement {
+    const section = document.createElement("div");
+    section.classList.add("guest-member-hint");
+    section.textContent = "Guest users cannot manage members.";
+    return section;
+  }
+
   renderMainSection() {
     const main = document.createElement("main");
     main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
 
     const firstSection = this.renderFieldSection();
-    const secondSection = this.renderMemberSection();
+    const secondSection = authStore.isGuest
+      ? this.renderGuestMemberHint()
+      : this.renderMemberSection();
 
     main.append(firstSection, secondSection);
     return main;
@@ -150,14 +159,16 @@ export class BoardCreateDialog extends BaseDialog {
 
     cancelBtn.addEventListener("click", () => this.close());
 
-    this.dialog.addEventListener("member-select:search", ((e: CustomEvent) => {
-      this.handleSearch(e.detail.query);
-    }) as EventListener);
+    if (!authStore.isGuest) {
+      this.dialog.addEventListener("member-select:search", ((e: CustomEvent) => {
+        this.handleSearch(e.detail.query);
+      }) as EventListener);
+    }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formDate = new FormData(form);
-      const members = this.memberSelect.getAllMemberIds();
+      const members = authStore.isGuest ? undefined : this.memberSelect.getAllMemberIds();
       try {
         await appStore.createBoard(
           formDate.get("title") as string,
@@ -173,6 +184,8 @@ export class BoardCreateDialog extends BaseDialog {
       }
     });
 
-    this.loadContacts();
+    if (!authStore.isGuest) {
+      this.loadContacts();
+    }
   }
 }

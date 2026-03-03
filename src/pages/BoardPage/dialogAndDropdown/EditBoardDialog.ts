@@ -8,6 +8,7 @@ import { Textarea } from "../../../components/common/Textarea";
 import { MemberSelect } from "../../../components/common/MemberSelect";
 import { editBoardDialogBtns } from "../../../core/constants/appDialogBtns.config";
 import { editBoardDialogFields } from "../../../core/constants/appDialogFields.config";
+import { authStore } from "../../../core/store/AuthStore";
 import type { Board } from "../../../core/types/board.types";
 
 export class EditBoardDialog extends BaseDialog {
@@ -59,14 +60,23 @@ export class EditBoardDialog extends BaseDialog {
     return this.memberSelect.render();
   }
 
+  private renderGuestMemberHint(): HTMLElement {
+    const section = document.createElement("div");
+    section.classList.add("guest-member-hint");
+    section.textContent = "Guest users cannot manage members.";
+    return section;
+  }
+
   renderMainSection() {
     const main = document.createElement("main");
     main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
 
     const firstSection = this.renderFieldSection();
-    const secondSection = this.renderMemberSection();
+    const secondSection = authStore.isGuest
+      ? this.renderGuestMemberHint()
+      : this.renderMemberSection();
 
-    main.append(firstSection,secondSection);
+    main.append(firstSection, secondSection);
     return main;
   }
 
@@ -150,16 +160,18 @@ export class EditBoardDialog extends BaseDialog {
 
     cancelBtn.addEventListener("click", () => this.close());
 
-    this.dialog.addEventListener("member-select:search", ((e: CustomEvent) => {
-      this.handleSearch(e.detail.query);
-    }) as EventListener);
+    if (!authStore.isGuest) {
+      this.dialog.addEventListener("member-select:search", ((e: CustomEvent) => {
+        this.handleSearch(e.detail.query);
+      }) as EventListener);
+    }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formDate = new FormData(form);
       const title = formDate.get("title") as string;
       const description = formDate.get("description") as string;
-      const members = this.memberSelect.getAllMemberIds();
+      const members = authStore.isGuest ? undefined : this.memberSelect.getAllMemberIds();
       try {
         await appStore.updateBoard(this.board.id, title, description, members);
         toastManager.success("Board erfolgreich aktualisiert");
@@ -171,6 +183,8 @@ export class EditBoardDialog extends BaseDialog {
       }
     });
 
-    this.loadContacts();
+    if (!authStore.isGuest) {
+      this.loadContacts();
+    }
   }
 }

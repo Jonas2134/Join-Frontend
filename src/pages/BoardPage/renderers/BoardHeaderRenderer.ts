@@ -1,11 +1,16 @@
 import { Avatar } from "../../../components/common/Avatar";
 import { Button } from "../../../components/common/Button";
 import { editBoardBtn, moreIndicator } from "../../../core/constants/appBoardBtns.config";
+import { authStore } from "../../../core/store/AuthStore";
 import type { Board } from "../../../core/types/board.types";
 import ToggleIcon from "../../../assets/icons/ToggleIcon.svg?raw";
 
 export class BoardHeaderRenderer {
   renderHeaderContent(header: HTMLElement, board: Board) {
+    if (!board.is_active) {
+      header.appendChild(this.renderArchivedBanner());
+    }
+
     const details = document.createElement("details");
     details.classList.add("group");
 
@@ -14,6 +19,13 @@ export class BoardHeaderRenderer {
 
     details.append(summary, detailsContent);
     header.appendChild(details);
+  }
+
+  private renderArchivedBanner(): HTMLElement {
+    const banner = document.createElement("div");
+    banner.classList.add("archived-banner");
+    banner.textContent = "This board is archived. Editing is disabled.";
+    return banner;
   }
 
   renderHeaderSummary(board: Board) {
@@ -90,15 +102,25 @@ export class BoardHeaderRenderer {
     return membersList;
   }
 
+  private isCurrentUserOwner(board: Board): boolean {
+    const currentUserId = authStore.currentUser?.id;
+    return currentUserId !== undefined && String(currentUserId) === String(board.owner);
+  }
+
   renderDetailsContent(board: Board) {
     const detailsContent = document.createElement("main");
     detailsContent.classList.add("detail-main");
 
     const descriptionSection = this.renderDetailsDescriptionSection(board);
     const membersSection = this.renderDetailsMembersSection(board);
-    const editBtn = new Button(editBoardBtn).renderBtn();
 
-    detailsContent.append(descriptionSection, membersSection, editBtn);
+    detailsContent.append(descriptionSection, membersSection);
+
+    if (board.is_active && this.isCurrentUserOwner(board)) {
+      const editBtn = new Button(editBoardBtn).renderBtn();
+      detailsContent.append(editBtn);
+    }
+
     return detailsContent;
   }
 }

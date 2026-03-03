@@ -67,4 +67,8 @@
     .is-dragging {
         @apply scale-105 bg-(--color-light-gray) shadow-(--shadow-large);
     }
+
+    .archived-banner {
+        @apply text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 mb-3;
+    }
 }

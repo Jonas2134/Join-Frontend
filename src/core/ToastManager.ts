@@ -41,6 +41,10 @@ class ToastManager {
     this.show(message, "error", duration);
   }
 
+  info(message: string, duration?: number): void {
+    this.show(message, "info", duration);
+  }
+
   clearAll(): void {
     this.toasts.forEach((toast) => toast.dismiss());
     this.toasts.clear();

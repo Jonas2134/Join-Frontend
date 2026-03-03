@@ -26,10 +26,12 @@ export class Toast {
   }
 
   private renderContent(): string {
-    const icon =
-      this.options.type === "success"
-        ? this.getSuccessIcon()
-        : this.getErrorIcon();
+    const iconMap = {
+      success: () => this.getSuccessIcon(),
+      error: () => this.getErrorIcon(),
+      info: () => this.getInfoIcon(),
+    };
+    const icon = iconMap[this.options.type]();
 
     return /*html*/ `
       <span class="toast-icon">${icon}</span>
@@ -54,6 +56,14 @@ export class Toast {
     return /*html*/ `
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    `;
+  }
+
+  private getInfoIcon(): string {
+    return /*html*/ `
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
       </svg>
     `;
   }

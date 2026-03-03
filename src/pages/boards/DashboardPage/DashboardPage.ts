@@ -3,6 +3,8 @@ import { BaseBoardListPage } from "../shared/BaseBoardListPage";
 import { DashboardStatsRenderer } from "./renderers/DashboardStatsRenderer";
 import { Button } from "../../../components/common/Button";
 import { appStore } from "../../../core/store/AppStore";
+import { authStore } from "../../../core/store/AuthStore";
+import { toastManager } from "../../../core/ToastManager";
 import { DashboardPageController } from "./DashboardPageController";
 import { dashboardHeaderBtns } from "../../../core/constants/appDashboardBtns.config";
 
@@ -90,6 +92,10 @@ export class DashboardPage extends BaseBoardListPage {
   // ============================================
 
   async mount() {
+    if (authStore.isGuest) {
+      toastManager.info("You are logged in as a guest. Some features are restricted.");
+    }
+
     this.initLoadDashboard();
 
     const pageroot = document.getElementById("dashboardPage");

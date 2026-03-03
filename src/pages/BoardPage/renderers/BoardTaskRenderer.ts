@@ -5,12 +5,16 @@ import { taskThreeDotBtn } from "../../../core/constants/appThreeDot.config";
 import type { Task } from "../../../core/types/board.types";
 
 export class BoardTaskRenderer {
-  constructor() {}
+  private readonly: boolean;
+
+  constructor(readonly = false) {
+    this.readonly = readonly;
+  }
 
   renderTask(task: Task) {
     const taskItem = document.createElement("li");
     taskItem.classList.add("task");
-    taskItem.draggable = true;
+    taskItem.draggable = !this.readonly;
     taskItem.dataset.taskId = String(task.id);
 
     const header = this.renderTaskHeader(task);
@@ -37,10 +41,14 @@ export class BoardTaskRenderer {
     title.classList.add("task-title");
     title.textContent = task.title;
 
-    const threeDotBtn = new Button(taskThreeDotBtn).renderBtn();
-    threeDotBtn.dataset.taskId = String(task.id);
+    header.append(title);
 
-    header.append(title, threeDotBtn);
+    if (!this.readonly) {
+      const threeDotBtn = new Button(taskThreeDotBtn).renderBtn();
+      threeDotBtn.dataset.taskId = String(task.id);
+      header.append(threeDotBtn);
+    }
+
     return header;
   }
 
