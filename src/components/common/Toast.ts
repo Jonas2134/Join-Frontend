@@ -1,4 +1,8 @@
 import type { ToastOptions } from "../../core/types/toast.types";
+import successIcon from "../../assets/icons/toast-success.svg?raw";
+import errorIcon from "../../assets/icons/toast-error.svg?raw";
+import infoIcon from "../../assets/icons/toast-info.svg?raw";
+import closeIcon from "../../assets/icons/toast-close.svg?raw";
 
 export class Toast {
   private element: HTMLDivElement;
@@ -27,44 +31,17 @@ export class Toast {
 
   private renderContent(): string {
     const iconMap = {
-      success: () => this.getSuccessIcon(),
-      error: () => this.getErrorIcon(),
-      info: () => this.getInfoIcon(),
+      success: successIcon,
+      error: errorIcon,
+      info: infoIcon,
     };
-    const icon = iconMap[this.options.type]();
 
     return /*html*/ `
-      <span class="toast-icon">${icon}</span>
+      <span class="toast-icon">${iconMap[this.options.type]}</span>
       <span class="toast-message">${this.options.message}</span>
       <button class="toast-close-btn" type="button" title="Schließen">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
+        ${closeIcon}
       </button>
-    `;
-  }
-
-  private getSuccessIcon(): string {
-    return /*html*/ `
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-      </svg>
-    `;
-  }
-
-  private getErrorIcon(): string {
-    return /*html*/ `
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
-    `;
-  }
-
-  private getInfoIcon(): string {
-    return /*html*/ `
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
     `;
   }
 
