@@ -31,3 +31,8 @@ dist-ssr
 CLAUDE.md
 
 up.sh
+
+# Test output
+test-results/
+playwright-report/
+coverage/
