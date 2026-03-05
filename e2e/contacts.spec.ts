@@ -16,6 +16,7 @@ test.describe("Contacts", () => {
     await page.goto("/contacts");
 
     // Should have tab navigation
-    await expect(page.locator("text=Find Contacts").or(page.locator("text=My Contacts"))).toBeVisible();
+    await expect(page.getByRole("button", { name: "Find Contacts" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "My Contacts" })).toBeVisible();
   });
 });

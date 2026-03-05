@@ -20,6 +20,7 @@ test.describe("Board CRUD", () => {
     await expect(page.locator("dialog")).toBeVisible();
 
     await page.fill('input[name="title"]', "New Board");
+    await page.fill('textarea[name="description"]', "Board description");
     await page.click('dialog button[type="submit"]');
 
     // Board should be created (dialog closes)
@@ -38,6 +39,6 @@ test.describe("Board CRUD", () => {
   test("board page shows board title and columns", async ({ page }) => {
     await page.goto("/board/1");
 
-    await expect(page.locator("h1")).toContainText("Project Alpha");
+    await expect(page.locator("h3")).toContainText("Project Alpha");
   });
 });

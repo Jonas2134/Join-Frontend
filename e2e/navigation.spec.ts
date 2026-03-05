@@ -38,7 +38,7 @@ test.describe("Navigation", () => {
   });
 
   test("unknown route shows 404", async ({ page }) => {
-    await mockUnauthenticatedAPI(page);
+    await mockAuthenticatedAPI(page);
 
     await page.goto("/nonexistent-page");
     await expect(page.locator("h1")).toContainText("404");
