@@ -15,8 +15,8 @@ export type TaskDetailMode = "view" | "edit";
 export class TaskDetailDialog extends BaseDialog {
   task: Task;
   private mode: TaskDetailMode;
-  private container!: HTMLElement;
-  private memberSelect!: MemberSelect;
+  private container: HTMLElement | null = null;
+  private memberSelect: MemberSelect | null = null;
 
   constructor(task: Task, mode: TaskDetailMode = "view") {
     super("task-detail-dialog");
@@ -36,6 +36,8 @@ export class TaskDetailDialog extends BaseDialog {
   }
 
   private renderCurrentMode(): void {
+    if (!this.container) return;
+
     this.container.innerHTML = "";
 
     if (this.mode === "view") {
@@ -66,7 +68,7 @@ export class TaskDetailDialog extends BaseDialog {
     const footer = this.renderViewFooter();
 
     wrapper.append(header, title, description, assignee, footer);
-    this.container.appendChild(wrapper);
+    this.container?.appendChild(wrapper);
   }
 
   private renderViewHeader(): HTMLElement {
@@ -179,7 +181,7 @@ export class TaskDetailDialog extends BaseDialog {
 
     fieldset.append(legend, main, menu);
     form.appendChild(fieldset);
-    this.container.appendChild(form);
+    this.container?.appendChild(form);
   }
 
   private renderEditMainSection(): HTMLElement {
@@ -278,30 +280,31 @@ export class TaskDetailDialog extends BaseDialog {
     const switchBtn = this.dialog.querySelector("#switch-to-view-btn");
 
     cancelBtn?.addEventListener("click", () => this.close());
-
     switchBtn?.addEventListener("click", () => this.switchMode("view"));
+    form?.addEventListener("submit", (e) => this.handleEditFormSubmit(e, form));
+  }
 
-    form?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form);
-      const title = formData.get("title") as string;
-      const description = formData.get("description") as string;
+  private async handleEditFormSubmit(e: Event, form: HTMLFormElement) {
+    e.preventDefault();
 
-      const assignee = this.memberSelect.getSelectedId();
-      try {
-        await appStore.updateTask(String(this.task.id), {
-          title: title,
-          description: description || null,
-          assignee: assignee ?? undefined,
-        });
+    const formData = new FormData(form);
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const assignee = this.memberSelect?.getSelectedId();
 
-        toastManager.success("Task successfully updated");
-        this.close();
-        form.reset();
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : String(err);
-        toastManager.error("Update failed: " + message);
-      }
-    });
+    try {
+      await appStore.updateTask(String(this.task.id), {
+        title: title,
+        description: description || null,
+        assignee: assignee ?? undefined,
+      });
+
+      toastManager.success("Task successfully updated");
+      this.close();
+      form.reset();
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Update failed: " + message);
+    }
   }
 }

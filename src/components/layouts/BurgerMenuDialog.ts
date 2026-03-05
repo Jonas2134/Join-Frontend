@@ -40,8 +40,9 @@ export class BurgerMenuDialog extends BaseDialog {
         await authStore.logout();
         this.dialog.close();
         router.navigate("/");
-      } catch (err: any) {
-        toastManager.error("Logout fehlgeschlagen: " + err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        toastManager.error("Logout fehlgeschlagen: " + message);
       }
     });
 

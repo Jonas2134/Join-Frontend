@@ -5,6 +5,7 @@ import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
 import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
 import { TaskThreeDotDropdown } from "../dialogAndDropdown/TaskThreeDotDropdown";
 import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
+import type { BoardContentRenderer } from "../renderers/BoardContentRenderer";
 import type { Board, Column, ColumnUpdate, Task } from "../../../core/types/board.types";
 
 export class BoardPageController extends BasePageController {
@@ -30,12 +31,12 @@ export class BoardPageController extends BasePageController {
     }
   }
 
-  registerColumnButtonListener(e: Event, renderer?: any) {
+  registerColumnButtonListener(e: Event, renderer?: BoardContentRenderer) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".create-column-btn");
     if (btn) this.showAddColumnForm(renderer);
   }
 
-  registerColumnCancelButtonListener(e: Event, renderer?: any) {
+  registerColumnCancelButtonListener(e: Event, renderer?: BoardContentRenderer) {
     const btn = this.findClosestElement<HTMLButtonElement>(e.target, ".cancel-column-btn");
     if (btn) this.hideAddColumnForm(renderer);
   }
@@ -252,7 +253,7 @@ export class BoardPageController extends BasePageController {
   // Add Column Form Management
   // ============================================
 
-  private showAddColumnForm(renderer?: any) {
+  private showAddColumnForm(renderer?: BoardContentRenderer) {
     const addColumnItem = document.querySelector(".add-column-item");
     if (!addColumnItem) return;
 
@@ -266,7 +267,7 @@ export class BoardPageController extends BasePageController {
     }
   }
 
-  private hideAddColumnForm(renderer?: any) {
+  private hideAddColumnForm(renderer?: BoardContentRenderer) {
     const addColumnItem = document.querySelector(".add-column-item");
     if (!addColumnItem) return;
 

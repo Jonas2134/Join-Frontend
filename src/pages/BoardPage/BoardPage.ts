@@ -9,10 +9,10 @@ import { appStore } from "../../core/store/AppStore";
 export class BoardPage extends BasePage {
   id: string;
   private headerRenderer: BoardHeaderRenderer;
-  private contentRenderer!: BoardContentRenderer;
+  private contentRenderer: BoardContentRenderer;
   private eventManager: BoardPageController;
 
-  constructor(params: { id: string }) {
+  constructor(params: Record<string, string>) {
     super(new AppLayout());
     this.id = params.id;
     this.headerRenderer = new BoardHeaderRenderer();
@@ -72,7 +72,6 @@ export class BoardPage extends BasePage {
 
   async initLoadBoard() {
     await appStore.loadBoard(this.id);
-    console.log(appStore.singleBoard);
     this.updateBoardUI();
   }
 

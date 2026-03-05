@@ -99,7 +99,6 @@ export class ProfilePage extends BasePage {
 
   private async initLoadProfile() {
     await profileStore.loadProfile();
-    console.log(profileStore.profile);
     this.updateProfileUI();
   }
 

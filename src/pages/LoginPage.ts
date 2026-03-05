@@ -128,8 +128,9 @@ export class LoginPage extends BasePage {
     try {
       await authStore.guestLogin();
       router.navigate("/dashboard");
-    } catch (err: any) {
-      toastManager.error("Guest Login fehlgeschlagen: " + err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Guest Login fehlgeschlagen: " + message);
     }
   }
 
@@ -142,8 +143,9 @@ export class LoginPage extends BasePage {
     try {
       await authStore.login(username, password);
       router.navigate("/dashboard");
-    } catch (err: any) {
-      toastManager.error("Login fehlgeschlagen: " + err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Login fehlgeschlagen: " + message);
     }
   }
 }

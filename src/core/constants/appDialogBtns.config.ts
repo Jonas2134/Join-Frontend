@@ -1,3 +1,19 @@
+export const createBoardDialogBtns = [
+  {
+    class: ["btn", "btn-blue"],
+    type: "submit" as const,
+    title: "Create Board",
+    text: "Create",
+  },
+  {
+    id: "cancel-btn",
+    class: ["btn", "btn-white"],
+    type: "button" as const,
+    title: "Cancel Creation",
+    text: "Cancel",
+  },
+];
+
 export const editBoardDialogBtns = [
   {
     class: ["btn", "btn-blue"],

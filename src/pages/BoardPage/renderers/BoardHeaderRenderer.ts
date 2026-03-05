@@ -85,21 +85,36 @@ export class BoardHeaderRenderer {
     const visibleMembers = sortedMembers.slice(0, maxVisibleMembers);
     const remainingCount = board.members.length - maxVisibleMembers;
 
-    visibleMembers.forEach((member) => {
-      const listItem = document.createElement("li");
+    for (const member of visibleMembers) {
       const isOwner = member.id === board.owner;
-      const avatar = new Avatar({ size: "lg", isOwner });
-      listItem.appendChild(avatar.createAvatar(member.username));
-      membersList.appendChild(listItem);
-    });
+      membersList.appendChild(this.renderMemberListItem(member, isOwner));
+    }
 
     if (remainingCount > 0) {
-      const listItem = document.createElement("li");
-      const moreIndicatorBtn = new Button({...moreIndicator, text: `+${remainingCount}`}).renderBtn();
-      listItem.appendChild(moreIndicatorBtn);
-      membersList.appendChild(listItem);
+      membersList.appendChild(this.renderOverflowIndicator(remainingCount));
     }
+
     return membersList;
+  }
+
+  private renderMemberListItem(
+    member: Board["members"][number],
+    isOwner: boolean,
+  ): HTMLElement {
+    const listItem = document.createElement("li");
+    const avatar = new Avatar({ size: "lg", isOwner });
+    listItem.appendChild(avatar.createAvatar(member.username));
+    return listItem;
+  }
+
+  private renderOverflowIndicator(count: number): HTMLElement {
+    const listItem = document.createElement("li");
+    const btn = new Button({
+      ...moreIndicator,
+      text: `+${count}`,
+    }).renderBtn();
+    listItem.appendChild(btn);
+    return listItem;
   }
 
   private isCurrentUserOwner(board: Board): boolean {

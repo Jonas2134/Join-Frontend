@@ -13,7 +13,7 @@ import type { Board } from "../../../core/types/board.types";
 
 export class EditBoardDialog extends BaseDialog {
   board: Board;
-  private memberSelect!: MemberSelect;
+  private memberSelect: MemberSelect | null = null;
 
   constructor(board: Board) {
     super("edit-board-dialog");
@@ -125,7 +125,7 @@ export class EditBoardDialog extends BaseDialog {
       const contacts = await contactStore.loadContacts();
       const memberIds = new Set(this.board.members.map(m => Number(m.id)));
       const filtered = contacts.filter(c => !memberIds.has(c.id));
-      this.memberSelect.setOptions(filtered);
+      this.memberSelect?.setOptions(filtered);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
       toastManager.error("Kontakte konnten nicht geladen werden: " + message);
@@ -135,15 +135,15 @@ export class EditBoardDialog extends BaseDialog {
   private async handleSearch(query: string): Promise<void> {
     if (!query) {
       const contacts = contactStore.contacts;
-      const selectedIds = new Set(this.memberSelect.getAllMemberIds());
-      this.memberSelect.setOptions(contacts.filter(c => !selectedIds.has(c.id)));
+      const selectedIds = new Set(this.memberSelect?.getAllMemberIds() ?? []);
+      this.memberSelect?.setOptions(contacts.filter(c => !selectedIds.has(c.id)));
       return;
     }
 
     try {
       const results = await contactStore.searchUsers(query);
-      const selectedIds = new Set(this.memberSelect.getAllMemberIds());
-      this.memberSelect.setOptions(results.filter(r => !selectedIds.has(r.id)));
+      const selectedIds = new Set(this.memberSelect?.getAllMemberIds() ?? []);
+      this.memberSelect?.setOptions(results.filter(r => !selectedIds.has(r.id)));
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
       toastManager.error("Suche fehlgeschlagen: " + message);
@@ -168,10 +168,10 @@ export class EditBoardDialog extends BaseDialog {
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formDate = new FormData(form);
-      const title = formDate.get("title") as string;
-      const description = formDate.get("description") as string;
-      const members = authStore.isGuest ? undefined : this.memberSelect.getAllMemberIds();
+      const formData = new FormData(form);
+      const title = formData.get("title") as string;
+      const description = formData.get("description") as string;
+      const members = authStore.isGuest ? undefined : this.memberSelect?.getAllMemberIds();
       try {
         await appStore.updateBoard(this.board.id, title, description, members);
         toastManager.success("Board erfolgreich aktualisiert");

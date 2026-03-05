@@ -10,7 +10,7 @@ import { createTaskDialogBtns } from "../../../core/constants/appDialogBtns.conf
 
 export class CreateTaskDialog extends BaseDialog {
   columnId: string;
-  private memberSelect!: MemberSelect;
+  private memberSelect: MemberSelect | null = null;
 
   constructor(id: string) {
     super("create-task-dialog");
@@ -123,10 +123,10 @@ export class CreateTaskDialog extends BaseDialog {
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formDate = new FormData(form);
-      const title = formDate.get("title") as string;
-      const description = formDate.get("description") as string;
-      const assignee = this.memberSelect.getSelectedId();
+      const formData = new FormData(form);
+      const title = formData.get("title") as string;
+      const description = formData.get("description") as string;
+      const assignee = this.memberSelect?.getSelectedId();
       try {
         await appStore.createTask(
           this.columnId,

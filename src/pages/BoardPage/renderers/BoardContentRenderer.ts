@@ -3,7 +3,7 @@ import { BoardAddColumnRenderer } from "./BoardAddColumnRenderer";
 import type { Board } from "../../../core/types/board.types";
 
 export class BoardContentRenderer {
-  private columnRenderer!: BoardColumnRenderer;
+  private columnRenderer: BoardColumnRenderer;
   addColumnRenderer: BoardAddColumnRenderer;
   private readonly: boolean;
 

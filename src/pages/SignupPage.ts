@@ -122,8 +122,9 @@ export class SignupPage extends BasePage {
       await authStore.register(username, email, password, repeated_password);
       toastManager.success("Registrierung erfolgreich");
       router.navigate('/login');
-    } catch (err: any) {
-      toastManager.error("Registrierung fehlgeschlagen: " + err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Registrierung fehlgeschlagen: " + message);
     }
   }
 }

@@ -120,32 +120,36 @@ export class MemberSelect {
     });
 
     for (const member of sorted) {
-      const chip = document.createElement("div");
-      chip.classList.add("member-select-chip");
-
-      const isOwner = this.ownerId != null && member.id === this.ownerId;
-
-      const avatar = new Avatar({
-        size: "lg",
-        isOwner,
-      }).createAvatar(member.username);
-
-      if (member.isNew) {
-        chip.classList.add("member-select-chip-new");
-      }
-
-      chip.appendChild(avatar);
-
-      if (!isOwner) {
-        const removeBtn = document.createElement("span");
-        removeBtn.classList.add("member-select-remove-btn");
-        removeBtn.textContent = "✕";
-        removeBtn.dataset.removeId = String(member.id);
-        chip.appendChild(removeBtn);
-      }
-
-      this.displayArea.appendChild(chip);
+      this.displayArea.appendChild(this.renderMemberChip(member));
     }
+  }
+
+  private renderMemberChip(member: SelectableMember): HTMLElement {
+    const chip = document.createElement("div");
+    chip.classList.add("member-select-chip");
+
+    const isOwner = this.ownerId != null && member.id === this.ownerId;
+
+    const avatar = new Avatar({
+      size: "lg",
+      isOwner,
+    }).createAvatar(member.username);
+
+    if (member.isNew) {
+      chip.classList.add("member-select-chip-new");
+    }
+
+    chip.appendChild(avatar);
+
+    if (!isOwner) {
+      const removeBtn = document.createElement("span");
+      removeBtn.classList.add("member-select-remove-btn");
+      removeBtn.textContent = "✕";
+      removeBtn.dataset.removeId = String(member.id);
+      chip.appendChild(removeBtn);
+    }
+
+    return chip;
   }
 
   private renderOptions(): void {

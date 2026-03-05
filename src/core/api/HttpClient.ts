@@ -17,7 +17,7 @@ export class HttpClient {
   private async request<T>(
     method: HttpMethod,
     url: string,
-    body?: any
+    body?: object,
   ): Promise<T> {
     const init: RequestInit = {
       method,
@@ -56,10 +56,10 @@ export class HttpClient {
   get<T>(url: string) {
     return this.request<T>("GET", url);
   }
-  post<T>(url: string, body?: any) {
+  post<T>(url: string, body?: object) {
     return this.request<T>("POST", url, body);
   }
-  patch<T>(url: string, body?: any) {
+  patch<T>(url: string, body?: object) {
     return this.request<T>("PATCH", url, body);
   }
   delete<T>(url: string) {

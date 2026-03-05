@@ -6,11 +6,13 @@ import { toastManager } from "../../../core/ToastManager";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
 import { MemberSelect } from "../../../components/common/MemberSelect";
+import { Button } from "../../../components/common/Button";
 import { dashboardFields } from "../../../core/constants/appDashboardFields.config";
+import { createBoardDialogBtns } from "../../../core/constants/appDialogBtns.config";
 import type { Member } from "../../../core/types/board.types";
 
 export class BoardCreateDialog extends BaseDialog {
-  private memberSelect!: MemberSelect;
+  private memberSelect: MemberSelect | null = null;
 
   constructor() {
     super("board-dialog");
@@ -86,10 +88,12 @@ export class BoardCreateDialog extends BaseDialog {
   renderMenu() {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
-    menu.innerHTML = `
-      <button class="btn btn-blue" type="submit">Create</button>
-      <button class="btn btn-white" type="button" id="cancel-btn">Cancel</button>
-    `;
+
+    const btns = createBoardDialogBtns.map((config) =>
+      new Button({ ...config }).renderBtn(),
+    );
+
+    menu.append(...btns);
     return menu;
   }
 
@@ -124,7 +128,7 @@ export class BoardCreateDialog extends BaseDialog {
   private async loadContacts(): Promise<void> {
     try {
       const contacts = await contactStore.loadContacts();
-      this.memberSelect.setOptions(contacts);
+      this.memberSelect?.setOptions(contacts);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
       toastManager.error("Kontakte konnten nicht geladen werden: " + message);
@@ -134,15 +138,15 @@ export class BoardCreateDialog extends BaseDialog {
   private async handleSearch(query: string): Promise<void> {
     if (!query) {
       const contacts = contactStore.contacts;
-      const selectedIds = new Set(this.memberSelect.getAllMemberIds());
-      this.memberSelect.setOptions(contacts.filter(c => !selectedIds.has(c.id)));
+      const selectedIds = new Set(this.memberSelect?.getAllMemberIds() ?? []);
+      this.memberSelect?.setOptions(contacts.filter(c => !selectedIds.has(c.id)));
       return;
     }
 
     try {
       const results = await contactStore.searchUsers(query);
-      const selectedIds = new Set(this.memberSelect.getAllMemberIds());
-      this.memberSelect.setOptions(results.filter(r => !selectedIds.has(r.id)));
+      const selectedIds = new Set(this.memberSelect?.getAllMemberIds() ?? []);
+      this.memberSelect?.setOptions(results.filter(r => !selectedIds.has(r.id)));
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
       toastManager.error("Suche fehlgeschlagen: " + message);
@@ -165,27 +169,30 @@ export class BoardCreateDialog extends BaseDialog {
       }) as EventListener);
     }
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formDate = new FormData(form);
-      const members = authStore.isGuest ? undefined : this.memberSelect.getAllMemberIds();
-      try {
-        await appStore.createBoard(
-          formDate.get("title") as string,
-          formDate.get("description") as string,
-          members,
-        );
-        toastManager.success("Board erfolgreich erstellt");
-        this.close();
-        form.reset();
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : String(err);
-        toastManager.error("Erstellung fehlgeschlagen: " + message);
-      }
-    });
+    form.addEventListener("submit", (e) => this.handleFormSubmit(e, form));
 
     if (!authStore.isGuest) {
       this.loadContacts();
+    }
+  }
+
+  private async handleFormSubmit(e: Event, form: HTMLFormElement) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const members = authStore.isGuest ? undefined : this.memberSelect?.getAllMemberIds();
+
+    try {
+      await appStore.createBoard(
+        formData.get("title") as string,
+        formData.get("description") as string,
+        members,
+      );
+      toastManager.success("Board erfolgreich erstellt");
+      this.close();
+      form.reset();
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Erstellung fehlgeschlagen: " + message);
     }
   }
 }
