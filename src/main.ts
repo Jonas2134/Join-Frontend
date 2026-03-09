@@ -41,7 +41,13 @@ async function checkAuthOnStart() {
   }
 }
 
-checkAuthOnStart();
+checkAuthOnStart().finally(() => {
+  router.setGuard((path) => {
+    if (PUBLIC_ROUTES.includes(path)) return null;
+    if (authStore.currentUser) return null;
+    return '/login';
+  });
+});
 
 document.body.addEventListener('click', (e) => {
   const target = e.target as HTMLElement;

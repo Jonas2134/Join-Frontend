@@ -1,5 +1,8 @@
 import { BaseDialog } from "../bases/BaseDialog";
 import { authStore } from "../../core/store/AuthStore";
+import { boardStore } from "../../core/store/BoardStore";
+import { contactStore } from "../../core/store/ContactStore";
+import { profileStore } from "../../core/store/ProfileStore";
 import { toastManager } from "../../core/ToastManager";
 import { router } from "../../core/router";
 
@@ -38,6 +41,9 @@ export class BurgerMenuDialog extends BaseDialog {
     logoutBtn.addEventListener("click", async () => {
       try {
         await authStore.logout();
+        boardStore.reset();
+        contactStore.reset();
+        profileStore.reset();
         this.dialog.close();
         router.navigate("/");
       } catch (err: unknown) {

@@ -12,15 +12,22 @@ type Route = RouteConfig & {
 
 export let router: Router;
 
+type RouteGuard = (path: string) => string | null;
+
 export class Router {
   private routes: Route[];
   private root: HTMLElement;
   private currentPage: BasePage | null = null;
+  private guard: RouteGuard | null = null;
 
   constructor(root: HTMLElement, routes: Route[]) {
     this.routes = routes;
     this.root = root;
     window.addEventListener("popstate", () => this.render());
+  }
+
+  setGuard(guard: RouteGuard) {
+    this.guard = guard;
   }
 
   navigate(path: string) {
@@ -29,6 +36,13 @@ export class Router {
   }
 
   render() {
+    if (this.guard) {
+      const redirect = this.guard(location.pathname);
+      if (redirect) {
+        this.navigate(redirect);
+        return;
+      }
+    }
     let matchedRoute: Route | null = null;
     let params: Record<string, string> = {};
 

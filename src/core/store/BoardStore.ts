@@ -17,6 +17,13 @@ class BoardStore {
 
   constructor() {}
 
+  reset() {
+    this.boards = [];
+    this.singleBoard = null;
+    this.columns = {};
+    this.tasks = {};
+  }
+
   async loadDashboard(): Promise<Boards[]> {
     this.boards = await http.get<Boards[]>(API_ROUTES.boards.list);
     return this.boards;

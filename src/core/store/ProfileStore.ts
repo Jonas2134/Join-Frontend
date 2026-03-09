@@ -13,6 +13,10 @@ export interface ProfileUpdate {
 class ProfileStore {
   profile: Profile | null = null;
 
+  reset() {
+    this.profile = null;
+  }
+
   async loadProfile(): Promise<Profile> {
     this.profile = await http.get<Profile>(API_ROUTES.profile);
     window.dispatchEvent(new CustomEvent("profile:loaded"));

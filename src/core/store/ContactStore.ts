@@ -5,6 +5,10 @@ import type { Contact, UserDetail } from "../types/contact.types";
 class ContactStore {
   contacts: Contact[] = [];
 
+  reset() {
+    this.contacts = [];
+  }
+
   async loadContacts(): Promise<Contact[]> {
     this.contacts = await http.get<Contact[]>(API_ROUTES.contacts.list);
     return this.contacts;
