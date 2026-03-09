@@ -1,5 +1,5 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { contactStore } from "../../../core/store/ContactStore";
 import { authStore } from "../../../core/store/AuthStore";
 import { toastManager } from "../../../core/ToastManager";
@@ -182,7 +182,7 @@ export class BoardCreateDialog extends BaseDialog {
     const members = authStore.isGuest ? undefined : this.memberSelect?.getAllMemberIds();
 
     try {
-      await appStore.createBoard(
+      await boardStore.createBoard(
         formData.get("title") as string,
         formData.get("description") as string,
         members,

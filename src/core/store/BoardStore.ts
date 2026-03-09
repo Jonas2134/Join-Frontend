@@ -9,7 +9,7 @@ import type {
   TaskUpdate,
 } from "../types/board.types";
 
-class AppStore {
+class BoardStore {
   boards: Boards[] = [];
   singleBoard: Board | null = null;
   columns: Record<number, Column[]> = {};
@@ -114,4 +114,4 @@ class AppStore {
   }
 }
 
-export const appStore = new AppStore();
+export const boardStore = new BoardStore();

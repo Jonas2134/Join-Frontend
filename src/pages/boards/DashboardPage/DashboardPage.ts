@@ -2,7 +2,7 @@ import { AppLayout } from "../../../layouts/AppLayout";
 import { BaseBoardListPage } from "../shared/BaseBoardListPage";
 import { DashboardStatsRenderer } from "./renderers/DashboardStatsRenderer";
 import { Button } from "../../../components/common/Button";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { authStore } from "../../../core/store/AuthStore";
 import { toastManager } from "../../../core/ToastManager";
 import { DashboardPageController } from "./DashboardPageController";
@@ -62,7 +62,7 @@ export class DashboardPage extends BaseBoardListPage {
   updateDashboardUI() {
     const statsContainer = document.getElementById("dashboardStats");
     if (statsContainer) {
-      const newStats = this.statsRenderer.renderStats(appStore.boards);
+      const newStats = this.statsRenderer.renderStats(boardStore.boards);
       statsContainer.replaceWith(newStats);
     }
 
@@ -82,7 +82,7 @@ export class DashboardPage extends BaseBoardListPage {
   }
 
   async initLoadDashboard() {
-    await appStore.loadDashboard();
+    await boardStore.loadDashboard();
     this.updateDashboardUI();
   }
 

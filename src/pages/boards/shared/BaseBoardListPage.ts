@@ -3,7 +3,7 @@ import { BoardRow } from "./renderers/BoardRowRenderer";
 import { BoardCard } from "./renderers/BoardCardRenderer";
 import { Button } from "../../../components/common/Button";
 import { ViewToggle, type ViewMode } from "../../../components/common/ViewToggle";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import EmptyBoardIcon from "../../../assets/icons/empty-board.svg?raw";
 
 import type { Boards } from "../../../core/types/board.types";
@@ -148,10 +148,10 @@ export abstract class BaseBoardListPage extends BasePage {
 
     if (this.currentView === "list") {
       const container = document.getElementById("boardListContainer");
-      if (container) this.renderBoardList(container, appStore.boards);
+      if (container) this.renderBoardList(container, boardStore.boards);
     } else {
       const container = document.getElementById("boardCardContainer");
-      if (container) this.renderCardGrid(container, appStore.boards);
+      if (container) this.renderCardGrid(container, boardStore.boards);
     }
   }
 }

@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createBoards } from "../../../../../tests/helpers/factories";
 
-vi.mock("../../../../core/store/AppStore", () => ({
-  appStore: {
+vi.mock("../../../../core/store/BoardStore", () => ({
+  boardStore: {
     boards: [],
     singleBoard: null,
     columns: {},
@@ -36,7 +36,7 @@ vi.mock("../../../../core/ToastManager", () => ({
 }));
 
 import { DashboardPage } from "../DashboardPage";
-import { appStore } from "../../../../core/store/AppStore";
+import { boardStore } from "../../../../core/store/BoardStore";
 import { authStore } from "../../../../core/store/AuthStore";
 import { toastManager } from "../../../../core/ToastManager";
 
@@ -48,12 +48,12 @@ describe("DashboardPage", () => {
     root.id = "app";
     document.body.appendChild(root);
 
-    vi.mocked(appStore.loadDashboard).mockReset();
-    vi.mocked(appStore.loadDashboard).mockResolvedValue([]);
+    vi.mocked(boardStore.loadDashboard).mockReset();
+    vi.mocked(boardStore.loadDashboard).mockResolvedValue([]);
     vi.mocked(toastManager.info).mockReset();
     vi.mocked(toastManager.error).mockReset();
     vi.mocked(toastManager.success).mockReset();
-    appStore.boards = [];
+    boardStore.boards = [];
     (authStore as any).isGuest = false;
   });
 
@@ -81,13 +81,13 @@ describe("DashboardPage", () => {
     const mockBoards = [
       createBoards({ id: "1", title: "Active Board" }),
     ];
-    vi.mocked(appStore.loadDashboard).mockResolvedValue(mockBoards);
+    vi.mocked(boardStore.loadDashboard).mockResolvedValue(mockBoards);
 
     const page = new DashboardPage();
     page.attachTo(root);
 
     await vi.waitFor(() => {
-      expect(appStore.loadDashboard).toHaveBeenCalled();
+      expect(boardStore.loadDashboard).toHaveBeenCalled();
     });
   });
 

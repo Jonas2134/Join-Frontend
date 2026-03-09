@@ -1,4 +1,4 @@
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { toastManager } from "../../../core/ToastManager";
 import type { Column } from "../../../core/types/board.types";
 
@@ -85,7 +85,7 @@ export class BoardDragAndDrop {
     }
 
     try {
-      await appStore.updateTask(String(dragged.taskId), {
+      await boardStore.updateTask(String(dragged.taskId), {
         column: droped.targetColumnId,
         position: droped.targetPosition,
       });
@@ -98,7 +98,7 @@ export class BoardDragAndDrop {
   }
 
   private exceedsWipLimit(targetColumnId: number): boolean {
-    const targetColumn = appStore.singleBoard?.columns.find(
+    const targetColumn = boardStore.singleBoard?.columns.find(
       (c) => Number(c.id) === targetColumnId,
     );
 

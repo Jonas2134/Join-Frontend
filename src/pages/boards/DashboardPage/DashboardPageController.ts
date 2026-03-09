@@ -2,7 +2,7 @@ import { BasePageController } from "../../../components/bases/BasePageController
 import { BoardCreateDialog } from "./BoardCreateDialog";
 import { ConfirmDialog } from "../../../components/common/ConfirmDialog";
 import { DashboardBoardDropdown } from "./DashboardBoardDropdown";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 
 const BOARD_ITEM_SELECTOR = ".board-row, .board-card";
 
@@ -68,7 +68,7 @@ export class DashboardPageController extends BasePageController {
       confirmText: "Confirmed",
       onConfirm: async () => {
         await this.performStoreOperation(
-          () => appStore.archiveBoard(boardId, false),
+          () => boardStore.archiveBoard(boardId, false),
           "Archive",
         );
       },
@@ -92,7 +92,7 @@ export class DashboardPageController extends BasePageController {
       confirmText: "Delete",
       onConfirm: async () => {
         await this.performStoreOperation(
-          () => appStore.deleteBoard(boardId),
+          () => boardStore.deleteBoard(boardId),
           "Deletion",
         );
       },

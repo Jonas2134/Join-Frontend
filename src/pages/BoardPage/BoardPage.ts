@@ -4,7 +4,7 @@ import { BoardHeaderRenderer } from "./renderers/BoardHeaderRenderer";
 import { BoardContentRenderer } from "./renderers/BoardContentRenderer";
 import { BoardDragAndDrop } from "./managers/BoardDragAndDrop";
 import { BoardPageController } from "./managers/BoardPageController";
-import { appStore } from "../../core/store/AppStore";
+import { boardStore } from "../../core/store/BoardStore";
 
 export class BoardPage extends BasePage {
   id: string;
@@ -52,7 +52,7 @@ export class BoardPage extends BasePage {
   updateBoardUI(): void {
     const header = document.getElementById("board-header");
     const section = document.getElementById("board-section");
-    const board = appStore.singleBoard;
+    const board = boardStore.singleBoard;
     if (!section || !header || !board) return;
 
     header.innerHTML = "";
@@ -71,7 +71,7 @@ export class BoardPage extends BasePage {
   }
 
   async initLoadBoard() {
-    await appStore.loadBoard(this.id);
+    await boardStore.loadBoard(this.id);
     this.updateBoardUI();
   }
 
@@ -89,7 +89,7 @@ export class BoardPage extends BasePage {
     this.events.on(boardHeader, "click", (e: Event) => {
       const target = (e.target as HTMLElement).closest("#editBoardBtn");
       if (!target) return;
-      const board = appStore.singleBoard;
+      const board = boardStore.singleBoard;
       if (board) this.eventManager.registerEditBoardDialog(board);
     });
 

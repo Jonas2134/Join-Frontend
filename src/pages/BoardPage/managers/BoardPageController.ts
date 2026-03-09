@@ -1,5 +1,5 @@
 import { BasePageController } from "../../../components/bases/BasePageController";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { CreateTaskDialog } from "../dialogAndDropdown/CreateTaskDialog";
 import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
 import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
@@ -49,7 +49,7 @@ export class BoardPageController extends BasePageController {
     const columnName = this.getFormValue(form, "columnName");
     if (columnName) {
       await this.performStoreOperation(
-        () => appStore.createColumn(id, columnName),
+        () => boardStore.createColumn(id, columnName),
         "Creation",
       );
     }
@@ -63,7 +63,7 @@ export class BoardPageController extends BasePageController {
     if (!header) return;
 
     const columnId = this.getDatasetFromClosest(btn, ".board-column", "columnId");
-    const column = appStore.singleBoard?.columns.find(
+    const column = boardStore.singleBoard?.columns.find(
       (c) => String(c.id) === columnId,
     );
     if (!column) return;
@@ -90,7 +90,7 @@ export class BoardPageController extends BasePageController {
 
     if (columnId && newName) {
       await this.performStoreOperation(
-        () => appStore.updateColumn(columnId, { name: newName } as ColumnUpdate),
+        () => boardStore.updateColumn(columnId, { name: newName } as ColumnUpdate),
         "Update",
       );
     }
@@ -124,7 +124,7 @@ export class BoardPageController extends BasePageController {
 
     if (columnId && newLimit) {
       this.performStoreOperation(
-        () => appStore.updateColumn(columnId, { wip_limit: newLimit } as ColumnUpdate),
+        () => boardStore.updateColumn(columnId, { wip_limit: newLimit } as ColumnUpdate),
         "Update",
       );
     }
@@ -147,7 +147,7 @@ export class BoardPageController extends BasePageController {
     const columnId = this.getDatasetFromClosest(btn, ".board-column", "columnId");
     if (columnId) {
       this.performStoreOperation(
-        () => appStore.deleteColumn(columnId),
+        () => boardStore.deleteColumn(columnId),
         "Deletion",
       );
     }
@@ -185,7 +185,7 @@ export class BoardPageController extends BasePageController {
     const taskId = this.getDatasetFromClosest(btn, ".task", "taskId");
     if (taskId) {
       this.performStoreOperation(
-        () => appStore.deleteTask(taskId),
+        () => boardStore.deleteTask(taskId),
         "Task deletion",
       );
     }
@@ -210,7 +210,7 @@ export class BoardPageController extends BasePageController {
   // ============================================
 
   private findTaskById(taskId: string): Task | null {
-    const board = appStore.singleBoard;
+    const board = boardStore.singleBoard;
     if (!board) return null;
 
     for (const column of board.columns) {

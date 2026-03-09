@@ -1,7 +1,7 @@
 import { AppLayout } from "../../../layouts/AppLayout";
 import { BaseBoardListPage } from "../shared/BaseBoardListPage";
 import { Button } from "../../../components/common/Button";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { ArchivedBoardsPageController } from "./ArchivedBoardsPageController";
 import { archivedBoardsBtn } from "../../../core/constants/appArchivedBoardsBtns.config";
 
@@ -64,7 +64,7 @@ export class ArchivedBoardsPage extends BaseBoardListPage {
   }
 
   async initLoadBoards() {
-    await appStore.loadDashboard();
+    await boardStore.loadDashboard();
     this.updateUI();
   }
 

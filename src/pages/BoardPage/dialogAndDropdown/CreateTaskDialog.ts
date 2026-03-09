@@ -1,5 +1,5 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { toastManager } from "../../../core/ToastManager";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
@@ -52,7 +52,7 @@ export class CreateTaskDialog extends BaseDialog {
       label: "Assignee:",
     });
 
-    const boardMembers = appStore.singleBoard?.members ?? [];
+    const boardMembers = boardStore.singleBoard?.members ?? [];
     const options = boardMembers.map(m => ({
       id: Number(m.id),
       username: m.username,
@@ -128,7 +128,7 @@ export class CreateTaskDialog extends BaseDialog {
       const description = formData.get("description") as string;
       const assignee = this.memberSelect?.getSelectedId();
       try {
-        await appStore.createTask(
+        await boardStore.createTask(
           this.columnId,
           title,
           description,

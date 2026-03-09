@@ -1,5 +1,5 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { contactStore } from "../../../core/store/ContactStore";
 import { toastManager } from "../../../core/ToastManager";
 import { Button } from "../../../components/common/Button";
@@ -173,7 +173,7 @@ export class EditBoardDialog extends BaseDialog {
       const description = formData.get("description") as string;
       const members = authStore.isGuest ? undefined : this.memberSelect?.getAllMemberIds();
       try {
-        await appStore.updateBoard(this.board.id, title, description, members);
+        await boardStore.updateBoard(this.board.id, title, description, members);
         toastManager.success("Board erfolgreich aktualisiert");
         this.close();
         form.reset();

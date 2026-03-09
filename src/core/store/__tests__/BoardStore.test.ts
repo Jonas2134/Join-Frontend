@@ -16,17 +16,17 @@ vi.mock("../../api/HttpClient", () => ({
   },
 }));
 
-import { appStore } from "../AppStore";
+import { boardStore } from "../BoardStore";
 import { http } from "../../api/HttpClient";
 
-describe("AppStore", () => {
+describe("BoardStore", () => {
   let dispatchSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    appStore.boards = [];
-    appStore.singleBoard = null;
-    appStore.columns = {};
-    appStore.tasks = {};
+    boardStore.boards = [];
+    boardStore.singleBoard = null;
+    boardStore.columns = {};
+    boardStore.tasks = {};
 
     vi.mocked(http.get).mockReset();
     vi.mocked(http.post).mockReset();
@@ -49,11 +49,11 @@ describe("AppStore", () => {
       const mockBoards = [createBoards(), createBoards({ id: "2", title: "Board 2" })];
       vi.mocked(http.get).mockResolvedValue(mockBoards);
 
-      const result = await appStore.loadDashboard();
+      const result = await boardStore.loadDashboard();
 
       expect(http.get).toHaveBeenCalledWith("/boards/");
       expect(result).toEqual(mockBoards);
-      expect(appStore.boards).toEqual(mockBoards);
+      expect(boardStore.boards).toEqual(mockBoards);
     });
   });
 
@@ -66,7 +66,7 @@ describe("AppStore", () => {
       const mockBoard = createBoard();
       vi.mocked(http.post).mockResolvedValue(mockBoard);
 
-      const result = await appStore.createBoard("Test Board", "Description", [1, 2]);
+      const result = await boardStore.createBoard("Test Board", "Description", [1, 2]);
 
       expect(http.post).toHaveBeenCalledWith("/boards/", {
         title: "Test Board",
@@ -79,7 +79,7 @@ describe("AppStore", () => {
     it("dispatches board:created event", async () => {
       vi.mocked(http.post).mockResolvedValue(createBoard());
 
-      await appStore.createBoard("Test");
+      await boardStore.createBoard("Test");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "board:created" }),
@@ -96,11 +96,11 @@ describe("AppStore", () => {
       const mockBoard = createBoard({ id: "42" });
       vi.mocked(http.get).mockResolvedValue(mockBoard);
 
-      const result = await appStore.loadBoard("42");
+      const result = await boardStore.loadBoard("42");
 
       expect(http.get).toHaveBeenCalledWith("/boards/42/");
       expect(result).toEqual(mockBoard);
-      expect(appStore.singleBoard).toEqual(mockBoard);
+      expect(boardStore.singleBoard).toEqual(mockBoard);
     });
   });
 
@@ -113,7 +113,7 @@ describe("AppStore", () => {
       const updatedBoard = createBoard({ title: "Updated" });
       vi.mocked(http.patch).mockResolvedValue(updatedBoard);
 
-      await appStore.updateBoard("1", "Updated");
+      await boardStore.updateBoard("1", "Updated");
 
       expect(http.patch).toHaveBeenCalledWith("/boards/1/", { title: "Updated" });
     });
@@ -121,7 +121,7 @@ describe("AppStore", () => {
     it("includes all provided fields in payload", async () => {
       vi.mocked(http.patch).mockResolvedValue(createBoard());
 
-      await appStore.updateBoard("1", "Title", "Desc", [1, 2]);
+      await boardStore.updateBoard("1", "Title", "Desc", [1, 2]);
 
       expect(http.patch).toHaveBeenCalledWith("/boards/1/", {
         title: "Title",
@@ -133,7 +133,7 @@ describe("AppStore", () => {
     it("omits undefined fields from payload", async () => {
       vi.mocked(http.patch).mockResolvedValue(createBoard());
 
-      await appStore.updateBoard("1", undefined, "New desc");
+      await boardStore.updateBoard("1", undefined, "New desc");
 
       expect(http.patch).toHaveBeenCalledWith("/boards/1/", {
         description: "New desc",
@@ -143,7 +143,7 @@ describe("AppStore", () => {
     it("dispatches board:updated event", async () => {
       vi.mocked(http.patch).mockResolvedValue(createBoard());
 
-      await appStore.updateBoard("1", "Updated");
+      await boardStore.updateBoard("1", "Updated");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "board:updated" }),
@@ -159,7 +159,7 @@ describe("AppStore", () => {
     it("sends DELETE request", async () => {
       vi.mocked(http.delete).mockResolvedValue(undefined);
 
-      await appStore.deleteBoard("1");
+      await boardStore.deleteBoard("1");
 
       expect(http.delete).toHaveBeenCalledWith("/boards/1/");
     });
@@ -167,7 +167,7 @@ describe("AppStore", () => {
     it("dispatches board:deleted event", async () => {
       vi.mocked(http.delete).mockResolvedValue(undefined);
 
-      await appStore.deleteBoard("1");
+      await boardStore.deleteBoard("1");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "board:deleted" }),
@@ -183,7 +183,7 @@ describe("AppStore", () => {
     it("sends PATCH with is_active flag", async () => {
       vi.mocked(http.patch).mockResolvedValue(createBoard({ is_active: false }));
 
-      await appStore.archiveBoard("1", false);
+      await boardStore.archiveBoard("1", false);
 
       expect(http.patch).toHaveBeenCalledWith("/boards/1/", { is_active: false });
     });
@@ -191,7 +191,7 @@ describe("AppStore", () => {
     it("dispatches board:updated event", async () => {
       vi.mocked(http.patch).mockResolvedValue(createBoard());
 
-      await appStore.archiveBoard("1", true);
+      await boardStore.archiveBoard("1", true);
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "board:updated" }),
@@ -208,7 +208,7 @@ describe("AppStore", () => {
       const mockColumn = createColumn();
       vi.mocked(http.post).mockResolvedValue(mockColumn);
 
-      const result = await appStore.createColumn("1", "To Do");
+      const result = await boardStore.createColumn("1", "To Do");
 
       expect(http.post).toHaveBeenCalledWith("/boards/1/columns/", { name: "To Do" });
       expect(result).toEqual(mockColumn);
@@ -217,7 +217,7 @@ describe("AppStore", () => {
     it("dispatches column:created event", async () => {
       vi.mocked(http.post).mockResolvedValue(createColumn());
 
-      await appStore.createColumn("1", "To Do");
+      await boardStore.createColumn("1", "To Do");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "column:created" }),
@@ -230,7 +230,7 @@ describe("AppStore", () => {
       const updatedColumn = createColumn({ name: "Done" });
       vi.mocked(http.patch).mockResolvedValue(updatedColumn);
 
-      const result = await appStore.updateColumn("1", { name: "Done", position: 2 });
+      const result = await boardStore.updateColumn("1", { name: "Done", position: 2 });
 
       expect(http.patch).toHaveBeenCalledWith("/columns/1/", {
         name: "Done",
@@ -242,7 +242,7 @@ describe("AppStore", () => {
     it("dispatches column:updated event", async () => {
       vi.mocked(http.patch).mockResolvedValue(createColumn());
 
-      await appStore.updateColumn("1", { name: "Updated" });
+      await boardStore.updateColumn("1", { name: "Updated" });
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "column:updated" }),
@@ -254,7 +254,7 @@ describe("AppStore", () => {
     it("sends DELETE request", async () => {
       vi.mocked(http.delete).mockResolvedValue(undefined);
 
-      await appStore.deleteColumn("1");
+      await boardStore.deleteColumn("1");
 
       expect(http.delete).toHaveBeenCalledWith("/columns/1/");
     });
@@ -262,7 +262,7 @@ describe("AppStore", () => {
     it("dispatches column:deleted event", async () => {
       vi.mocked(http.delete).mockResolvedValue(undefined);
 
-      await appStore.deleteColumn("1");
+      await boardStore.deleteColumn("1");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "column:deleted" }),
@@ -279,7 +279,7 @@ describe("AppStore", () => {
       const mockTask = createTask();
       vi.mocked(http.post).mockResolvedValue(mockTask);
 
-      const result = await appStore.createTask("1", "Task Title", "Task desc", 5);
+      const result = await boardStore.createTask("1", "Task Title", "Task desc", 5);
 
       expect(http.post).toHaveBeenCalledWith("/columns/1/tasks/", {
         title: "Task Title",
@@ -292,7 +292,7 @@ describe("AppStore", () => {
     it("dispatches task:created event", async () => {
       vi.mocked(http.post).mockResolvedValue(createTask());
 
-      await appStore.createTask("1", "Task");
+      await boardStore.createTask("1", "Task");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "task:created" }),
@@ -305,7 +305,7 @@ describe("AppStore", () => {
       const updatedTask = createTask({ title: "Updated Task" });
       vi.mocked(http.patch).mockResolvedValue(updatedTask);
 
-      const result = await appStore.updateTask("1", { title: "Updated Task", assignee: 3 });
+      const result = await boardStore.updateTask("1", { title: "Updated Task", assignee: 3 });
 
       expect(http.patch).toHaveBeenCalledWith("/tasks/1/", {
         title: "Updated Task",
@@ -317,7 +317,7 @@ describe("AppStore", () => {
     it("dispatches task:updated event", async () => {
       vi.mocked(http.patch).mockResolvedValue(createTask());
 
-      await appStore.updateTask("1", { title: "Updated" });
+      await boardStore.updateTask("1", { title: "Updated" });
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "task:updated" }),
@@ -329,7 +329,7 @@ describe("AppStore", () => {
     it("sends DELETE request", async () => {
       vi.mocked(http.delete).mockResolvedValue(undefined);
 
-      await appStore.deleteTask("1");
+      await boardStore.deleteTask("1");
 
       expect(http.delete).toHaveBeenCalledWith("/tasks/1/");
     });
@@ -337,7 +337,7 @@ describe("AppStore", () => {
     it("dispatches task:deleted event", async () => {
       vi.mocked(http.delete).mockResolvedValue(undefined);
 
-      await appStore.deleteTask("1");
+      await boardStore.deleteTask("1");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: "task:deleted" }),

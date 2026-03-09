@@ -1,5 +1,5 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { toastManager } from "../../../core/ToastManager";
 import { Button } from "../../../components/common/Button";
 import { InputField } from "../../../components/common/InputField";
@@ -122,7 +122,7 @@ export class TaskDetailDialog extends BaseDialog {
     content.classList.add("task-detail-text");
 
     if (this.task.assignee != null) {
-      const member = appStore.singleBoard?.members.find(
+      const member = boardStore.singleBoard?.members.find(
         m => Number(m.id) === this.task.assignee
       );
       content.textContent = member?.username ?? "Unknown";
@@ -217,7 +217,7 @@ export class TaskDetailDialog extends BaseDialog {
   }
 
   private renderEditAssigneeSection(): HTMLElement {
-    const boardMembers = appStore.singleBoard?.members ?? [];
+    const boardMembers = boardStore.singleBoard?.members ?? [];
     const currentAssignee = boardMembers.find(
       m => String(m.id) === String(this.task.assignee)
     );
@@ -293,7 +293,7 @@ export class TaskDetailDialog extends BaseDialog {
     const assignee = this.memberSelect?.getSelectedId();
 
     try {
-      await appStore.updateTask(String(this.task.id), {
+      await boardStore.updateTask(String(this.task.id), {
         title: title,
         description: description || null,
         assignee: assignee ?? undefined,

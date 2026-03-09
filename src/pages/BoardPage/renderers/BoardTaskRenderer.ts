@@ -1,6 +1,6 @@
 import { Button } from "../../../components/common/Button";
 import { Avatar } from "../../../components/common/Avatar";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { taskThreeDotBtn } from "../../../core/constants/appThreeDot.config";
 import type { Task } from "../../../core/types/board.types";
 
@@ -69,7 +69,7 @@ export class BoardTaskRenderer {
     const assigneeElement = document.createElement("div");
     assigneeElement.classList.add("task-assignee");
 
-    const member = appStore.singleBoard?.members.find(
+    const member = boardStore.singleBoard?.members.find(
       m => Number(m.id) === assigneeId
     );
     const username = member?.username ?? "?";
