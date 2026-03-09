@@ -1,6 +1,6 @@
 import { BasePageController } from "../../components/bases/BasePageController";
 import { contactStore } from "../../core/store/ContactStore";
-import { authStore } from "../../core/store/AuthStore";
+import { isGuest } from "../../core/store/AuthStore";
 import { ContactListRenderer } from "./renderers/ContactListRenderer";
 import { ContactDetailRenderer } from "./renderers/ContactDetailRenderer";
 
@@ -44,7 +44,7 @@ export class ContactsPageController extends BasePageController {
     const query = input.value.trim();
 
     if (this.activeTab === "find") {
-      const showToggle = !authStore.isGuest;
+      const showToggle = !isGuest();
       if (!query) {
         this.updateList([], showToggle, "Search for users to add them");
         return;
@@ -63,7 +63,7 @@ export class ContactsPageController extends BasePageController {
   }
 
   async registerToggleSwitchListener(e: Event) {
-    if (authStore.isGuest) return;
+    if (isGuest()) return;
 
     const input = this.findClosestElement<HTMLInputElement>(e.target, "input[data-add-user-id]");
     if (!input) return;
@@ -152,8 +152,8 @@ export class ContactsPageController extends BasePageController {
   }
 
   renderFindTab() {
-    const showToggle = !authStore.isGuest;
-    const emptyMessage = authStore.isGuest
+    const showToggle = !isGuest();
+    const emptyMessage = isGuest()
       ? "Guest users cannot add contacts"
       : "Search for users to add them";
     this.updateList([], showToggle, emptyMessage);

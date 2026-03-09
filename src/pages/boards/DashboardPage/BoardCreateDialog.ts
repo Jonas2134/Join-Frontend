@@ -1,7 +1,7 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
 import { boardStore } from "../../../core/store/BoardStore";
 import { contactStore } from "../../../core/store/ContactStore";
-import { authStore } from "../../../core/store/AuthStore";
+import { isGuest, getCurrentUser } from "../../../core/store/AuthStore";
 import { toastManager } from "../../../core/ToastManager";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
@@ -46,7 +46,7 @@ export class BoardCreateDialog extends BaseDialog {
   }
 
   renderMemberSection(): HTMLElement {
-    const currentUser = authStore.currentUser;
+    const currentUser = getCurrentUser();
     const ownerAsMember: Member = {
       id: String(currentUser?.id ?? 0),
       username: currentUser?.username ?? "",
@@ -77,7 +77,7 @@ export class BoardCreateDialog extends BaseDialog {
     main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
 
     const firstSection = this.renderFieldSection();
-    const secondSection = authStore.isGuest
+    const secondSection = isGuest()
       ? this.renderGuestMemberHint()
       : this.renderMemberSection();
 
@@ -163,7 +163,7 @@ export class BoardCreateDialog extends BaseDialog {
 
     cancelBtn.addEventListener("click", () => this.close());
 
-    if (!authStore.isGuest) {
+    if (!isGuest()) {
       this.dialog.addEventListener("member-select:search", ((e: CustomEvent) => {
         this.handleSearch(e.detail.query);
       }) as EventListener);
@@ -171,7 +171,7 @@ export class BoardCreateDialog extends BaseDialog {
 
     form.addEventListener("submit", (e) => this.handleFormSubmit(e, form));
 
-    if (!authStore.isGuest) {
+    if (!isGuest()) {
       this.loadContacts();
     }
   }
@@ -179,7 +179,7 @@ export class BoardCreateDialog extends BaseDialog {
   private async handleFormSubmit(e: Event, form: HTMLFormElement) {
     e.preventDefault();
     const formData = new FormData(form);
-    const members = authStore.isGuest ? undefined : this.memberSelect?.getAllMemberIds();
+    const members = isGuest() ? undefined : this.memberSelect?.getAllMemberIds();
 
     try {
       await boardStore.createBoard(

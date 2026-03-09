@@ -77,3 +77,11 @@ export class AuthStore {
 }
 
 export const authStore = new AuthStore();
+
+export function isGuest(): boolean {
+  return authStore.isGuest;
+}
+
+export function getCurrentUser(): AuthUser | null {
+  return authStore.currentUser;
+}

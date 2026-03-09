@@ -3,7 +3,7 @@ import { BaseBoardListPage } from "../shared/BaseBoardListPage";
 import { DashboardStatsRenderer } from "./renderers/DashboardStatsRenderer";
 import { Button } from "../../../components/common/Button";
 import { boardStore } from "../../../core/store/BoardStore";
-import { authStore } from "../../../core/store/AuthStore";
+import { isGuest, getCurrentUser } from "../../../core/store/AuthStore";
 import { toastManager } from "../../../core/ToastManager";
 import { DashboardPageController } from "./DashboardPageController";
 import { dashboardHeaderBtns } from "../../../core/constants/appDashboardBtns.config";
@@ -62,7 +62,7 @@ export class DashboardPage extends BaseBoardListPage {
   updateDashboardUI() {
     const statsContainer = document.getElementById("dashboardStats");
     if (statsContainer) {
-      const newStats = this.statsRenderer.renderStats(boardStore.boards);
+      const newStats = this.statsRenderer.renderStats(boardStore.boards, getCurrentUser());
       statsContainer.replaceWith(newStats);
     }
 
@@ -75,7 +75,7 @@ export class DashboardPage extends BaseBoardListPage {
     container.classList.add("space-y-6");
     container.append(
       this.renderHeader(),
-      this.statsRenderer.renderStats([]),
+      this.statsRenderer.renderStats([], getCurrentUser()),
       this.renderBoardSection()
     );
     return this.wrapWithLayout(container);
@@ -91,7 +91,7 @@ export class DashboardPage extends BaseBoardListPage {
   // ============================================
 
   async mount() {
-    if (authStore.isGuest) {
+    if (isGuest()) {
       toastManager.info("You are logged in as a guest. Some features are restricted.");
     }
 

@@ -1,12 +1,11 @@
 import { Avatar } from "../../../components/common/Avatar";
 import { Button } from "../../../components/common/Button";
 import { editBoardBtn, moreIndicator } from "../../../core/constants/appBoardBtns.config";
-import { authStore } from "../../../core/store/AuthStore";
 import type { Board } from "../../../core/types/board.types";
 import ToggleIcon from "../../../assets/icons/ToggleIcon.svg?raw";
 
 export class BoardHeaderRenderer {
-  renderHeaderContent(header: HTMLElement, board: Board) {
+  renderHeaderContent(header: HTMLElement, board: Board, currentUserId?: number) {
     if (!board.is_active) {
       header.appendChild(this.renderArchivedBanner());
     }
@@ -15,7 +14,7 @@ export class BoardHeaderRenderer {
     details.classList.add("group");
 
     const summary = this.renderHeaderSummary(board);
-    const detailsContent = this.renderDetailsContent(board);
+    const detailsContent = this.renderDetailsContent(board, currentUserId);
 
     details.append(summary, detailsContent);
     header.appendChild(details);
@@ -117,12 +116,11 @@ export class BoardHeaderRenderer {
     return listItem;
   }
 
-  private isCurrentUserOwner(board: Board): boolean {
-    const currentUserId = authStore.currentUser?.id;
+  private isCurrentUserOwner(board: Board, currentUserId?: number): boolean {
     return currentUserId !== undefined && String(currentUserId) === String(board.owner);
   }
 
-  renderDetailsContent(board: Board) {
+  renderDetailsContent(board: Board, currentUserId?: number) {
     const detailsContent = document.createElement("main");
     detailsContent.classList.add("detail-main");
 
@@ -131,7 +129,7 @@ export class BoardHeaderRenderer {
 
     detailsContent.append(descriptionSection, membersSection);
 
-    if (board.is_active && this.isCurrentUserOwner(board)) {
+    if (board.is_active && this.isCurrentUserOwner(board, currentUserId)) {
       const editBtn = new Button(editBoardBtn).renderBtn();
       detailsContent.append(editBtn);
     }

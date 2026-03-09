@@ -4,6 +4,7 @@ import { BoardHeaderRenderer } from "./renderers/BoardHeaderRenderer";
 import { BoardContentRenderer } from "./renderers/BoardContentRenderer";
 import { BoardDragAndDrop } from "./managers/BoardDragAndDrop";
 import { BoardPageController } from "./managers/BoardPageController";
+import { getCurrentUser } from "../../core/store/AuthStore";
 import { boardStore } from "../../core/store/BoardStore";
 
 export class BoardPage extends BasePage {
@@ -61,7 +62,7 @@ export class BoardPage extends BasePage {
     const readonly = !board.is_active;
     this.contentRenderer = new BoardContentRenderer(readonly);
 
-    this.headerRenderer.renderHeaderContent(header, board);
+    this.headerRenderer.renderHeaderContent(header, board, getCurrentUser()?.id);
     this.contentRenderer.renderBoardContent(section, board);
 
     if (!readonly) {

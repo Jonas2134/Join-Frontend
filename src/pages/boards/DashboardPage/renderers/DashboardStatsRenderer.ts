@@ -1,4 +1,4 @@
-import { authStore } from "../../../../core/store/AuthStore";
+import type { AuthUser } from "../../../../core/types/auth.types";
 import type { Boards } from "../../../../core/types/board.types";
 
 interface StatCard {
@@ -15,8 +15,8 @@ export class DashboardStatsRenderer {
     return "Good evening";
   }
 
-  private renderGreeting(): HTMLElement | null {
-    const user = authStore.currentUser;
+  private renderGreeting(currentUser: AuthUser | null): HTMLElement | null {
+    const user = currentUser;
     if (!user) return null;
 
     const greeting = document.createElement("div");
@@ -38,11 +38,11 @@ export class DashboardStatsRenderer {
     return greeting;
   }
 
-  renderStats(boards: Boards[]): HTMLElement {
+  renderStats(boards: Boards[], currentUser: AuthUser | null): HTMLElement {
     const section = document.createElement("section");
     section.id = "dashboardStats";
 
-    const greeting = this.renderGreeting();
+    const greeting = this.renderGreeting(currentUser);
     if (greeting) section.appendChild(greeting);
 
     const grid = document.createElement("div");

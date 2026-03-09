@@ -15,12 +15,8 @@ vi.mock("../../../../core/store/BoardStore", () => ({
 }));
 
 vi.mock("../../../../core/store/AuthStore", () => ({
-  authStore: {
-    login: vi.fn(),
-    guestLogin: vi.fn(),
-    currentUser: { id: 1, username: "testuser", email: "test@test.com", is_guest: false },
-    isGuest: false,
-  },
+  isGuest: vi.fn(() => false),
+  getCurrentUser: vi.fn(() => ({ id: 1, username: "testuser", email: "test@test.com", is_guest: false })),
 }));
 
 vi.mock("../../../../core/router", () => ({
@@ -37,7 +33,7 @@ vi.mock("../../../../core/ToastManager", () => ({
 
 import { DashboardPage } from "../DashboardPage";
 import { boardStore } from "../../../../core/store/BoardStore";
-import { authStore } from "../../../../core/store/AuthStore";
+import { isGuest } from "../../../../core/store/AuthStore";
 import { toastManager } from "../../../../core/ToastManager";
 
 describe("DashboardPage", () => {
@@ -54,7 +50,7 @@ describe("DashboardPage", () => {
     vi.mocked(toastManager.error).mockReset();
     vi.mocked(toastManager.success).mockReset();
     boardStore.boards = [];
-    (authStore as any).isGuest = false;
+    vi.mocked(isGuest).mockReturnValue(false);
   });
 
   afterEach(() => {
@@ -92,7 +88,7 @@ describe("DashboardPage", () => {
   });
 
   it("shows guest info toast when user is guest", () => {
-    (authStore as any).isGuest = true;
+    vi.mocked(isGuest).mockReturnValue(true);
 
     const page = new DashboardPage();
     page.attachTo(root);

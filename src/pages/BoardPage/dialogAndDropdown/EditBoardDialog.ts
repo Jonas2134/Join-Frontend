@@ -8,7 +8,7 @@ import { Textarea } from "../../../components/common/Textarea";
 import { MemberSelect } from "../../../components/common/MemberSelect";
 import { editBoardDialogBtns } from "../../../core/constants/appDialogBtns.config";
 import { editBoardDialogFields } from "../../../core/constants/appDialogFields.config";
-import { authStore } from "../../../core/store/AuthStore";
+import { isGuest } from "../../../core/store/AuthStore";
 import type { Board } from "../../../core/types/board.types";
 
 export class EditBoardDialog extends BaseDialog {
@@ -72,7 +72,7 @@ export class EditBoardDialog extends BaseDialog {
     main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
 
     const firstSection = this.renderFieldSection();
-    const secondSection = authStore.isGuest
+    const secondSection = isGuest()
       ? this.renderGuestMemberHint()
       : this.renderMemberSection();
 
@@ -160,7 +160,7 @@ export class EditBoardDialog extends BaseDialog {
 
     cancelBtn.addEventListener("click", () => this.close());
 
-    if (!authStore.isGuest) {
+    if (!isGuest()) {
       this.dialog.addEventListener("member-select:search", ((e: CustomEvent) => {
         this.handleSearch(e.detail.query);
       }) as EventListener);
@@ -171,7 +171,7 @@ export class EditBoardDialog extends BaseDialog {
       const formData = new FormData(form);
       const title = formData.get("title") as string;
       const description = formData.get("description") as string;
-      const members = authStore.isGuest ? undefined : this.memberSelect?.getAllMemberIds();
+      const members = isGuest() ? undefined : this.memberSelect?.getAllMemberIds();
       try {
         await boardStore.updateBoard(this.board.id, title, description, members);
         toastManager.success("Board erfolgreich aktualisiert");
@@ -183,7 +183,7 @@ export class EditBoardDialog extends BaseDialog {
       }
     });
 
-    if (!authStore.isGuest) {
+    if (!isGuest()) {
       this.loadContacts();
     }
   }
