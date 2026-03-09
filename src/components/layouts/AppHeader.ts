@@ -1,15 +1,16 @@
-import { BurgerMenuDialog } from "./BurgerMenuDialog";
+import { BurgerMenuDropdown } from "./BurgerMenuDropdown";
+import { Button } from "../common/Button";
+import { burgerMenuBtn } from "../../core/constants/appLayoutBtns.config";
 
 import LogoRaw from "/logo.svg?raw";
-import Burgermenu from "../../assets/icons/menu.svg?raw";
 
 export class AppHeader {
   private element: HTMLElement;
   private colorLogo?: HTMLElement;
-  menuDialog: BurgerMenuDialog | null = null;
+  private menuDropdown: BurgerMenuDropdown | null = null;
 
   constructor() {
-    this.element = document.createElement('header');
+    this.element = document.createElement("header");
     this.element.classList.add("app-header")
     this.colorLogo = this.createLogo();
   }
@@ -26,24 +27,28 @@ export class AppHeader {
     return logo;
   };
 
-  render(): HTMLElement {
-    this.element.innerHTML = /*html*/ `
-      <button id="menu" class="menu">
-        ${Burgermenu}
-      </button>
-    `;
-
-    if (this.colorLogo) this.element.prepend(this.colorLogo);
-
-    const menuBtn = this.element.querySelector('#menu');
-    if (menuBtn) {
-      menuBtn.addEventListener('click', () => {
-        this.menuDialog = new BurgerMenuDialog();
-        document.body.appendChild(this.menuDialog.render());
-        this.menuDialog?.open()
-      });
-    }
+  createHeader(): HTMLElement {
+    this.render();
+    this.mount();
 
     return this.element;
+  }
+
+  private render() {
+    const burgerBtn = new Button(burgerMenuBtn).renderBtn();
+    if (this.colorLogo) this.element.append(this.colorLogo, burgerBtn);
+  }
+
+  private mount() {
+    const menuBtn = this.element.querySelector("#burger-menu-btn") as HTMLButtonElement;
+    if (menuBtn) {
+      
+      menuBtn.addEventListener('click', (e: Event) => {
+        e.preventDefault();
+        this.menuDropdown = new BurgerMenuDropdown(menuBtn);
+        this.element.appendChild(this.menuDropdown.render());
+        this.menuDropdown?.toggle();
+      });
+    }
   }
 }

@@ -14,7 +14,7 @@ export class AppLayout {
     this.main = document.createElement('main');
     this.main.classList.add("app-main")
 
-    this.element.append(header.render(), sidebar.render(), this.main);
+    this.element.append(header.createHeader(), sidebar.render(), this.main);
   }
 
   setContent(content: HTMLElement) {

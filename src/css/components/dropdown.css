@@ -2,7 +2,8 @@
     .column-dropdown-menu,
     .task-dropdown-menu,
     .dashboard-dropdown-menu,
-    .archived-boards-dropdown-menu {
+    .archived-boards-dropdown-menu,
+    .burger-dropdown-menu {
         @apply fixed w-65 bg-white shadow-lg rounded-md z-50 border border-(--color-light-gray) p-3;
     }
 

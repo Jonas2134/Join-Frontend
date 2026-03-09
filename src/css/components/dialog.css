@@ -11,10 +11,6 @@
     }
   }
 
-  .menu-dialog {
-    @apply fixed top-24 left-[98%] -translate-x-[100%] rounded-xl;
-  }
-
   .task-detail-text {
     @apply text-(--color-blue-gray);
   }
