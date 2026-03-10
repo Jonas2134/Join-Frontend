@@ -1,8 +1,8 @@
-import { BaseDropdownMenu } from "../bases/BaseDropdownMenu";
-import { Button } from "../common/Button";
-import { burgerMenuListBtns } from "../../core/constants/appLayoutBtns.config";
+import { BaseDropdownMenu } from "../components/bases/BaseDropdownMenu";
+import { Button } from "../components/common/Button";
+import { burgerMenuListBtns } from "../core/constants/appLayoutBtns.config";
 
-import type { ButtonOptions } from "../common/Button";
+import type { ButtonOptions } from "../components/common/Button";
 
 export class BurgerMenuDropdown extends BaseDropdownMenu {
   constructor(btn: HTMLButtonElement) {

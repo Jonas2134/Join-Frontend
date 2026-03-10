@@ -1,5 +1,5 @@
 import { BasePageController } from "../components/bases/BasePageController";
-import { BurgerMenuDropdown } from "../components/layouts/BurgerMenuDropdown";
+import { BurgerMenuDropdown } from "./BurgerMenuDropdown";
 import { ConfirmDialog } from "../components/common/ConfirmDialog";
 import { authStore } from "../core/store/AuthStore";
 import { boardStore } from "../core/store/BoardStore";
