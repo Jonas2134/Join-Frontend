@@ -3,6 +3,8 @@ import { EventManager } from "../../core/EventManager";
 export interface Layout {
   render(): HTMLElement;
   setContent(content: HTMLElement): void;
+  mount?(): void;
+  unmount?(): void;
 }
 
 export abstract class BasePage {
@@ -18,6 +20,7 @@ export abstract class BasePage {
   mount?(): void;
 
   unmount() {
+    this.layout?.unmount?.();
     this.events.clearAll();
   }
 
@@ -38,6 +41,7 @@ export abstract class BasePage {
     root.innerHTML = '';
     root.appendChild(pageElement);
 
+    this.layout?.mount?.();
     this.mount?.();
     this.mounted = true;
   }

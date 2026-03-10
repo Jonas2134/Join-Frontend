@@ -1,28 +1,20 @@
-import { AuthHeader } from '../components/layouts/AuthHeader';
-import { AuthFooter } from '../components/layouts/AuthFooter';
+import { BaseLayout } from "../components/bases/BaseLayout";
+import { AuthHeader } from "../components/layouts/AuthHeader";
+import { AuthFooter } from "../components/layouts/AuthFooter";
 
-export class AuthLayout {
-  private element: HTMLElement;
-  private main: HTMLElement;
-
+export class AuthLayout extends BaseLayout {
   constructor() {
-    this.element = document.createElement("div");
+    super();
     this.element.classList.add("auth-layout");
 
     const header = new AuthHeader();
-    this.main = document.createElement("main");
     this.main.classList.add("auth-main");
     const footer = new AuthFooter();
 
     this.element.append(header.render(), this.main, footer.render());
   }
 
-  setContent(content: HTMLElement) {
-    this.main.innerHTML = '';
-    this.main.appendChild(content);
-  }
-
-  render() {
+  render(): HTMLElement {
     return this.element;
   }
 }
