@@ -5,6 +5,7 @@ import { ProfilePageController } from "./ProfilePageController";
 import { Avatar } from "../../components/common/Avatar";
 import { Button } from "../../components/common/Button";
 import { showChangePasswordBtn } from "../../core/constants/profileBtns.config";
+import { isGuest } from "../../core/store/AuthStore";
 
 import type { Profile } from "../../core/types/profile.types";
 
@@ -33,15 +34,34 @@ export class ProfilePage extends BasePage {
     return section;
   }
 
+  private renderGuestRestriction(): HTMLElement {
+    const hintContainer = document.createElement("div");
+
+    const hintTitle = document.createElement("h2");
+    hintTitle.classList.add("text-(--color-light-blue)", "underline");
+    hintTitle.textContent = "Profile";
+
+    const hint = document.createElement("span");
+    hint.classList.add("profile-guest-hint");
+    hint.textContent = "You can only edit your profile or change your password as a registered user.";
+
+    hintContainer.append(hintTitle, hint);
+    return hintContainer;
+  }
+
   render() {
     const container = document.createElement("div");
     container.id = "profilePage";
     container.classList.add("profile-page");
 
-    container.append(
-      this.renderProfileHeader(),
-      this.renderProfileSection(),
-    );
+    if (isGuest()) {
+      container.append(this.renderGuestRestriction());
+    } else {
+      container.append(
+        this.renderProfileHeader(),
+        this.renderProfileSection(),
+      );
+    }
 
     return this.wrapWithLayout(container);
   }
@@ -107,6 +127,8 @@ export class ProfilePage extends BasePage {
   // ============================================
 
   mount() {
+    if (isGuest()) return;
+
     this.initLoadProfile();
 
     const pageroot = document.getElementById("profilePage");
