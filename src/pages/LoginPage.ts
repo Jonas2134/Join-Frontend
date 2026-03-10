@@ -1,11 +1,12 @@
+import { BasePage } from "../components/bases/BasePage";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { router } from "../core/router";
 import { authStore } from "../core/store/AuthStore";
 import { toastManager } from "../core/ToastManager";
 import { InputField } from "../components/common/InputField";
-import { BasePage } from "../components/bases/BasePage";
-
+import { Button } from "../components/common/Button";
 import { loginFields } from "../core/constants/authFields.config";
+import { loginBtns } from "../core/constants/authBtns.config";
 
 export class LoginPage extends BasePage {
   constructor() {
@@ -67,19 +68,11 @@ export class LoginPage extends BasePage {
     const menu = document.createElement("menu");
     menu.classList.add("flex", "gap-6");
 
-    const subBtn = document.createElement("button");
-    subBtn.type = "submit";
-    subBtn.classList.add("btn", "btn-blue");
-    subBtn.title = "Login";
-    subBtn.textContent = "Login";
+    const btns = loginBtns.map((config) =>
+      new Button({ ...config }).renderBtn(),
+    );
 
-    const guestBtn = document.createElement("button");
-    guestBtn.type = "button";
-    guestBtn.classList.add("btn", "btn-white");
-    guestBtn.title = "Guest login";
-    guestBtn.textContent = "Guest Login";
-
-    menu.append(subBtn, guestBtn);
+    menu.append(...btns);
     return menu;
   }
 
@@ -124,6 +117,21 @@ export class LoginPage extends BasePage {
     const form = document.getElementById("loginForm") as HTMLFormElement;
     if (!form) throw new Error("form not found!");
     this.events.on(form, "submit", async (e: Event) => this.registerLoginFormListener(e, form));
+
+    const guestBtn = document.getElementById("guestLoginBtn");
+    if (guestBtn) {
+      this.events.on(guestBtn, "click", async () => this.handleGuestLogin());
+    }
+  }
+
+  async handleGuestLogin() {
+    try {
+      await authStore.guestLogin();
+      router.navigate("/dashboard");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Guest Login fehlgeschlagen: " + message);
+    }
   }
 
   async registerLoginFormListener(e: Event, form: HTMLFormElement) {
@@ -135,8 +143,9 @@ export class LoginPage extends BasePage {
     try {
       await authStore.login(username, password);
       router.navigate("/dashboard");
-    } catch (err: any) {
-      toastManager.error("Login fehlgeschlagen: " + err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Login fehlgeschlagen: " + message);
     }
   }
 }

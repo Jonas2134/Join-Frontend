@@ -1,14 +1,20 @@
 import { Button } from "../../../components/common/Button";
+import { Avatar } from "../../../components/common/Avatar";
+import { boardStore } from "../../../core/store/BoardStore";
 import { taskThreeDotBtn } from "../../../core/constants/appThreeDot.config";
 import type { Task } from "../../../core/types/board.types";
 
 export class BoardTaskRenderer {
-  constructor() {}
+  private readonly: boolean;
+
+  constructor(readonly = false) {
+    this.readonly = readonly;
+  }
 
   renderTask(task: Task) {
     const taskItem = document.createElement("li");
     taskItem.classList.add("task");
-    taskItem.draggable = true;
+    taskItem.draggable = !this.readonly;
     taskItem.dataset.taskId = String(task.id);
 
     const header = this.renderTaskHeader(task);
@@ -19,7 +25,7 @@ export class BoardTaskRenderer {
       taskItem.appendChild(description);
     }
 
-    if (task.assignee) {
+    if (task.assignee != null) {
       const assignee = this.renderTaskAssignee(task.assignee);
       taskItem.appendChild(assignee);
     }
@@ -35,10 +41,14 @@ export class BoardTaskRenderer {
     title.classList.add("task-title");
     title.textContent = task.title;
 
-    const threeDotBtn = new Button(taskThreeDotBtn).renderBtn();
-    threeDotBtn.dataset.taskId = String(task.id);
+    header.append(title);
 
-    header.append(title, threeDotBtn);
+    if (!this.readonly) {
+      const threeDotBtn = new Button(taskThreeDotBtn).renderBtn();
+      threeDotBtn.dataset.taskId = String(task.id);
+      header.append(threeDotBtn);
+    }
+
     return header;
   }
 
@@ -46,7 +56,7 @@ export class BoardTaskRenderer {
     const descElement = document.createElement("p");
     descElement.classList.add("task-description");
 
-    const maxLength = 60;
+    const maxLength = 45;
     descElement.textContent =
       description.length > maxLength
         ? description.substring(0, maxLength) + "..."
@@ -55,14 +65,16 @@ export class BoardTaskRenderer {
     return descElement;
   }
 
-  private renderTaskAssignee(assignee: string) {
+  private renderTaskAssignee(assigneeId: number) {
     const assigneeElement = document.createElement("div");
     assigneeElement.classList.add("task-assignee");
 
-    const avatar = document.createElement("span");
-    avatar.classList.add("task-assignee-avatar");
-    avatar.textContent = assignee.charAt(0).toUpperCase();
+    const member = boardStore.singleBoard?.members.find(
+      m => Number(m.id) === assigneeId
+    );
+    const username = member?.username ?? "?";
 
+    const avatar = new Avatar({ size: "sm" }).createAvatar(username);
     assigneeElement.appendChild(avatar);
     return assigneeElement;
   }

@@ -23,7 +23,16 @@ dist-ssr
 *.sln
 *.sw?
 
+.env
+.env.local
+.env.*.local
+
 .claude/
 CLAUDE.md
 
 up.sh
+
+# Test output
+test-results/
+playwright-report/
+coverage/

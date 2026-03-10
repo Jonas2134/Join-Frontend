@@ -1,5 +1,5 @@
 import Editicon from "../../assets/icons/edit.svg?raw";
-import VerticalDotsIcon from "../../assets/icons/menu-vertical.svg?raw"
+import VerticalDotsIcon from "../../assets/icons/menu-vertical.svg?raw";
 
 export const threeDotFormBtns = [
   {
@@ -87,12 +87,12 @@ export const taskViewDetailsBtn = {
   text: "View Details",
 };
 
-export const taskDetailCloseBtn = {
-  id: "close-detail-btn",
+export const taskDetailEditBtn = {
+  id: "edit-mode-btn",
   class: "task-detail-close-btn",
   type: "button" as const,
-  title: "Close",
-  text: "x",
+  title: "Edit Task",
+  icon: Editicon,
 };
 
 export const taskEditBtn = {
@@ -109,4 +109,43 @@ export const taskDeleteBtn = {
   type: "button" as const,
   title: "Delete Task",
   text: "Delete Task",
+};
+
+export const dashboardThreeDotBtn = {
+  class: "three-dot-btn",
+  type: "button" as const,
+  title: "Board menu",
+  icon: VerticalDotsIcon,
+};
+
+export const dashboardArchiveBtn = {
+  id: "archive-board-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "Archive board",
+  text: "Archive",
+};
+
+export const dashboardDeleteBtn = {
+  id: "delete-board-btn",
+  class: ["dropdown-btn", "dropdown-btn--danger"],
+  type: "button" as const,
+  title: "Delete board",
+  text: "Delete",
+};
+
+export const dashboardLeaveBtn = {
+  id: "leave-board-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "Leave board",
+  text: "Leave Board",
+};
+
+export const unarchiveBoardBtn = {
+  id: "unarchive-board-btn",
+  class: "dropdown-btn",
+  type: "button" as const,
+  title: "Unarchive board",
+  text: "Unarchive",
 };

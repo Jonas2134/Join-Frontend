@@ -1,3 +1,13 @@
+export interface Boards {
+  id: string;
+  title: string;
+  is_active: boolean;
+  member_count: number;
+  is_user_owner: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Board {
   id: string;
   title: string;
@@ -37,7 +47,7 @@ export interface Task {
   id: string;
   title: string;
   description: string | null;
-  assignee: string;
+  assignee: number | null;
   position: number;
   column: number;
   created_at: string;
@@ -47,7 +57,7 @@ export interface Task {
 export interface TaskUpdate {
   title?: string;
   description?: string | null;
-  assignee?: string;
+  assignee?: number | null;
   position?: number;
   column?: number;
 }

@@ -3,21 +3,22 @@ import { BasePage } from "../../components/bases/BasePage";
 import { BoardHeaderRenderer } from "./renderers/BoardHeaderRenderer";
 import { BoardContentRenderer } from "./renderers/BoardContentRenderer";
 import { BoardDragAndDrop } from "./managers/BoardDragAndDrop";
-import { BoardEventManager } from "./managers/BoardEventManager";
-import { appStore } from "../../core/store/AppStore";
+import { BoardPageController } from "./managers/BoardPageController";
+import { getCurrentUser } from "../../core/store/AuthStore";
+import { boardStore } from "../../core/store/BoardStore";
 
 export class BoardPage extends BasePage {
   id: string;
   private headerRenderer: BoardHeaderRenderer;
   private contentRenderer: BoardContentRenderer;
-  private eventManager: BoardEventManager;
+  private eventManager: BoardPageController;
 
-  constructor(params: { id: string }) {
+  constructor(params: Record<string, string>) {
     super(new AppLayout());
     this.id = params.id;
     this.headerRenderer = new BoardHeaderRenderer();
     this.contentRenderer = new BoardContentRenderer();
-    this.eventManager = new BoardEventManager(this.initLoadBoard.bind(this));
+    this.eventManager = new BoardPageController();
   }
 
   // ============================================
@@ -52,22 +53,26 @@ export class BoardPage extends BasePage {
   updateBoardUI(): void {
     const header = document.getElementById("board-header");
     const section = document.getElementById("board-section");
-    const board = appStore.singleBoard;
+    const board = boardStore.singleBoard;
     if (!section || !header || !board) return;
 
     header.innerHTML = "";
     section.innerHTML = "";
 
-    this.headerRenderer.renderHeaderContent(header, board);
+    const readonly = !board.is_active;
+    this.contentRenderer = new BoardContentRenderer(readonly);
+
+    this.headerRenderer.renderHeaderContent(header, board, getCurrentUser()?.id);
     this.contentRenderer.renderBoardContent(section, board);
 
-    const dnd = new BoardDragAndDrop(this.initLoadBoard.bind(this));
-    dnd.init(section);
+    if (!readonly) {
+      const dnd = new BoardDragAndDrop(this.initLoadBoard.bind(this));
+      dnd.init(section);
+    }
   }
 
   async initLoadBoard() {
-    await appStore.loadBoard(this.id);
-    console.log(appStore.singleBoard);
+    await boardStore.loadBoard(this.id);
     this.updateBoardUI();
   }
 
@@ -78,24 +83,37 @@ export class BoardPage extends BasePage {
   async mount() {
     await this.initLoadBoard();
 
-    const boardEdit = document.getElementById("editBoardBtn");
-    if (!boardEdit) {
-      throw new Error("Edit Board button nor found!");
+    const boardHeader = document.getElementById("board-header");
+    if (!boardHeader) {
+      throw new Error("Board header not found!");
     }
-    this.events.on(boardEdit, "click", () => {
-      const board = appStore.singleBoard;
+    this.events.on(boardHeader, "click", (e: Event) => {
+      const target = (e.target as HTMLElement).closest("#editBoardBtn");
+      if (!target) return;
+      const board = boardStore.singleBoard;
       if (board) this.eventManager.registerEditBoardDialog(board);
     });
-    this.events.on(window, "board:updated", async () => await this.initLoadBoard());
 
     const boardroot = document.getElementById("board-section");
     if (!boardroot) {
       throw new Error("board-root not found");
     }
 
+    this.mountStoreEventListeners();
     this.mountThreeDotListener(boardroot);
     this.mountAddColumnListener(boardroot);
     this.mountTaskListener(boardroot);
+  }
+
+  mountStoreEventListeners() {
+    const reload = async () => await this.initLoadBoard();
+    this.events.on(window, "board:updated", reload);
+    this.events.on(window, "column:created", reload);
+    this.events.on(window, "column:updated", reload);
+    this.events.on(window, "column:deleted", reload);
+    this.events.on(window, "task:created", reload);
+    this.events.on(window, "task:updated", reload);
+    this.events.on(window, "task:deleted", reload);
   }
 
   mountThreeDotListener(boardroot: HTMLElement) {
@@ -120,10 +138,6 @@ export class BoardPage extends BasePage {
 
   mountTaskListener(boardroot: HTMLElement) {
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskButtonListener(e));
-    this.events.on(window, "task:created", async () => await this.initLoadBoard());
-    this.events.on(window, "task:deleted", async () => await this.initLoadBoard());
-    this.events.on(window, "task:updated", async () => await this.initLoadBoard());
-
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskThreeDotListener(e));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskViewDetailsListener(e));
     this.events.on(boardroot, "click", (e: Event) => this.eventManager.registerTaskEditListener(e));

@@ -1,0 +1,49 @@
+@layer components {
+  .member-select {
+    @apply flex flex-col gap-3 w-full;
+  }
+
+  .member-select-label {
+    @apply text-(--color-dark-blue) underline font-semibold;
+  }
+
+  .member-select-display {
+    @apply flex flex-wrap gap-2 min-h-10 p-2 rounded-lg bg-(--color-light-gray);
+  }
+
+  .member-select-chip {
+    @apply relative flex items-center gap-1;
+  }
+
+  .member-select-chip-new {
+    @apply ring-4 ring-yellow-300 rounded-full;
+  }
+
+  .member-select-remove-btn {
+    @apply absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full bg-gray-500 text-white text-xs cursor-pointer transition-all;
+
+    &:hover {
+      @apply bg-red-500;
+    }
+  }
+
+  .member-select-search {
+    @apply w-full px-3 py-2 border border-(--color-light-gray) rounded-lg outline-none transition-all;
+
+    &:focus {
+      @apply border-(--color-light-blue);
+    }
+  }
+
+  .member-select-options {
+    @apply flex flex-col max-h-40 overflow-y-auto rounded-lg border border-(--color-light-gray);
+  }
+
+  .member-select-option {
+    @apply w-full text-left px-3 py-2 cursor-pointer transition-all;
+
+    &:hover {
+      @apply bg-(--color-soft-blue);
+    }
+  }
+}

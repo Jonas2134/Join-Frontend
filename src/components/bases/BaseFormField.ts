@@ -12,8 +12,8 @@ export interface BaseFormFieldOptions {
 }
 
 export abstract class BaseFormField<T extends HTMLInputElement | HTMLTextAreaElement> {
-  protected element!: HTMLElement;
-  protected fieldElement!: T;
+  protected element: HTMLElement | null = null;
+  protected fieldElement: T | null = null;
   protected options: BaseFormFieldOptions;
   private fieldId: string;
 
@@ -88,7 +88,7 @@ export abstract class BaseFormField<T extends HTMLInputElement | HTMLTextAreaEle
 
   render(): HTMLElement {
     if (!this.element) {
-      this.createElement();
+      return this.createElement();
     }
     return this.element;
   }

@@ -4,7 +4,7 @@
   }
 
   .base-legend {
-    @apply text-4xl w-full text-center font-semibold pb-2 mb-6 border-b-2 border-(--color-light-blue);
+    @apply text-4xl text-(--color-light-blue) w-full text-center font-semibold pb-2 mb-6 border-b-2 border-(--color-light-blue);
   }
 
   .fields-wrapper {

@@ -1,28 +1,36 @@
+import { BaseLayout } from "../components/bases/BaseLayout";
 import { AppHeader } from "../components/layouts/AppHeader";
 import { AppSidebar } from "../components/layouts/AppSidebar";
+import { AppLayoutController } from "./AppLayoutController";
 
-export class AppLayout {
-  private element: HTMLElement;
-  private main: HTMLElement;
+export class AppLayout extends BaseLayout {
+  private header: HTMLElement;
+  private controller = new AppLayoutController();
 
   constructor() {
-    this.element = document.createElement('div');
-    this.element.classList.add('app-layout');
+    super();
+    this.element.classList.add("app-layout");
 
-    const header = new AppHeader();
+    const appHeader = new AppHeader();
     const sidebar = new AppSidebar();
-    this.main = document.createElement('main');
-    this.main.classList.add("app-main")
+    this.header = appHeader.render();
+    this.main.classList.add("app-main");
 
-    this.element.append(header.render(), sidebar.render(), this.main);
+    this.element.append(this.header, sidebar.render(), this.main);
   }
 
-  setContent(content: HTMLElement) {
-    this.main.innerHTML = '';
-    this.main.appendChild(content);
-  }
-
-  render() {
+  render(): HTMLElement {
     return this.element;
+  }
+
+  mount() {
+    this.events.on(this.header, "click", (e: Event) => {
+      this.controller.registerHeaderClickListener(e, this.header);
+    });
+  }
+
+  unmount() {
+    this.controller.cleanup();
+    super.unmount();
   }
 }

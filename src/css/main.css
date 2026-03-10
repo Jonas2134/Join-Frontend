@@ -11,9 +11,13 @@
 /* import layout styles */
 @import "./layouts/auth-layout.css";
 @import "./layouts/app-layout.css";
+@import "./layouts/static-layout.css";
 
 /* import page styles */
 @import "./pages/board.css";
+@import "./pages/dashboard.css";
+@import "./pages/profile.css";
+@import "./pages/contacts.css";
 
 /* import component styles */
 @import "./components/form.css";
@@ -24,3 +28,4 @@
 @import "./components/dropdown.css";
 @import "./components/detail.css";
 @import "./components/toast.css";
+@import "./components/member-select.css";

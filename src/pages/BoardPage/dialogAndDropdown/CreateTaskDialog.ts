@@ -1,14 +1,16 @@
 import { BaseDialog } from "../../../components/bases/BaseDialog";
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
 import { toastManager } from "../../../core/ToastManager";
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
 import { Button } from "../../../components/common/Button";
+import { MemberSelect } from "../../../components/common/MemberSelect";
 import { createTaskFields } from "../../../core/constants/appBoardFields.config";
 import { createTaskDialogBtns } from "../../../core/constants/appDialogBtns.config";
 
 export class CreateTaskDialog extends BaseDialog {
   columnId: string;
+  private memberSelect: MemberSelect | null = null;
 
   constructor(id: string) {
     super("create-task-dialog");
@@ -44,19 +46,22 @@ export class CreateTaskDialog extends BaseDialog {
   }
 
   renderSecondFormSection() {
-    const secontsec = document.createElement("section");
-    secontsec.innerHTML = `
-      <label for="assignee">Choose an assignee:</label>
-      <br>
-      <select name="assignee" id="assignee">
-        <option value="">--Please choose the assignee--</option>
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
-      </select>
-    `;
-    return secontsec;
+    this.memberSelect = new MemberSelect({
+      multiple: false,
+      showSearch: false,
+      label: "Assignee:",
+    });
+
+    const boardMembers = boardStore.singleBoard?.members ?? [];
+    const options = boardMembers.map(m => ({
+      id: Number(m.id),
+      username: m.username,
+      email: "",
+    }));
+
+    const el = this.memberSelect.render();
+    this.memberSelect.setOptions(options);
+    return el;
   }
 
   renderMainSection() {
@@ -118,17 +123,23 @@ export class CreateTaskDialog extends BaseDialog {
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formDate = new FormData(form);
-      const title = formDate.get("title") as string;
-      const description = formDate.get("description") as string;
-      //const assignee = formDate.get("assignee") as string;
+      const formData = new FormData(form);
+      const title = formData.get("title") as string;
+      const description = formData.get("description") as string;
+      const assignee = this.memberSelect?.getSelectedId();
       try {
-        await appStore.createTask(this.columnId, title, description);
+        await boardStore.createTask(
+          this.columnId,
+          title,
+          description,
+          assignee ?? undefined,
+        );
         toastManager.success("Task erfolgreich erstellt");
         this.close();
         form.reset();
-      } catch (err: any) {
-        toastManager.error("Erstellung fehlgeschlagen: " + err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        toastManager.error("Erstellung fehlgeschlagen: " + message);
       }
     });
   }

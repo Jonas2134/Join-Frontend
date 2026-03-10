@@ -1,17 +1,23 @@
 export const columnRenameField = {
-  label: "Rename column:",
-  name: "column-rename",
-  type: "text" as const,
-  placeholder: "New column name",
-  required: true,
+  value: "name" as const,
+  config: {
+    label: "Rename column:",
+    name: "column-rename",
+    type: "text" as const,
+    placeholder: "New column name",
+    required: true,
+  },
 };
 
 export const columnLimitField = {
-  label: "Set Task Limit:",
-  name: "task-limit",
-  type: "number" as const,
-  placeholder: "Task limit",
-  required: true,
+  value: "wip_limit" as const,
+  config: {
+    label: "Set Task Limit:",
+    name: "task-limit",
+    type: "number" as const,
+    placeholder: "Task limit",
+    required: true,
+  },
 };
 
 export const addColumnField = {

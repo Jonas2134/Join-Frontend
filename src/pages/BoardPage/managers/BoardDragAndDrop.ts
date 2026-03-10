@@ -1,4 +1,6 @@
-import { appStore } from "../../../core/store/AppStore";
+import { boardStore } from "../../../core/store/BoardStore";
+import { toastManager } from "../../../core/ToastManager";
+import type { Column } from "../../../core/types/board.types";
 
 interface DragPayload {
   taskId: number;
@@ -53,28 +55,67 @@ export class BoardDragAndDrop {
     task.classList.add("is-dragging");
   }
 
+  private isWipLimitReached(targetColumn: Column): boolean {
+    if (targetColumn.wip_limit == null) return false;
+
+    const limit = Number(targetColumn.wip_limit);
+    return targetColumn.tasks.length >= limit;
+  }
+
   private async onTaskDragend(task: HTMLElement): Promise<void> {
     task.classList.remove("is-dragging");
 
     if (!this.dragged || !this.droped) return;
 
-    const sameColumn = this.dragged.columnId === this.droped.targetColumnId;
-    const samePosition = this.dragged.taskPosition === this.droped.targetPosition;
+    const hasChanged = this.dragged.columnId !== this.droped.targetColumnId
+      || this.dragged.taskPosition !== this.droped.targetPosition;
 
-    if (sameColumn && samePosition) {
-      this.dragged = null;
-      this.droped = null;
+    if (hasChanged) {
+      await this.moveTask(this.dragged, this.droped);
+    }
+
+    this.resetDragState();
+  }
+
+  private async moveTask(dragged: DragPayload, droped: DropPayload): Promise<void> {
+    const isColumnChange = dragged.columnId !== droped.targetColumnId;
+
+    if (isColumnChange && this.exceedsWipLimit(droped.targetColumnId)) {
       return;
     }
 
-    await appStore.updateTask(String(this.dragged.taskId), {
-      column: this.droped.targetColumnId,
-      position: this.droped.targetPosition,
-    });
+    try {
+      await boardStore.updateTask(String(dragged.taskId), {
+        column: droped.targetColumnId,
+        position: droped.targetPosition,
+      });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Task move failed: " + message);
+    }
 
+    this.onUpdate();
+  }
+
+  private exceedsWipLimit(targetColumnId: number): boolean {
+    const targetColumn = boardStore.singleBoard?.columns.find(
+      (c) => Number(c.id) === targetColumnId,
+    );
+
+    if (targetColumn && this.isWipLimitReached(targetColumn)) {
+      toastManager.error(
+        `Column "${targetColumn.name}" has reached its WIP limit of ${targetColumn.wip_limit}.`,
+      );
+      this.onUpdate();
+      return true;
+    }
+
+    return false;
+  }
+
+  private resetDragState(): void {
     this.dragged = null;
     this.droped = null;
-    this.onUpdate();
   }
 
   private insertAboveTask(

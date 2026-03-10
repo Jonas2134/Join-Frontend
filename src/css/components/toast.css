@@ -33,6 +33,14 @@
     @apply text-red-500;
   }
 
+  .toast-info {
+    @apply bg-blue-50 border border-blue-200 text-blue-800;
+  }
+
+  .toast-info .toast-icon {
+    @apply text-blue-500;
+  }
+
   .toast-icon {
     @apply flex-shrink-0;
   }
@@ -62,6 +70,14 @@
 
     &:hover {
       @apply bg-red-100;
+    }
+  }
+
+  .toast-info .toast-close-btn {
+    @apply text-blue-600;
+
+    &:hover {
+      @apply bg-blue-100;
     }
   }
 }

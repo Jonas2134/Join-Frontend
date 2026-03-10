@@ -5,6 +5,7 @@ export interface ButtonOptions {
   title?: string;
   text?: string;
   icon?: string;
+  dataset?: Record<string, string>
 }
 
 export class Button {
@@ -32,6 +33,12 @@ export class Button {
     if (this.btnOptions.text) this.btnElement.textContent = this.btnOptions.text;
 
     if (this.btnOptions.icon) this.btnElement.innerHTML = this.btnOptions.icon;
+
+    if (this.btnOptions.dataset) {
+      for (const [key, value] of Object.entries(this.btnOptions.dataset)) {
+        this.btnElement.dataset[key] = value;
+      }
+    }
 
     return this.btnElement;
   }

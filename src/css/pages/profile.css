@@ -1,0 +1,37 @@
+@layer components {
+  .profile-page {
+    @apply space-y-8;
+  }
+
+  .profile-header {
+    @apply flex justify-between;
+  }
+
+  .profile-info-wrapper {
+    @apply flex items-center gap-6;
+  }
+
+  .profile-user-info {
+    @apply flex flex-col gap-1;
+  }
+
+  .profile-username {
+    @apply text-2xl font-bold text-(--color-dark-blue);
+  }
+
+  .profile-email {
+    @apply text-sm text-(--color-blue-gray);
+  }
+
+  .profile-section {
+    @apply rounded-lg border border-(--color-soft-blue) bg-white p-6 shadow-sm;
+  }
+
+  .profile-section-title {
+    @apply text-3xl font-semibold underline text-(--color-dark-blue) mb-4 pb-2 border-b border-(--color-pale-blue);
+  }
+
+  .profile-actions {
+    @apply flex gap-4 mt-4;
+  }
+}

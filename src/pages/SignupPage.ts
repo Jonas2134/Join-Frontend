@@ -1,11 +1,12 @@
+import { BasePage } from '../components/bases/BasePage';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { router } from '../core/router';
 import { authStore } from '../core/store/AuthStore';
 import { toastManager } from '../core/ToastManager';
 import { InputField } from '../components/common/InputField';
-import { BasePage } from '../components/bases/BasePage';
-
+import { Button } from '../components/common/Button';
 import { signupFields } from '../core/constants/authFields.config';
+import { signupBtn } from '../core/constants/authBtns.config';
 
 export class SignupPage extends BasePage {
   constructor() {
@@ -59,7 +60,7 @@ export class SignupPage extends BasePage {
     checkboxWrapper.appendChild(checkbox);
     checkboxWrapper.innerHTML += `
       I accept the
-      <a href="/privacy" data-link"> Privacy policy</a>
+      <a href="/privacy" data-link>Privacy policy</a>
     `;
     return checkboxWrapper;
   }
@@ -71,11 +72,7 @@ export class SignupPage extends BasePage {
     const legend = this.renderSignupLegend();
     const fieldsWrapper = this.renderSignupFieldsWrapper();
     const checkboxWrapper = this.renderPrivacyCheckboxWrapper();
-
-    const subBtn = document.createElement("button");
-    subBtn.type = "submit";
-    subBtn.classList.add("btn", "btn-blue");
-    subBtn.textContent = "Signup";
+    const subBtn = new Button(signupBtn).renderBtn();
 
     fieldset.append(legend, fieldsWrapper, checkboxWrapper, subBtn);
     return fieldset;
@@ -125,8 +122,9 @@ export class SignupPage extends BasePage {
       await authStore.register(username, email, password, repeated_password);
       toastManager.success("Registrierung erfolgreich");
       router.navigate('/login');
-    } catch (err: any) {
-      toastManager.error("Registrierung fehlgeschlagen: " + err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toastManager.error("Registrierung fehlgeschlagen: " + message);
     }
   }
 }
