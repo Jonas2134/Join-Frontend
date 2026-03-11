@@ -69,12 +69,13 @@ describe("Router", () => {
       expect(router).toBeInstanceOf(Router);
     });
 
-    it("renders the current route on initialization", () => {
+    it("renders the current route after calling render", () => {
       window.history.pushState({}, "", "/dashboard");
 
-      initRouter(root, [
+      const router = initRouter(root, [
         { path: "/dashboard", component: MockPage },
       ]);
+      router.render();
 
       expect(root.textContent).toBe("MockPage");
     });
@@ -108,10 +109,11 @@ describe("Router", () => {
     it("matches route and instantiates the correct component", () => {
       window.history.pushState({}, "", "/dashboard");
 
-      initRouter(root, [
+      const router = initRouter(root, [
         { path: "/dashboard", component: MockPage },
         { path: "/profile", component: AnotherMockPage },
       ]);
+      router.render();
 
       expect(root.textContent).toBe("MockPage");
     });
@@ -130,9 +132,10 @@ describe("Router", () => {
         }
       }
 
-      initRouter(root, [
+      const router = initRouter(root, [
         { path: "/board/:id", component: ParamCapturePage },
       ]);
+      router.render();
 
       expect(capturedParams).toEqual({ id: "42" });
     });
@@ -140,9 +143,10 @@ describe("Router", () => {
     it("shows 404 for unmatched routes", () => {
       window.history.pushState({}, "", "/unknown-route");
 
-      initRouter(root, [
+      const router = initRouter(root, [
         { path: "/dashboard", component: MockPage },
       ]);
+      router.render();
 
       expect(root.innerHTML).toContain("404");
     });
@@ -156,6 +160,7 @@ describe("Router", () => {
         { path: "/dashboard", component: MockPage },
         { path: "/profile", component: AnotherMockPage },
       ]);
+      router.render();
 
       router.navigate("/profile");
 
@@ -176,9 +181,10 @@ describe("Router", () => {
         }
       }
 
-      initRouter(root, [
+      const router = initRouter(root, [
         { path: "/board/:boardId/task/:taskId", component: MultiParamPage },
       ]);
+      router.render();
 
       expect(capturedParams).toEqual({ boardId: "1", taskId: "5" });
     });

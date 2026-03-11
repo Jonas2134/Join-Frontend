@@ -89,6 +89,5 @@ export function initRouter(root: HTMLElement, routes: RouteConfig[]) {
   });
 
   router = new Router(root, processedRoutes);
-  router.render();
   return router;
 }

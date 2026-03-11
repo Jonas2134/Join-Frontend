@@ -29,25 +29,26 @@ const router = initRouter(app, [
   { path: '/legal', component: LegalPage },
 ]);
 
-async function checkAuthOnStart() {
+async function init() {
   const currentPath = location.pathname;
 
-  if (PUBLIC_ROUTES.includes(currentPath)) return;
-
-  const isAuthenticated = await authStore.checkAuthStatus();
-
-  if (!isAuthenticated) {
-    router.navigate('/login');
+  if (!PUBLIC_ROUTES.includes(currentPath)) {
+    const isAuthenticated = await authStore.checkAuthStatus();
+    if (!isAuthenticated) {
+      history.replaceState({}, "", "/login");
+    }
   }
-}
 
-checkAuthOnStart().finally(() => {
   router.setGuard((path) => {
     if (PUBLIC_ROUTES.includes(path)) return null;
     if (authStore.currentUser) return null;
     return '/login';
   });
-});
+
+  router.render();
+}
+
+init();
 
 document.body.addEventListener('click', (e) => {
   const target = e.target as HTMLElement;

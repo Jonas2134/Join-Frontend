@@ -43,7 +43,7 @@ export class ProfilePage extends BasePage {
 
     const hint = document.createElement("span");
     hint.classList.add("profile-guest-hint");
-    hint.textContent = "You can only edit your profile or change your password as a registered user.";
+    hint.textContent = "You can only show, edit your profile or change your password as a registered user.";
 
     hintContainer.append(hintTitle, hint);
     return hintContainer;

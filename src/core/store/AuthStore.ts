@@ -54,6 +54,7 @@ export class AuthStore {
       return response.is_authenticated;
     } catch {
       this.currentUser = null;
+      this.isGuest = false;
       return false;
     }
   }
