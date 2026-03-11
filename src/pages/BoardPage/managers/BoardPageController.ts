@@ -2,14 +2,15 @@ import { BasePageController } from "../../../components/bases/BasePageController
 import { boardStore } from "../../../core/store/BoardStore";
 import { CreateTaskDialog } from "../dialogAndDropdown/CreateTaskDialog";
 import { EditBoardDialog } from "../dialogAndDropdown/EditBoardDialog";
+import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
+import { ConfirmDialog } from "../../../components/common/ConfirmDialog";
 import { ColumnThreeDotDropdown } from "../dialogAndDropdown/ColumnThreeDotDropdown";
 import { TaskThreeDotDropdown } from "../dialogAndDropdown/TaskThreeDotDropdown";
-import { TaskDetailDialog } from "../dialogAndDropdown/TaskDetailDialog";
 import type { BoardContentRenderer } from "../renderers/BoardContentRenderer";
 import type { Board, Column, ColumnUpdate, Task } from "../../../core/types/board.types";
 
 export class BoardPageController extends BasePageController {
-  dialog: CreateTaskDialog | EditBoardDialog | TaskDetailDialog | null = null;
+  dialog: CreateTaskDialog | EditBoardDialog | TaskDetailDialog | ConfirmDialog | null = null;
   dropdown: ColumnThreeDotDropdown | null = null;
   taskDropdown: TaskThreeDotDropdown | null = null;
 
@@ -146,10 +147,18 @@ export class BoardPageController extends BasePageController {
 
     const columnId = this.getDatasetFromClosest(btn, ".board-column", "columnId");
     if (columnId) {
-      this.performStoreOperation(
-        () => boardStore.deleteColumn(columnId),
-        "Deletion",
-      );
+      this.dialog = new ConfirmDialog({
+        title: "Delete Column",
+        message: "Are you sure you want to delete this Column?",
+        confirmText: "Delete",
+        onConfirm: async () => {
+          await this.performStoreOperation(
+            () => boardStore.deleteColumn(columnId),
+            "Deletion",
+          );
+        },
+      });
+      this.openDialog(this.dialog);
     }
   }
 
@@ -184,10 +193,18 @@ export class BoardPageController extends BasePageController {
 
     const taskId = this.getDatasetFromClosest(btn, ".task", "taskId");
     if (taskId) {
-      this.performStoreOperation(
-        () => boardStore.deleteTask(taskId),
-        "Task deletion",
-      );
+      this.dialog = new ConfirmDialog({
+        title: "Delete Task",
+        message: "Are you sure you want to delete this Task?",
+        confirmText: "Delete",
+        onConfirm: async () => {
+          await this.performStoreOperation(
+            () => boardStore.deleteTask(taskId),
+            "Task deletion",
+          );
+        },
+      });
+      this.openDialog(this.dialog);
     }
   }
 
