@@ -62,11 +62,12 @@ describe("AuthStore", () => {
       const authResponse = createAuthStatusResponse();
       vi.mocked(http.get).mockResolvedValue(authResponse);
 
-      await store.login("testuser", "password");
+      await store.login("testuser", "password", true);
 
       expect(http.post).toHaveBeenCalledWith("/login/", {
         username: "testuser",
         password: "password",
+        remember_me: true,
       });
       expect(http.get).toHaveBeenCalledWith("/auth/status/");
       expect(store.currentUser).toEqual(authResponse.user);

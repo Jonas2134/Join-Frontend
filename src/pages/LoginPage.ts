@@ -140,8 +140,9 @@ export class LoginPage extends BasePage {
     const formData = new FormData(form);
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
+    const rememberMe = formData.has("remember");
     try {
-      await authStore.login(username, password);
+      await authStore.login(username, password, rememberMe);
       router.navigate("/dashboard");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);

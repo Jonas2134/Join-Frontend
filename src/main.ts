@@ -29,6 +29,12 @@ const router = initRouter(app, [
   { path: '/legal', component: LegalPage },
 ]);
 
+const AUTH_ROUTES = ['/', '/login', '/signup'];
+
+function hasRememberMeCookie(): boolean {
+  return document.cookie.split('; ').some(c => c.startsWith('remember_me='));
+}
+
 async function init() {
   const currentPath = location.pathname;
 
@@ -36,6 +42,11 @@ async function init() {
     const isAuthenticated = await authStore.checkAuthStatus();
     if (!isAuthenticated) {
       history.replaceState({}, "", "/login");
+    }
+  } else if (AUTH_ROUTES.includes(currentPath) && hasRememberMeCookie()) {
+    const isAuthenticated = await authStore.checkAuthStatus();
+    if (isAuthenticated) {
+      history.replaceState({}, "", "/dashboard");
     }
   }
 
