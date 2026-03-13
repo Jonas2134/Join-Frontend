@@ -3,7 +3,6 @@ import { API_ROUTES } from "../api/config";
 import type { Profile } from "../types/profile.types";
 
 export interface ProfileUpdate {
-  email?: string;
   first_name?: string;
   last_name?: string;
   tele_number?: string;

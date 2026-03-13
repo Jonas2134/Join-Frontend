@@ -1,7 +1,7 @@
 import { InputField } from "../../../components/common/InputField";
 import { Textarea } from "../../../components/common/Textarea";
 import { Button } from "../../../components/common/Button";
-import { profileInfoFields, profileEmailField } from "../../../core/constants/profileFields.config";
+import { profileInfoFields } from "../../../core/constants/profileFields.config";
 import { editProfileBtn, profileMenuBtns } from "../../../core/constants/profileBtns.config";
 
 import type { Profile } from "../../../core/types/profile.types";
@@ -54,15 +54,6 @@ export class ProfileInfoRenderer {
 
     fieldsWrapper.append(...fields);
     return fieldsWrapper;
-  }
-
-  renderEmailField(value?: string): HTMLElement {
-    const emailField = new InputField({
-      ...profileEmailField,
-      value,
-    }).render();
-    emailField.id = "emailFieldWrapper";
-    return emailField;
   }
 
   renderEditBtn(): HTMLButtonElement {

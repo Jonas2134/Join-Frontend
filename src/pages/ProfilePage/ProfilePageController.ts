@@ -36,7 +36,6 @@ export class ProfilePageController extends BasePageController {
 
     await this.performStoreOperation(
       () => profileStore.updateProfile({
-        email: formData.get("email") as string,
         first_name: formData.get("first_name") as string,
         last_name: formData.get("last_name") as string,
         tele_number: formData.get("tele_number") as string,
@@ -94,12 +93,6 @@ export class ProfilePageController extends BasePageController {
       'input[name="first_name"], input[name="last_name"], input[name="tele_number"], textarea[name="bio"]'
     );
     editableFields.forEach(field => field.disabled = false);
-
-    const fieldsWrapper = form.querySelector(".fields-wrapper");
-    if (fieldsWrapper) {
-      const emailField = this.infoRenderer.renderEmailField(profileStore.profile?.email);
-      fieldsWrapper.prepend(emailField);
-    }
 
     const menu = form.querySelector(".profile-actions");
     if (menu) {
