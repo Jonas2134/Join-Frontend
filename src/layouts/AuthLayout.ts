@@ -17,13 +17,19 @@ export class AuthLayout extends BaseLayout {
     header.classList.add("auth-header");
 
     const logo = this.createLogo(["w-[95px]", "text-(--color-light-blue)"]);
-    header.innerHTML = /*html*/ `
-      <nav class="flex gap-3">
-        <a href="/login" data-link>Login</a>
-        <a href="/signup" data-link>Signup</a>
-      </nav>
-    `;
-    header.prepend(logo);
+    const nav = document.createElement("nav");
+    nav.classList.add("flex", "gap-1");
+
+    const isLoginPage = location.pathname === "/login";
+    const label = document.createElement("span");
+    label.textContent = isLoginPage ? "Not a member?" : "Already a member?";
+    const link = document.createElement("a");
+    link.href = isLoginPage ? "/signup" : "/login";
+    link.textContent = isLoginPage ? "Signup" : "Login";
+    link.setAttribute("data-link", "");
+
+    nav.append(label, link);
+    header.append(logo, nav);
     return header;
   }
 
