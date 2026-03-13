@@ -106,6 +106,7 @@ export class DashboardPage extends BaseBoardListPage {
     this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerDashboardThreeDotDropdown(e));
     this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerArchiveBoardListener(e));
     this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerDeleteBoardListener(e));
+    this.events.on(pageroot, "click", (e: Event) => this.eventManager.registerLeaveBoardListener(e));
     this.events.on(pageroot, "change", (e: Event) => this.eventManager.registerViewToggleListener(e, (view) => this.switchView(view)));
 
     const reload = async () => this.initLoadDashboard();
