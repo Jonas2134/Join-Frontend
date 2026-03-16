@@ -62,10 +62,10 @@ async function init() {
 init();
 
 document.body.addEventListener('click', (e) => {
-  const target = e.target as HTMLElement;
-  if (target.matches('[data-link]')) {
+  const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-link]');
+  if (link) {
     e.preventDefault();
-    const href = target.getAttribute('href');
+    const href = link.getAttribute('href');
     if (href) router.navigate(href);
   }
 });
