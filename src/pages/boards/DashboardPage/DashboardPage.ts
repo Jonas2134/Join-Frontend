@@ -37,21 +37,26 @@ export class DashboardPage extends BaseBoardListPage {
 
   renderHeader() {
     const header = document.createElement("header");
-    header.classList.add("flex", "items-center", "justify-between");
+    header.classList.add("flex", "flex-col", "lg:flex-row", "lg:items-center", "lg:justify-between", "gap-3");
+
+    const titleRow = document.createElement("div");
+    titleRow.classList.add("flex", "items-center", "gap-3");
 
     const title = document.createElement("h1");
     title.classList.add("text-(--color-light-blue)", "underline");
     title.textContent = "My Dashboard";
 
-    const controls = document.createElement("div");
-    controls.classList.add("flex", "items-center", "gap-3");
+    titleRow.append(title, this.renderViewToggle());
+
+    const actionsRow = document.createElement("div");
+    actionsRow.classList.add("flex", "items-center", "gap-3");
 
     const btns = dashboardHeaderBtns.map((config) =>
       new Button({ ...config }).renderBtn(),
     );
+    actionsRow.append(...btns);
 
-    controls.append(this.renderViewToggle(), ...btns);
-    header.append(title, controls);
+    header.append(titleRow, actionsRow);
     return header;
   }
 

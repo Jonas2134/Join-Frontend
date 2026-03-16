@@ -1,6 +1,10 @@
 @layer components {
   .btn {
-    @apply px-6 py-2.5 text-lg rounded-lg shadow-2xl transition-all;
+    @apply px-4 py-1.5 text-sm rounded-lg shadow-2xl transition-all whitespace-nowrap;
+
+    @media (min-width: 768px) {
+      @apply px-6 py-2.5 text-lg;
+    }
 
     &:hover {
       @apply scale-102 cursor-pointer;

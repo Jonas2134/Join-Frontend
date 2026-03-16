@@ -31,19 +31,20 @@ export class ArchivedBoardsPage extends BaseBoardListPage {
 
   renderHeader() {
     const header = document.createElement("header");
-    header.classList.add("flex", "items-center", "justify-between");
+    header.classList.add("flex", "flex-col", "lg:flex-row", "lg:items-center", "lg:justify-between", "gap-3");
+
+    const titleRow = document.createElement("div");
+    titleRow.classList.add("flex", "items-center", "gap-3");
 
     const title = document.createElement("h1");
-    title.classList.add("text-(--color-light-blue)", "underline");
+    title.classList.add("text-(--color-light-blue)", "underline", "text-center");
     title.textContent = "Archived Boards";
 
-    const controls = document.createElement("div");
-    controls.classList.add("flex", "items-center", "gap-3");
+    titleRow.append(title, this.renderViewToggle());
 
     const backBtn = new Button(archivedBoardsBtn).renderBtn();
 
-    controls.append(this.renderViewToggle(), backBtn);
-    header.append(title, controls);
+    header.append(titleRow, backBtn);
     return header;
   }
 

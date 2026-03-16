@@ -1,6 +1,6 @@
 @layer components {
   .stats-grid {
-    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+    @apply grid gap-4 grid-cols-2 lg:grid-cols-4;
   }
 
   .stat-card {
@@ -9,11 +9,15 @@
 
   .board-list-header,
   .board-row {
-    @apply grid grid-cols-[100px_100px_100px_150px_150px_1fr] items-center px-4;
+    @apply grid grid-cols-[1fr_80px_80px_130px_130px_auto] items-center px-4;
   }
 
   .board-list-header {
     @apply py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
+
+    @media (max-width: 767px) {
+      @apply hidden;
+    }
   }
 
   .board-row {
@@ -21,6 +25,23 @@
 
     &:hover {
       @apply bg-(--color-pale-blue) cursor-pointer;
+    }
+
+    @media (max-width: 767px) {
+      @apply grid-cols-[1fr_auto];
+    }
+  }
+
+  .board-row-title {
+    @apply font-medium text-gray-800 truncate;
+  }
+
+  .board-row-meta {
+    display: contents;
+
+    @media (max-width: 767px) {
+      @apply flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs;
+      grid-column: 1 / -1;
     }
   }
 
@@ -30,8 +51,33 @@
     @apply text-sm text-(--color-blue-gray) text-center;
   }
 
+  .board-row-menu {
+    @apply flex items-center justify-end;
+
+    @media (max-width: 767px) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
   .board-row-role--owner {
     @apply text-(--color-light-blue) font-semibold;
+  }
+
+  @media (max-width: 767px) {
+    .board-row-members,
+    .board-row-role,
+    .board-row-date {
+      @apply text-xs text-left;
+    }
+
+    .board-row-date {
+      @apply hidden;
+    }
+
+    .board-row-meta > span + span {
+      @apply before:content-['·'] before:mr-2;
+    }
   }
 
   /* View Toggle */

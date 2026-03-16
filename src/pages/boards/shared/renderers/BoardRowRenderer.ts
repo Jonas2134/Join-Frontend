@@ -17,7 +17,7 @@ export class BoardRow {
 
   renderTitleSpan() {
     const span = document.createElement("span");
-    span.classList.add("font-medium", "text-gray-800", "truncate");
+    span.classList.add("board-row-title");
     span.textContent = this.board.title;
     return span;
   }
@@ -51,9 +51,21 @@ export class BoardRow {
     return span;
   }
 
+  renderMeta() {
+    const meta = document.createElement("div");
+    meta.classList.add("board-row-meta");
+    meta.append(
+      this.renderMemberCountSpan(),
+      this.renderRoleSpan(),
+      this.renderDateSpan(this.board.created_at),
+      this.renderDateSpan(this.board.updated_at),
+    );
+    return meta;
+  }
+
   renderMenuRow() {
     const menu = document.createElement("menu");
-    menu.classList.add("flex", "items-center", "justify-end");
+    menu.classList.add("board-row-menu");
 
     const threeDotBtn = new Button(dashboardThreeDotBtn).renderBtn();
 
@@ -64,10 +76,7 @@ export class BoardRow {
   render() {
     this.element.append(
       this.renderTitleSpan(),
-      this.renderMemberCountSpan(),
-      this.renderRoleSpan(),
-      this.renderDateSpan(this.board.created_at),
-      this.renderDateSpan(this.board.updated_at),
+      this.renderMeta(),
       this.renderMenuRow(),
     );
     return this.element;
