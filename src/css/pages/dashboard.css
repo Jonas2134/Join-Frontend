@@ -4,51 +4,34 @@
   }
 
   .stat-card {
-    @apply flex flex-col items-center justify-center gap-1 rounded-lg border border-(--color-soft-blue) bg-white p-5 shadow-sm;
+    @apply flex flex-col items-center justify-center gap-1 p-5;
   }
 
-  .stat-value {
-    @apply text-3xl font-bold text-(--color-light-blue);
-  }
-
-  .stat-label {
-    @apply text-sm text-(--color-blue-gray);
+  .board-list-header,
+  .board-row {
+    @apply grid grid-cols-[100px_100px_100px_150px_150px_1fr] items-center px-4;
   }
 
   .board-list-header {
-    @apply grid grid-cols-[100px_100px_100px_150px_150px_1fr] items-center px-4 py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
+    @apply py-2 text-sm font-semibold text-(--color-blue-gray) border-b border-(--color-light-gray);
   }
 
   .board-row {
-    @apply grid grid-cols-[100px_100px_100px_150px_150px_1fr] items-center px-4 py-3 border-b border-(--color-pale-blue) transition-all;
+    @apply py-3 border-b border-(--color-pale-blue) transition-all;
 
     &:hover {
       @apply bg-(--color-pale-blue) cursor-pointer;
     }
   }
 
-  .board-row-title {
-    @apply font-medium text-gray-800 truncate;
-  }
-
-  .board-row-members {
-    @apply text-sm text-(--color-blue-gray) text-center;
-  }
-
-  .board-row-role {
+  .board-row-members,
+  .board-row-role,
+  .board-row-date {
     @apply text-sm text-(--color-blue-gray) text-center;
   }
 
   .board-row-role--owner {
     @apply text-(--color-light-blue) font-semibold;
-  }
-
-  .board-row-date {
-    @apply text-sm text-(--color-blue-gray) text-center;
-  }
-
-  .board-row-menu {
-    @apply flex items-center justify-end;
   }
 
   /* View Toggle */
@@ -78,23 +61,11 @@
   }
 
   .board-card {
-    @apply flex flex-col gap-3 rounded-lg border border-(--color-soft-blue) bg-white py-5 pl-5 pr-2 shadow-sm transition-all cursor-pointer;
+    @apply flex flex-col gap-3 py-5 pl-5 pr-2 transition-all cursor-pointer;
 
     &:hover {
       @apply shadow-md border-(--color-light-blue);
     }
-  }
-
-  .board-card-header {
-    @apply flex items-start justify-between gap-2;
-  }
-
-  .board-card-title {
-    @apply text-lg font-semibold text-gray-800 truncate;
-  }
-
-  .board-card-menu {
-    @apply flex items-center shrink-0;
   }
 
   .board-card-badge {
@@ -113,25 +84,8 @@
     @apply flex flex-col gap-1 text-sm text-(--color-blue-gray) mt-auto pt-2 border-t border-(--color-pale-blue);
   }
 
-  .board-card-meta-item {
-    @apply truncate;
-  }
-
-  /* Greeting */
-  .dashboard-greeting {
-    @apply text-xl text-center text-(--color-blue-gray) pb-2;
-  }
-
-  .greet-text {
-    @apply text-3xl text-(--color-dark-blue);
-  }
-
   /* Empty State */
   .empty-state {
     @apply flex flex-col items-center justify-center gap-4 py-16 text-center;
-  }
-
-  .empty-state-text {
-    @apply text-lg text-(--color-blue-gray);
   }
 }

@@ -17,14 +17,14 @@ export class BoardCard {
 
   private renderHeader() {
     const header = document.createElement("div");
-    header.classList.add("board-card-header");
+    header.classList.add("flex", "items-start", "justify-between", "gap-2");
 
     const title = document.createElement("h3");
-    title.classList.add("board-card-title");
+    title.classList.add("text-lg", "font-semibold", "text-gray-800", "truncate");
     title.textContent = this.board.title;
 
     const menu = document.createElement("menu");
-    menu.classList.add("board-card-menu");
+    menu.classList.add("flex", "items-center", "shrink-0");
     menu.appendChild(new Button(dashboardThreeDotBtn).renderBtn());
 
     header.append(title, menu);
@@ -49,16 +49,16 @@ export class BoardCard {
     meta.classList.add("board-card-meta");
 
     const members = document.createElement("span");
-    members.classList.add("board-card-meta-item");
+    members.classList.add("truncate");
     members.textContent = `${this.board.member_count} Member${this.board.member_count !== 1 ? "s" : ""}`;
 
     const created = document.createElement("span");
-    created.classList.add("board-card-meta-item");
+    created.classList.add("truncate");
     const createDate = new Date(this.board.created_at);
     created.textContent = `Created: ${createDate.toLocaleDateString()}`;
 
     const updated = document.createElement("span");
-    updated.classList.add("board-card-meta-item");
+    updated.classList.add("truncate");
     const updateDate = new Date(this.board.updated_at);
     updated.textContent = `Updated: ${updateDate.toLocaleDateString()}`;
 

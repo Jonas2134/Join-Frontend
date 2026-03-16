@@ -1,18 +1,10 @@
 @layer components {
-  .static-layout {
-    @apply grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen;
-  }
-
   .static-header {
-    @apply px-10 py-5 flex justify-between items-center bg-(--color-light-blue);
+    @apply bg-(--color-light-blue);
   }
 
   .static-back-link {
     @apply text-white cursor-pointer hover:underline;
-  }
-
-  .static-main {
-    @apply flex justify-center px-4 py-12;
   }
 
   .static-content {
@@ -20,6 +12,6 @@
   }
 
   .static-footer {
-    @apply px-10 py-5 flex justify-center border-t border-(--color-light-gray);
+    @apply border-t border-(--color-light-gray);
   }
 }

@@ -32,7 +32,7 @@ export class BoardHeaderRenderer {
     summary.classList.add("detail-header-summary");
 
     const title = document.createElement("h3");
-    title.classList.add("detail-header-summary-headline");
+    title.classList.add("text-(--color-light-blue)", "font-semibold", "underline");
     title.textContent = board.title;
 
     const toggleIcon = document.createElement("span");
@@ -47,7 +47,7 @@ export class BoardHeaderRenderer {
     const descriptionSection = document.createElement("section");
 
     const descriptionTitle = document.createElement("h4");
-    descriptionTitle.classList.add("detail-content-headline");
+    descriptionTitle.classList.add("text-(--color-placeholder-gray)", "font-semibold", "underline", "mb-1");
     descriptionTitle.textContent = "Description";
 
     const descriptionText = document.createElement("p");
@@ -62,7 +62,7 @@ export class BoardHeaderRenderer {
     const membersSection = document.createElement("section");
 
     const membersTitle = document.createElement("h4");
-    membersTitle.classList.add("detail-content-headline");
+    membersTitle.classList.add("text-(--color-placeholder-gray)", "font-semibold", "underline", "mb-1");
     membersTitle.textContent = "Members";
 
     const membersList = this.renderMemberList(board);
@@ -73,7 +73,7 @@ export class BoardHeaderRenderer {
 
   renderMemberList(board: Board) {
     const membersList = document.createElement("ul");
-    membersList.classList.add("detail-list");
+    membersList.classList.add("flex", "items-center", "gap-2", "flex-wrap");
 
     const maxVisibleMembers = 5;
     const sortedMembers = [...board.members].sort((a, b) => {

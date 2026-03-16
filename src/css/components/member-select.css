@@ -3,16 +3,8 @@
     @apply flex flex-col gap-3 w-full;
   }
 
-  .member-select-label {
-    @apply text-(--color-dark-blue) underline font-semibold;
-  }
-
   .member-select-display {
     @apply flex flex-wrap gap-2 min-h-10 p-2 rounded-lg bg-(--color-light-gray);
-  }
-
-  .member-select-chip {
-    @apply relative flex items-center gap-1;
   }
 
   .member-select-chip-new {

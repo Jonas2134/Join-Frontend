@@ -27,7 +27,7 @@ export class ContactsPage extends BasePage {
   render() {
     const container = document.createElement("div");
     container.id = "contactsPage";
-    container.classList.add("contacts-page");
+    container.classList.add("flex", "flex-col", "gap-6", "h-full");
 
     container.append(
       this.tabsRenderer.renderHeader(),

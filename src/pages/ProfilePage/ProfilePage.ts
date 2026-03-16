@@ -23,7 +23,7 @@ export class ProfilePage extends BasePage {
   renderProfileHeader(): HTMLElement {
     const header = document.createElement("header");
     header.id = "profileHeader";
-    header.classList.add("profile-header");
+    header.classList.add("flex", "justify-between");
     return header;
   }
 
@@ -52,7 +52,7 @@ export class ProfilePage extends BasePage {
   render() {
     const container = document.createElement("div");
     container.id = "profilePage";
-    container.classList.add("profile-page");
+    container.classList.add("space-y-8");
 
     if (isGuest()) {
       container.append(this.renderGuestRestriction());
@@ -72,14 +72,14 @@ export class ProfilePage extends BasePage {
 
   renderProfileHeaderInfoContainer(username: string, email: string) {
     const info = document.createElement("div");
-    info.classList.add("profile-user-info");
+    info.classList.add("flex", "flex-col", "gap-1");
 
     const nameEl = document.createElement("span");
-    nameEl.classList.add("profile-username");
+    nameEl.classList.add("text-2xl", "font-bold", "text-(--color-dark-blue)");
     nameEl.textContent = username;
 
     const emailEl = document.createElement("span");
-    emailEl.classList.add("profile-email");
+    emailEl.classList.add("text-sm", "text-(--color-blue-gray)");
     emailEl.textContent = email;
 
     info.append(nameEl, emailEl);
@@ -88,7 +88,7 @@ export class ProfilePage extends BasePage {
 
   updateProfileHeader(header: HTMLElement, profile: Profile) {
     const infoWrapper = document.createElement("div");
-    infoWrapper.classList.add("profile-info-wrapper");
+    infoWrapper.classList.add("flex", "items-center", "gap-6");
 
     const avatar = new Avatar({ size: "lg" }).createAvatar(profile.username);
     const info = this.renderProfileHeaderInfoContainer(

@@ -87,7 +87,7 @@ export class TaskDetailDialog extends BaseDialog {
     label.textContent = "Title:";
 
     const content = document.createElement("p");
-    content.classList.add("task-detail-text");
+    content.classList.add("text-(--color-blue-gray)");
     content.textContent = this.task.title || "No title";
 
     section.append(label, content);
@@ -103,7 +103,7 @@ export class TaskDetailDialog extends BaseDialog {
     label.textContent = "Description:";
 
     const content = document.createElement("p");
-    content.classList.add("task-detail-text");
+    content.classList.add("text-(--color-blue-gray)");
     content.textContent = this.task.description || "No description";
 
     section.append(label, content);
@@ -119,7 +119,7 @@ export class TaskDetailDialog extends BaseDialog {
     label.textContent = "Assignee:";
 
     const content = document.createElement("p");
-    content.classList.add("task-detail-text");
+    content.classList.add("text-(--color-blue-gray)");
 
     if (this.task.assignee != null) {
       const member = boardStore.singleBoard?.members.find(
@@ -139,11 +139,11 @@ export class TaskDetailDialog extends BaseDialog {
     section.classList.add("flex", "gap-4");
 
     const createdAt = document.createElement("span");
-    createdAt.classList.add("task-detail-meta-item");
+    createdAt.classList.add("text-xs", "text-gray-400", "whitespace-nowrap");
     createdAt.textContent = `Created: ${new Date(this.task.created_at).toLocaleDateString()}`;
 
     const updatedAt = document.createElement("span");
-    updatedAt.classList.add("task-detail-meta-item");
+    updatedAt.classList.add("text-xs", "text-gray-400", "whitespace-nowrap");
     updatedAt.textContent = `Updated: ${new Date(this.task.updated_at).toLocaleDateString()}`;
 
     section.append(createdAt, updatedAt);
@@ -186,7 +186,7 @@ export class TaskDetailDialog extends BaseDialog {
 
   private renderEditMainSection(): HTMLElement {
     const main = document.createElement("main");
-    main.classList.add("edit-task-main");
+    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
 
     const firstSection = this.renderEditFields();
     const secondSection = this.renderEditAssigneeSection();
@@ -197,7 +197,7 @@ export class TaskDetailDialog extends BaseDialog {
 
   private renderEditFields(): HTMLElement {
     const section = document.createElement("section");
-    section.classList.add("edit-task-fields");
+    section.classList.add("flex", "flex-col", "gap-3");
 
     const componentMap = {
       input: InputField,
@@ -243,7 +243,7 @@ export class TaskDetailDialog extends BaseDialog {
 
   private renderEditMenu(): HTMLElement {
     const menu = document.createElement("menu");
-    menu.classList.add("edit-task-menu");
+    menu.classList.add("flex", "gap-6");
 
     const btns = editTaskDialogBtns.map((config) =>
       new Button({ ...config }).renderBtn()

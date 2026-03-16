@@ -8,6 +8,9 @@
 /* import utility styles */
 @import "./utilities.css";
 
+/* import shared component styles */
+@import "./shared.css";
+
 /* import layout styles */
 @import "./layouts/auth-layout.css";
 @import "./layouts/app-layout.css";

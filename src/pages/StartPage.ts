@@ -36,7 +36,7 @@ export class StartPage extends BasePage {
     const logo = this.createLogo(["w-[95px]", "text-(--color-light-blue)"]);
 
     const nav = document.createElement("nav");
-    nav.classList.add("start-header-nav");
+    nav.classList.add("flex", "gap-6", "text-sm");
 
     const privacyLink = document.createElement("a");
     privacyLink.href = "/privacy";
@@ -67,12 +67,12 @@ export class StartPage extends BasePage {
     headline.textContent = "Kanban Project Management";
 
     const description = document.createElement("p");
-    description.classList.add("start-hero-description");
+    description.classList.add("text-lg", "text-(--color-blue-gray)", "max-w-xl");
     description.textContent =
       "Organize your work with boards, track tasks from idea to completion, and collaborate with your team — all in one place.";
 
     const cta = document.createElement("div");
-    cta.classList.add("start-hero-cta");
+    cta.classList.add("flex", "gap-6", "mt-2");
 
     const loginLink = document.createElement("a");
     loginLink.href = "/login";
@@ -119,11 +119,11 @@ export class StartPage extends BasePage {
       card.classList.add("start-feature-card");
 
       const title = document.createElement("h3");
-      title.classList.add("start-feature-title");
+      title.classList.add("text-lg", "font-semibold", "text-(--color-light-blue)");
       title.textContent = feature.title;
 
       const text = document.createElement("p");
-      text.classList.add("start-feature-text");
+      text.classList.add("text-sm", "text-(--color-blue-gray)");
       text.textContent = feature.text;
 
       card.append(title, text);
@@ -142,12 +142,12 @@ export class StartPage extends BasePage {
     footer.classList.add("start-footer");
 
     const note = document.createElement("p");
-    note.classList.add("start-footer-note");
+    note.classList.add("text-sm", "text-(--color-blue-gray)", "italic");
     note.textContent =
       "This is a portfolio project and not a commercial application.";
 
     const links = document.createElement("div");
-    links.classList.add("start-footer-links");
+    links.classList.add("flex", "gap-4", "text-sm");
 
     const githubLink = document.createElement("a");
     githubLink.href = "#";

@@ -17,7 +17,7 @@ export class BoardRow {
 
   renderTitleSpan() {
     const span = document.createElement("span");
-    span.classList.add("board-row-title");
+    span.classList.add("font-medium", "text-gray-800", "truncate");
     span.textContent = this.board.title;
     return span;
   }
@@ -53,7 +53,7 @@ export class BoardRow {
 
   renderMenuRow() {
     const menu = document.createElement("menu");
-    menu.classList.add("board-row-menu");
+    menu.classList.add("flex", "items-center", "justify-end");
 
     const threeDotBtn = new Button(dashboardThreeDotBtn).renderBtn();
 

@@ -6,7 +6,7 @@ export class StaticLayout extends BaseLayout {
     this.element.classList.add("static-layout");
 
     const header = this.createHeader();
-    this.main.classList.add("static-main");
+    this.main.classList.add("flex", "justify-center", "px-4", "py-12");
     const footer = this.createFooter();
 
     this.element.append(header, this.main, footer);

@@ -83,7 +83,7 @@ export abstract class BaseBoardListPage extends BasePage {
     empty.appendChild(iconWrapper);
 
     const text = document.createElement("p");
-    text.classList.add("empty-state-text");
+    text.classList.add("text-lg", "text-(--color-blue-gray)");
     text.textContent = this.emptyStateMessage;
     empty.appendChild(text);
 

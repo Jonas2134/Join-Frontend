@@ -1,0 +1,35 @@
+@layer components {
+  /* Layout-Grid Basis */
+  .auth-layout,
+  .static-layout,
+  .start-page {
+    @apply grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen;
+  }
+
+  /* Header Basis */
+  .auth-header,
+  .start-header,
+  .static-header {
+    @apply px-10 py-5 flex justify-between items-center;
+  }
+
+  /* Footer Basis */
+  .auth-footer,
+  .static-footer {
+    @apply px-10 py-5 flex justify-center;
+  }
+
+  /* Label Basis */
+  .input-label,
+  .member-select-label {
+    @apply text-(--color-dark-blue) underline font-semibold;
+  }
+
+  /* Card/Panel Basis */
+  .stat-card,
+  .board-card,
+  .profile-section,
+  .contacts-detail-panel {
+    @apply rounded-lg border border-(--color-soft-blue) bg-white shadow-sm;
+  }
+}

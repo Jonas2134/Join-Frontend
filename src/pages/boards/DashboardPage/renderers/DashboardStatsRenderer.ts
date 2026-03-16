@@ -20,13 +20,13 @@ export class DashboardStatsRenderer {
     if (!user) return null;
 
     const greeting = document.createElement("div");
-    greeting.classList.add("dashboard-greeting");
+    greeting.classList.add("text-xl", "text-center", "text-(--color-blue-gray)", "pb-2");
 
     if (user.is_guest) {
       greeting.textContent = "Welcome, Guest!";
     } else {
       const greetText = document.createElement("span");
-      greetText.classList.add("greet-text");
+      greetText.classList.add("text-3xl", "text-(--color-dark-blue)");
       greetText.textContent = this.getTimeOfDayGreeting();
 
       const username = document.createElement("span");
@@ -72,8 +72,8 @@ export class DashboardStatsRenderer {
     const el = document.createElement("div");
     el.classList.add("stat-card");
     el.innerHTML = `
-      <span class="stat-value">${card.value}</span>
-      <span class="stat-label">${card.label}</span>
+      <span class="text-3xl font-bold text-(--color-light-blue)">${card.value}</span>
+      <span class="text-sm text-(--color-blue-gray)">${card.label}</span>
     `;
     return el;
   }

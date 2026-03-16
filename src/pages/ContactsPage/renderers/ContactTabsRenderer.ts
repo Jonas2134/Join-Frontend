@@ -18,7 +18,7 @@ export class ContactTabsRenderer {
 
   renderTabs(): HTMLElement {
     const nav = document.createElement("nav");
-    nav.classList.add("contacts-tabs");
+    nav.classList.add("flex", "gap-2", "border-b", "border-(--color-pale-blue)", "pb-1");
 
     const btns = tabBtns.map((config) =>
       new Button({ ...config }).renderBtn()

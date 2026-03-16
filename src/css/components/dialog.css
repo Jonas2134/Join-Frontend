@@ -11,40 +11,8 @@
     }
   }
 
-  .task-detail-text {
-    @apply text-(--color-blue-gray);
-  }
-
-  .task-detail-meta-item {
-    @apply text-xs text-gray-400 whitespace-nowrap;
-  }
-
-  .edit-task-main {
-    @apply w-full grid grid-cols-2 gap-4;
-  }
-
-  .edit-task-fields {
-    @apply flex flex-col gap-3;
-  }
-
-  .edit-task-menu {
-    @apply flex gap-6;
-  }
-
   .confirm-dialog-content {
     @apply flex flex-col gap-4 p-6 min-w-80;
-  }
-
-  .confirm-dialog-title {
-    @apply font-semibold text-(--color-dark-blue) underline;
-  }
-
-  .confirm-dialog-message {
-    @apply text-lg text-(--color-blue-gray);
-  }
-
-  .confirm-dialog-menu {
-    @apply flex justify-end gap-3 mt-2;
   }
 
   .guest-member-hint {

@@ -33,7 +33,7 @@ export class ContactDetailRenderer {
 
     if (showRemoveBtn) {
       const actions = document.createElement("div");
-      actions.classList.add("contacts-detail-actions");
+      actions.classList.add("mt-6", "pt-4", "border-t", "border-(--color-pale-blue)");
 
       const btn = new Button(removeContactBtn).renderBtn();
       btn.dataset.removeUserId = String(user.id);
@@ -52,14 +52,14 @@ export class ContactDetailRenderer {
     avatar.tabIndex = -1;
 
     const info = document.createElement("div");
-    info.classList.add("constacts-detail-info-wrapper");
+    info.classList.add("flex", "flex-col");
 
     const username = document.createElement("span");
-    username.classList.add("contacts-detail-username");
+    username.classList.add("text-2xl", "font-bold", "text-(--color-dark-blue)");
     username.textContent = user.username;
 
     const email = document.createElement("span");
-    email.classList.add("contacts-detail-email");
+    email.classList.add("text-sm", "text-(--color-blue-gray)");
     email.textContent = user.email;
 
     info.append(username, email);
@@ -69,7 +69,7 @@ export class ContactDetailRenderer {
 
   private renderDetailFields(user: UserDetail | Contact): HTMLElement {
     const container = document.createElement("div");
-    container.classList.add("contacts-detail-fields");
+    container.classList.add("flex", "flex-col", "gap-3");
 
     const detailUser = user as UserDetail;
     const fields: { label: string; value: string }[] = [];
@@ -100,14 +100,14 @@ export class ContactDetailRenderer {
 
     for (const field of fields) {
       const fieldEl = document.createElement("div");
-      fieldEl.classList.add("contacts-detail-field");
+      fieldEl.classList.add("flex", "flex-col", "gap-1");
 
       const label = document.createElement("span");
       label.classList.add("contacts-detail-label");
       label.textContent = field.label;
 
       const value = document.createElement("span");
-      value.classList.add("contacts-detail-value");
+      value.classList.add("text-base", "text-(--color-dark-blue)");
       value.textContent = field.value;
 
       fieldEl.append(label, value);
