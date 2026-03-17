@@ -186,7 +186,7 @@ export class TaskDetailDialog extends BaseDialog {
 
   private renderEditMainSection(): HTMLElement {
     const main = document.createElement("main");
-    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
+    main.classList.add("w-full", "grid", "grid-cols-1", "lg:grid-cols-2", "gap-4");
 
     const firstSection = this.renderEditFields();
     const secondSection = this.renderEditAssigneeSection();

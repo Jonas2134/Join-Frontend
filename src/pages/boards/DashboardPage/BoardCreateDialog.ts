@@ -74,7 +74,7 @@ export class BoardCreateDialog extends BaseDialog {
 
   renderMainSection() {
     const main = document.createElement("main");
-    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
+    main.classList.add("w-full", "grid", "grid-cols-1", "lg:grid-cols-2", "gap-4");
 
     const firstSection = this.renderFieldSection();
     const secondSection = isGuest()
