@@ -1,6 +1,8 @@
 import { BasePageController } from "../../components/bases/BasePageController";
 import { profileStore } from "../../core/store/ProfileStore";
 import { authStore } from "../../core/store/AuthStore";
+import { Button } from "../../components/common/Button";
+import { showChangePasswordBtn } from "../../core/constants/profileBtns.config";
 import { ProfileInfoRenderer } from "./renderers/ProfileInfoRenderer";
 import { ProfilePasswordRenderer } from "./renderers/ProfilePasswordRenderer";
 
@@ -106,14 +108,21 @@ export class ProfilePageController extends BasePageController {
     const section = document.getElementById("profileSection");
     if (!section) return;
 
+    document.getElementById("showChangePasswordBtn")?.remove();
+
     section.innerHTML = "";
     this.passwordRenderer.renderPasswordSection(section);
   }
 
   rerenderProfileSection() {
     const section = document.getElementById("profileSection");
+    const header = document.getElementById("profileHeader");
     const profile = profileStore.profile;
     if (!section || !profile) return;
+
+    if (header && !document.getElementById("showChangePasswordBtn")) {
+      header.appendChild(new Button(showChangePasswordBtn).renderBtn());
+    }
 
     section.innerHTML = "";
     this.infoRenderer.renderProfileForm(section, profile);

@@ -23,7 +23,7 @@ export class ProfilePage extends BasePage {
   renderProfileHeader(): HTMLElement {
     const header = document.createElement("header");
     header.id = "profileHeader";
-    header.classList.add("flex", "justify-between");
+    header.classList.add("profile-header");
     return header;
   }
 
@@ -88,7 +88,7 @@ export class ProfilePage extends BasePage {
 
   updateProfileHeader(header: HTMLElement, profile: Profile) {
     const infoWrapper = document.createElement("div");
-    infoWrapper.classList.add("flex", "items-center", "gap-6");
+    infoWrapper.classList.add("profile-header-info");
 
     const avatar = new Avatar({ size: "lg" }).createAvatar(profile.username);
     const info = this.renderProfileHeaderInfoContainer(

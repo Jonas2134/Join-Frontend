@@ -35,7 +35,7 @@ export const changePasswordBtns = [
     class: ["btn", "btn-blue"],
     type: "submit" as const,
     title: "Change Password",
-    text: "Change Password",
+    text: "Change",
   },
   {
     id: "cancelChangePasswordBtn",
