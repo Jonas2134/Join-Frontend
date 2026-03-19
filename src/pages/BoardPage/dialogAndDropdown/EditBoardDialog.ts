@@ -9,6 +9,7 @@ import { MemberSelect } from "../../../components/common/MemberSelect";
 import { editBoardDialogBtns } from "../../../core/constants/appDialogBtns.config";
 import { editBoardDialogFields } from "../../../core/constants/appDialogFields.config";
 import { isGuest } from "../../../core/store/AuthStore";
+import { buildChangedPayload } from "../../../core/utils/diffPayload";
 import type { Board } from "../../../core/types/board.types";
 
 export class EditBoardDialog extends BaseDialog {
@@ -169,11 +170,35 @@ export class EditBoardDialog extends BaseDialog {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
-      const title = formData.get("title") as string;
-      const description = formData.get("description") as string;
-      const members = isGuest() ? undefined : this.memberSelect?.getAllMemberIds();
+
+      const original: Record<string, unknown> = {
+        title: this.board.title,
+        description: this.board.description ?? "",
+      };
+      const updated: Record<string, unknown> = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+      };
+
+      if (!isGuest()) {
+        original.members = this.board.members.map(m => Number(m.id));
+        updated.members = this.memberSelect?.getAllMemberIds() ?? [];
+      }
+
+      const payload = buildChangedPayload(original, updated);
+
+      if (Object.keys(payload).length === 0) {
+        toastManager.info("No changes detected.");
+        return;
+      }
+
       try {
-        await boardStore.updateBoard(this.board.id, title, description, members);
+        await boardStore.updateBoard(
+          this.board.id,
+          payload.title as string | undefined,
+          payload.description as string | undefined,
+          payload.members as number[] | undefined,
+        );
         toastManager.success("Board erfolgreich aktualisiert");
         this.close();
         form.reset();

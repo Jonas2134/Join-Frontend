@@ -3,6 +3,8 @@ import { profileStore } from "../../core/store/ProfileStore";
 import { authStore } from "../../core/store/AuthStore";
 import { Button } from "../../components/common/Button";
 import { showChangePasswordBtn } from "../../core/constants/profileBtns.config";
+import { buildChangedPayload } from "../../core/utils/diffPayload";
+import { toastManager } from "../../core/ToastManager";
 import { ProfileInfoRenderer } from "./renderers/ProfileInfoRenderer";
 import { ProfilePasswordRenderer } from "./renderers/ProfilePasswordRenderer";
 
@@ -34,15 +36,33 @@ export class ProfilePageController extends BasePageController {
 
     e.preventDefault();
 
+    const profile = profileStore.profile;
+    if (!profile) return;
+
     const formData = new FormData(form);
 
+    const original: Record<string, unknown> = {
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      tele_number: profile.tele_number,
+      bio: profile.bio,
+    };
+    const updated = {
+      first_name: formData.get("first_name") as string,
+      last_name: formData.get("last_name") as string,
+      tele_number: formData.get("tele_number") as string,
+      bio: formData.get("bio") as string,
+    };
+
+    const payload = buildChangedPayload(original, updated);
+
+    if (Object.keys(payload).length === 0) {
+      toastManager.info("No changes detected.");
+      return;
+    }
+
     await this.performStoreOperation(
-      () => profileStore.updateProfile({
-        first_name: formData.get("first_name") as string,
-        last_name: formData.get("last_name") as string,
-        tele_number: formData.get("tele_number") as string,
-        bio: formData.get("bio") as string,
-      }),
+      () => profileStore.updateProfile(payload),
       "Profile update",
     );
 

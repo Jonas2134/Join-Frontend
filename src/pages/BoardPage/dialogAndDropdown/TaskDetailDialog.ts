@@ -8,7 +8,8 @@ import { MemberSelect } from "../../../components/common/MemberSelect";
 import { taskDetailEditBtn } from "../../../core/constants/appThreeDot.config";
 import { editTaskDialogFields } from "../../../core/constants/appDialogFields.config";
 import { editTaskDialogBtns } from "../../../core/constants/appDialogBtns.config";
-import type { Task } from "../../../core/types/board.types";
+import { buildChangedPayload } from "../../../core/utils/diffPayload";
+import type { Task, TaskUpdate } from "../../../core/types/board.types";
 
 export type TaskDetailMode = "view" | "edit";
 
@@ -290,14 +291,29 @@ export class TaskDetailDialog extends BaseDialog {
     const formData = new FormData(form);
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
-    const assignee = this.memberSelect?.getSelectedId();
+    const assignee = this.memberSelect?.getSelectedId() ?? null;
+
+    const original: Record<string, unknown> = {
+      title: this.task.title,
+      description: this.task.description,
+      assignee: this.task.assignee,
+    };
+
+    const updated = {
+      title,
+      description: description || null,
+      assignee,
+    };
+
+    const payload = buildChangedPayload(original, updated);
+
+    if (Object.keys(payload).length === 0) {
+      toastManager.info("No changes detected.");
+      return;
+    }
 
     try {
-      await boardStore.updateTask(String(this.task.id), {
-        title: title,
-        description: description || null,
-        assignee: assignee ?? undefined,
-      });
+      await boardStore.updateTask(String(this.task.id), payload as TaskUpdate);
 
       toastManager.success("Task successfully updated");
       this.close();
