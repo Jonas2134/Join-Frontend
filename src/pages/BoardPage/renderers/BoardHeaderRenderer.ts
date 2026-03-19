@@ -11,7 +11,7 @@ export class BoardHeaderRenderer {
     }
 
     const details = document.createElement("details");
-    details.classList.add("group");
+    details.classList.add("group", "detail-section");
 
     const summary = this.renderHeaderSummary(board);
     const detailsContent = this.renderDetailsContent(board, currentUserId);

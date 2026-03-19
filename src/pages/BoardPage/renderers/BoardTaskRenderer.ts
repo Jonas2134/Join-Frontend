@@ -38,7 +38,7 @@ export class BoardTaskRenderer {
     header.classList.add("flex", "justify-between", "items-start", "gap-2");
 
     const title = document.createElement("h5");
-    title.classList.add("font-medium", "text-lg", "flex-1");
+    title.classList.add("flex-1");
     title.textContent = task.title;
 
     header.append(title);
