@@ -29,7 +29,7 @@
   }
 
   .sidebar-link {
-    @apply flex items-center gap-3 px-5 py-2 rounded-lg transition-all text-sm text-(--color-blue-gray) whitespace-nowrap w-full;
+    @apply flex items-center gap-3 px-5 py-2 rounded-lg transition-all duration-300 ease-in-out text-sm text-(--color-blue-gray) whitespace-nowrap w-full;
 
     &:hover {
       @apply bg-(--color-soft-blue) text-(--color-dark-blue);
@@ -41,15 +41,15 @@
   }
 
   .sidebar-link-text {
-    @apply transition-opacity duration-300 opacity-100;
+    @apply transition-all duration-300 ease-in-out opacity-100 max-w-[150px];
   }
 
   .sidebar-collapsed .sidebar-link-text {
-    @apply opacity-0 w-0 overflow-hidden;
+    @apply opacity-0 max-w-0 overflow-hidden;
   }
 
   .sidebar-collapsed .sidebar-link {
-    @apply justify-center px-0;
+    @apply justify-center px-0 gap-0;
   }
 
   .sidebar-toggle {
@@ -66,5 +66,19 @@
 
   .app-main {
     @apply col-start-2 row-start-2 row-span-1 p-5 overflow-auto;
+  }
+
+  @media (max-width: 767px) {
+    .app-layout {
+      @apply relative grid-cols-[50px_1fr];
+    }
+
+    .app-aside {
+      @apply absolute top-0 bottom-0 left-0 z-20 bg-white w-[50px] transition-[width] duration-300 ease-in-out;
+    }
+
+    .app-layout:not(.sidebar-collapsed) .app-aside {
+      @apply w-[190px];
+    }
   }
 }
