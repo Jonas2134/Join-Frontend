@@ -21,7 +21,7 @@
   }
 
   .contacts-tab {
-    @apply px-5 py-2 text-lg font-medium rounded-t-lg transition-all cursor-pointer
+    @apply px-5 py-2 font-medium rounded-t-lg transition-all cursor-pointer
       text-(--color-blue-gray) border-b-2 border-transparent;
 
     &:hover {

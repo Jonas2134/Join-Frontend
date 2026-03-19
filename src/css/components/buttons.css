@@ -104,6 +104,20 @@
     }
   }
 
+  .btn-text-short {
+    @apply hidden;
+  }
+
+  @media (max-width: 359px) {
+    .btn-text-full {
+      @apply hidden;
+    }
+
+    .btn-text-short {
+      @apply inline;
+    }
+  }
+
   .btn-disabled {
     @apply text-gray-400 bg-gray-100 cursor-not-allowed shadow-none;
 

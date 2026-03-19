@@ -5,6 +5,7 @@ export const dashboardHeaderBtns = [
     type: "button" as const,
     title: "Archived Boards",
     text: "Archived Boards",
+    shortText: "Archive",
   },
   {
     id: "createBoardBtn",
@@ -12,5 +13,6 @@ export const dashboardHeaderBtns = [
     type: "button" as const,
     title: "Create Board",
     text: "+ Create Board",
+    shortText: "+ Create",
   },
 ];
