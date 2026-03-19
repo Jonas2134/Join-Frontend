@@ -1,9 +1,9 @@
 @layer components {
   .auth-main {
-    @apply flex items-center justify-center px-4 py-12;
+    @apply flex items-center justify-center px-4 py-6 md:py-12;
   }
 
   .auth-main-content {
-    @apply px-28 py-12 rounded-3xl shadow-large max-w-4xl w-full;
+    @apply px-6 py-8 rounded-3xl shadow-large max-w-4xl w-full md:px-28 md:py-12;
   }
 }

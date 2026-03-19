@@ -10,13 +10,13 @@
   .auth-header,
   .start-header,
   .static-header {
-    @apply px-10 py-5 flex justify-between items-center;
+    @apply px-4 py-3 flex justify-between items-center md:px-10 md:py-5;
   }
 
   /* Footer Basis */
   .auth-footer,
   .static-footer {
-    @apply px-10 py-5 flex justify-center;
+    @apply px-4 py-3 flex justify-center md:px-10 md:py-5;
   }
 
   /* Label Basis */

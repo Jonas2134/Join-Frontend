@@ -16,7 +16,7 @@ export class AuthLayout extends BaseLayout {
     const header = document.createElement("header");
     header.classList.add("auth-header");
 
-    const logo = this.createLogo(["w-[95px]", "text-(--color-light-blue)"]);
+    const logo = this.createLogo(["w-[70px]", "md:w-[95px]", "text-(--color-light-blue)"]);
     const nav = document.createElement("nav");
     nav.classList.add("flex", "gap-1");
 
