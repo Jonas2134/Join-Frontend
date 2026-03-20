@@ -5,6 +5,7 @@ import { ProfilePageController } from "./ProfilePageController";
 import { Avatar } from "../../components/common/Avatar";
 import { Button } from "../../components/common/Button";
 import { showChangePasswordBtn } from "../../core/constants/profileBtns.config";
+import { isGuest } from "../../core/store/AuthStore";
 
 import type { Profile } from "../../core/types/profile.types";
 
@@ -33,15 +34,34 @@ export class ProfilePage extends BasePage {
     return section;
   }
 
+  private renderGuestRestriction(): HTMLElement {
+    const hintContainer = document.createElement("div");
+
+    const hintTitle = document.createElement("h2");
+    hintTitle.classList.add("text-(--color-light-blue)", "underline");
+    hintTitle.textContent = "Profile";
+
+    const hint = document.createElement("span");
+    hint.classList.add("profile-guest-hint");
+    hint.textContent = "You can only show, edit your profile or change your password as a registered user.";
+
+    hintContainer.append(hintTitle, hint);
+    return hintContainer;
+  }
+
   render() {
     const container = document.createElement("div");
     container.id = "profilePage";
-    container.classList.add("profile-page");
+    container.classList.add("space-y-8");
 
-    container.append(
-      this.renderProfileHeader(),
-      this.renderProfileSection(),
-    );
+    if (isGuest()) {
+      container.append(this.renderGuestRestriction());
+    } else {
+      container.append(
+        this.renderProfileHeader(),
+        this.renderProfileSection(),
+      );
+    }
 
     return this.wrapWithLayout(container);
   }
@@ -52,14 +72,14 @@ export class ProfilePage extends BasePage {
 
   renderProfileHeaderInfoContainer(username: string, email: string) {
     const info = document.createElement("div");
-    info.classList.add("profile-user-info");
+    info.classList.add("flex", "flex-col", "gap-1");
 
     const nameEl = document.createElement("span");
-    nameEl.classList.add("profile-username");
+    nameEl.classList.add("text-2xl", "font-bold", "text-(--color-dark-blue)");
     nameEl.textContent = username;
 
     const emailEl = document.createElement("span");
-    emailEl.classList.add("profile-email");
+    emailEl.classList.add("text-sm", "text-(--color-blue-gray)");
     emailEl.textContent = email;
 
     info.append(nameEl, emailEl);
@@ -68,7 +88,7 @@ export class ProfilePage extends BasePage {
 
   updateProfileHeader(header: HTMLElement, profile: Profile) {
     const infoWrapper = document.createElement("div");
-    infoWrapper.classList.add("profile-info-wrapper");
+    infoWrapper.classList.add("profile-header-info");
 
     const avatar = new Avatar({ size: "lg" }).createAvatar(profile.username);
     const info = this.renderProfileHeaderInfoContainer(
@@ -107,6 +127,8 @@ export class ProfilePage extends BasePage {
   // ============================================
 
   mount() {
+    if (isGuest()) return;
+
     this.initLoadProfile();
 
     const pageroot = document.getElementById("profilePage");

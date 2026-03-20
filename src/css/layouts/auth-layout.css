@@ -1,21 +1,9 @@
 @layer components {
-  .auth-layout {
-    @apply grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen;
-  }
-
-  .auth-header {
-    @apply px-10 py-5 flex justify-between items-center;
-  }
-
   .auth-main {
-    @apply flex items-center justify-center px-4 py-12;
+    @apply flex items-center justify-center px-4 py-6 md:py-12;
   }
 
   .auth-main-content {
-    @apply px-28 py-12 rounded-3xl shadow-large max-w-4xl w-full;
-  }
-
-  .auth-footer {
-    @apply px-10 py-5 flex justify-center;
+    @apply px-6 py-8 rounded-3xl shadow-large max-w-4xl w-full md:px-28 md:py-12;
   }
 }

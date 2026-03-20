@@ -1,6 +1,10 @@
 import { BasePageController } from "../../components/bases/BasePageController";
 import { profileStore } from "../../core/store/ProfileStore";
 import { authStore } from "../../core/store/AuthStore";
+import { Button } from "../../components/common/Button";
+import { showChangePasswordBtn } from "../../core/constants/profileBtns.config";
+import { buildChangedPayload } from "../../core/utils/diffPayload";
+import { toastManager } from "../../core/ToastManager";
 import { ProfileInfoRenderer } from "./renderers/ProfileInfoRenderer";
 import { ProfilePasswordRenderer } from "./renderers/ProfilePasswordRenderer";
 
@@ -32,16 +36,33 @@ export class ProfilePageController extends BasePageController {
 
     e.preventDefault();
 
+    const profile = profileStore.profile;
+    if (!profile) return;
+
     const formData = new FormData(form);
 
+    const original: Record<string, unknown> = {
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      tele_number: profile.tele_number,
+      bio: profile.bio,
+    };
+    const updated = {
+      first_name: formData.get("first_name") as string,
+      last_name: formData.get("last_name") as string,
+      tele_number: formData.get("tele_number") as string,
+      bio: formData.get("bio") as string,
+    };
+
+    const payload = buildChangedPayload(original, updated);
+
+    if (Object.keys(payload).length === 0) {
+      toastManager.info("No changes detected.");
+      return;
+    }
+
     await this.performStoreOperation(
-      () => profileStore.updateProfile({
-        email: formData.get("email") as string,
-        first_name: formData.get("first_name") as string,
-        last_name: formData.get("last_name") as string,
-        tele_number: formData.get("tele_number") as string,
-        bio: formData.get("bio") as string,
-      }),
+      () => profileStore.updateProfile(payload),
       "Profile update",
     );
 
@@ -95,12 +116,6 @@ export class ProfilePageController extends BasePageController {
     );
     editableFields.forEach(field => field.disabled = false);
 
-    const fieldsWrapper = form.querySelector(".fields-wrapper");
-    if (fieldsWrapper) {
-      const emailField = this.infoRenderer.renderEmailField(profileStore.profile?.email);
-      fieldsWrapper.prepend(emailField);
-    }
-
     const menu = form.querySelector(".profile-actions");
     if (menu) {
       menu.innerHTML = "";
@@ -113,14 +128,21 @@ export class ProfilePageController extends BasePageController {
     const section = document.getElementById("profileSection");
     if (!section) return;
 
+    document.getElementById("showChangePasswordBtn")?.remove();
+
     section.innerHTML = "";
     this.passwordRenderer.renderPasswordSection(section);
   }
 
   rerenderProfileSection() {
     const section = document.getElementById("profileSection");
+    const header = document.getElementById("profileHeader");
     const profile = profileStore.profile;
     if (!section || !profile) return;
+
+    if (header && !document.getElementById("showChangePasswordBtn")) {
+      header.appendChild(new Button(showChangePasswordBtn).renderBtn());
+    }
 
     section.innerHTML = "";
     this.infoRenderer.renderProfileForm(section, profile);

@@ -1,5 +1,5 @@
 import { BasePageController } from "../components/bases/BasePageController";
-import { BurgerMenuDropdown } from "../components/layouts/BurgerMenuDropdown";
+import { BurgerMenuDropdown } from "./BurgerMenuDropdown";
 import { ConfirmDialog } from "../components/common/ConfirmDialog";
 import { authStore } from "../core/store/AuthStore";
 import { boardStore } from "../core/store/BoardStore";
@@ -51,7 +51,7 @@ export class AppLayoutController extends BasePageController {
           this.redirectTo("/");
         } catch (err: unknown) {
           const message = err instanceof Error ? err.message : String(err);
-          toastManager.error("Logout fehlgeschlagen: " + message);
+          toastManager.error("Logout failed: " + message);
         }
       },
     });

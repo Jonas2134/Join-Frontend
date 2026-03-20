@@ -35,10 +35,10 @@ export class BoardTaskRenderer {
 
   private renderTaskHeader(task: Task) {
     const header = document.createElement("header");
-    header.classList.add("task-header");
+    header.classList.add("flex", "justify-between", "items-start", "gap-2");
 
     const title = document.createElement("h5");
-    title.classList.add("task-title");
+    title.classList.add("flex-1");
     title.textContent = task.title;
 
     header.append(title);
@@ -54,7 +54,7 @@ export class BoardTaskRenderer {
 
   private renderTaskDescription(description: string) {
     const descElement = document.createElement("p");
-    descElement.classList.add("task-description");
+    descElement.classList.add("text-xs", "text-gray-500", "mt-1");
 
     const maxLength = 45;
     descElement.textContent =
@@ -67,7 +67,7 @@ export class BoardTaskRenderer {
 
   private renderTaskAssignee(assigneeId: number) {
     const assigneeElement = document.createElement("div");
-    assigneeElement.classList.add("task-assignee");
+    assigneeElement.classList.add("flex", "justify-end", "mt-2");
 
     const member = boardStore.singleBoard?.members.find(
       m => Number(m.id) === assigneeId

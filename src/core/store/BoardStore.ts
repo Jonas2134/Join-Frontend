@@ -69,6 +69,11 @@ class BoardStore {
     window.dispatchEvent(new CustomEvent("board:deleted"));
   }
 
+  async leaveBoard(boardId: string): Promise<void> {
+    await http.post<void>(API_ROUTES.boards.leave(boardId));
+    window.dispatchEvent(new CustomEvent("board:updated"));
+  }
+
   async archiveBoard(boardId: string, isActive: boolean): Promise<Board> {
     const data = await http.patch<Board>(API_ROUTES.boards.detail(boardId), {
       is_active: isActive,

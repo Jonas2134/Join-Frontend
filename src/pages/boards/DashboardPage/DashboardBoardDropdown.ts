@@ -29,7 +29,7 @@ export class DashboardBoardDropdown extends BaseDropdownMenu {
         this.renderMenuListItem(dashboardDeleteBtn),
       );
     } else {
-      menu.append(this.renderDisabledListItem(dashboardLeaveBtn));
+      menu.append(this.renderMenuListItem(dashboardLeaveBtn));
     }
 
     return menu;
@@ -39,21 +39,6 @@ export class DashboardBoardDropdown extends BaseDropdownMenu {
     const item = document.createElement("li");
     item.classList.add("menu-item");
     item.appendChild(new Button(btnConfig).renderBtn());
-    return item;
-  }
-
-  private renderDisabledListItem(btnConfig: ButtonOptions): HTMLLIElement {
-    const item = document.createElement("li");
-    item.classList.add("menu-item");
-
-    const btn = new Button({
-      ...btnConfig,
-      class: ["dropdown-btn", "btn-disabled"],
-    }).renderBtn();
-    btn.disabled = true;
-    btn.title = "Coming soon";
-
-    item.appendChild(btn);
     return item;
   }
 }

@@ -43,7 +43,7 @@ export class BoardColumnRenderer {
     headline.classList.add("column-header");
 
     const title = document.createElement("h4");
-    title.classList.add("column-header-headline");
+    title.classList.add("text-lg", "text-(--color-light-blue)", "underline", "line-clamp-2");
     title.textContent = column.name;
 
     headline.append(title);
@@ -72,7 +72,7 @@ export class BoardColumnRenderer {
       bar.classList.add("column-progress-bar");
 
       const fill = document.createElement("div");
-      fill.classList.add("column-progress-fill");
+      fill.classList.add("h-full", "rounded-full", "transition-all");
       fill.style.width = `${percentage}%`;
 
       if (ratio >= 1) {
@@ -86,13 +86,13 @@ export class BoardColumnRenderer {
       bar.appendChild(fill);
 
       const text = document.createElement("span");
-      text.classList.add("column-progress-text");
+      text.classList.add("text-xs", "text-(--color-blue-gray)", "whitespace-nowrap");
       text.textContent = `${taskCount}/${wipLimit}`;
 
       container.append(bar, text);
     } else {
       const text = document.createElement("span");
-      text.classList.add("column-progress-text");
+      text.classList.add("text-xs", "text-(--color-blue-gray)", "whitespace-nowrap");
       text.textContent = taskCount === 1 ? "1 Task" : `${taskCount} Tasks`;
 
       container.appendChild(text);

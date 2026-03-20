@@ -1,0 +1,24 @@
+@layer components {
+  .start-page {
+    @apply bg-(--color-pale-blue);
+  }
+
+  .start-hero {
+    @apply flex flex-col items-center justify-center gap-6 px-4 py-16 text-center
+           bg-gradient-to-b from-(--color-soft-blue) to-transparent;
+  }
+
+  .start-features {
+    @apply grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto px-4 pb-16;
+  }
+
+  .start-feature-card {
+    @apply flex flex-col items-center gap-3 p-6 rounded-2xl bg-white shadow-lg text-center
+           border border-(--color-soft-blue);
+  }
+
+  .start-footer {
+    @apply px-10 py-6 flex flex-col items-center gap-3
+           bg-(--color-soft-blue) border-t border-(--color-light-blue)/20;
+  }
+}

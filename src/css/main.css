@@ -8,12 +8,16 @@
 /* import utility styles */
 @import "./utilities.css";
 
+/* import shared component styles */
+@import "./shared.css";
+
 /* import layout styles */
 @import "./layouts/auth-layout.css";
 @import "./layouts/app-layout.css";
 @import "./layouts/static-layout.css";
 
 /* import page styles */
+@import "./pages/start-page.css";
 @import "./pages/board.css";
 @import "./pages/dashboard.css";
 @import "./pages/profile.css";

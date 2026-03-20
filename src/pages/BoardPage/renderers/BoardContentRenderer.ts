@@ -15,7 +15,7 @@ export class BoardContentRenderer {
 
   renderBoardContent(container: HTMLElement, board: Board) {
     const columnsList = document.createElement("ol");
-    columnsList.classList.add("board-columns-list");
+    columnsList.classList.add("flex", "gap-4", "h-full", "overflow-x-auto");
 
     for (const column of board.columns) {
       columnsList.appendChild(this.columnRenderer.renderColumn(column));

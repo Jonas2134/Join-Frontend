@@ -66,7 +66,7 @@ export class CreateTaskDialog extends BaseDialog {
 
   renderMainSection() {
     const main = document.createElement("main");
-    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
+    main.classList.add("w-full", "grid", "grid-cols-1", "lg:grid-cols-2", "gap-4");
 
     const firstsec = this.renderFirstFormSection();
     const secontsec = this.renderSecondFormSection();
@@ -123,23 +123,27 @@ export class CreateTaskDialog extends BaseDialog {
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(form);
-      const title = formData.get("title") as string;
-      const description = formData.get("description") as string;
-      const assignee = this.memberSelect?.getSelectedId();
+      const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
       try {
+        const formData = new FormData(form);
+        const title = formData.get("title") as string;
+        const description = formData.get("description") as string;
+        const assignee = this.memberSelect?.getSelectedId();
         await boardStore.createTask(
           this.columnId,
           title,
           description,
           assignee ?? undefined,
         );
-        toastManager.success("Task erfolgreich erstellt");
+        toastManager.success("Task created successfully");
         this.close();
         form.reset();
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
-        toastManager.error("Erstellung fehlgeschlagen: " + message);
+        toastManager.error("Creation failed: " + message);
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
       }
     });
   }

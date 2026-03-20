@@ -18,8 +18,8 @@ export class AuthStore {
     await this.client.post(API_ROUTES.auth.register, { username, email, password, repeated_password });
   }
 
-  async login(username:string, password:string) {
-    await this.client.post(API_ROUTES.auth.login, { username, password });
+  async login(username: string, password: string, rememberMe: boolean) {
+    await this.client.post(API_ROUTES.auth.login, { username, password, remember_me: rememberMe });
     await this.checkAuthStatus();
   }
 
@@ -54,6 +54,7 @@ export class AuthStore {
       return response.is_authenticated;
     } catch {
       this.currentUser = null;
+      this.isGuest = false;
       return false;
     }
   }

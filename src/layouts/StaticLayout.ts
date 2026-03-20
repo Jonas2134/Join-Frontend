@@ -1,14 +1,12 @@
 import { BaseLayout } from "../components/bases/BaseLayout";
 
-import LogoRaw from "/logo.svg?raw";
-
 export class StaticLayout extends BaseLayout {
   constructor() {
     super();
     this.element.classList.add("static-layout");
 
     const header = this.createHeader();
-    this.main.classList.add("static-main");
+    this.main.classList.add("flex", "justify-center", "px-4", "py-12");
     const footer = this.createFooter();
 
     this.element.append(header, this.main, footer);
@@ -18,13 +16,7 @@ export class StaticLayout extends BaseLayout {
     const header = document.createElement("header");
     header.classList.add("static-header");
 
-    const parser = new DOMParser();
-    const svgDoc = parser.parseFromString(LogoRaw, "image/svg+xml");
-    const logo = svgDoc.documentElement as HTMLElement;
-    logo.querySelectorAll("[fill]").forEach((el) => {
-      el.setAttribute("fill", "currentColor");
-    });
-    logo.classList.add("w-[55px]", "text-white");
+    const logo = this.createLogo(["w-[55px]", "text-white"]);
 
     const backLink = document.createElement("a");
     backLink.classList.add("static-back-link");

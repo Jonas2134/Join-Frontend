@@ -23,11 +23,11 @@ export class ConfirmDialog extends BaseDialog {
     container.classList.add("confirm-dialog-content");
 
     const title = document.createElement("h2");
-    title.classList.add("confirm-dialog-title");
+    title.classList.add("font-semibold", "text-(--color-dark-blue)", "underline");
     title.textContent = this.options.title;
 
     const message = document.createElement("p");
-    message.classList.add("confirm-dialog-message");
+    message.classList.add("text-lg", "text-(--color-blue-gray)");
     message.textContent = this.options.message;
 
     const menu = this.renderMenu();
@@ -38,7 +38,7 @@ export class ConfirmDialog extends BaseDialog {
 
   private renderMenu(): HTMLElement {
     const menu = document.createElement("menu");
-    menu.classList.add("confirm-dialog-menu");
+    menu.classList.add("flex", "justify-end", "gap-3", "mt-2");
 
     const cancelBtn = new Button({
       id: "confirm-cancel-btn",

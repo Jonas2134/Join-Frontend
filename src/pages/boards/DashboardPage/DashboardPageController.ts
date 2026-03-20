@@ -100,6 +100,28 @@ export class DashboardPageController extends BasePageController {
     this.openDialog(dialog);
   }
 
+  registerLeaveBoardListener(e: Event) {
+    const btn = this.findClosestElement<HTMLButtonElement>(e.target, "#leave-board-btn");
+    if (!btn) return;
+
+    const boardId = this.getDatasetFromClosest(btn, BOARD_ITEM_SELECTOR, "boardId");
+    if (!boardId) return;
+
+    this.activeDropdown?.close();
+    const dialog = new ConfirmDialog({
+      title: "Leave Board",
+      message: "Are you sure you want to leave this board?",
+      confirmText: "Leave",
+      onConfirm: async () => {
+        await this.performStoreOperation(
+          () => boardStore.leaveBoard(boardId),
+          "Leave",
+        );
+      },
+    });
+    this.openDialog(dialog);
+  }
+
   registerViewToggleListener(e: Event, onSwitch: (view: "list" | "card") => void) {
     const target = e.target;
     if (!(target instanceof HTMLInputElement)) return;

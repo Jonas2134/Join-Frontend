@@ -29,31 +29,43 @@ const router = initRouter(app, [
   { path: '/legal', component: LegalPage },
 ]);
 
-async function checkAuthOnStart() {
-  const currentPath = location.pathname;
+const AUTH_ROUTES = ['/', '/login', '/signup'];
 
-  if (PUBLIC_ROUTES.includes(currentPath)) return;
-
-  const isAuthenticated = await authStore.checkAuthStatus();
-
-  if (!isAuthenticated) {
-    router.navigate('/login');
-  }
+function hasRememberMeCookie(): boolean {
+  return document.cookie.split('; ').some(c => c.startsWith('remember_me='));
 }
 
-checkAuthOnStart().finally(() => {
+async function init() {
+  const currentPath = location.pathname;
+
+  if (!PUBLIC_ROUTES.includes(currentPath)) {
+    const isAuthenticated = await authStore.checkAuthStatus();
+    if (!isAuthenticated) {
+      history.replaceState({}, "", "/login");
+    }
+  } else if (AUTH_ROUTES.includes(currentPath) && hasRememberMeCookie()) {
+    const isAuthenticated = await authStore.checkAuthStatus();
+    if (isAuthenticated) {
+      history.replaceState({}, "", "/dashboard");
+    }
+  }
+
   router.setGuard((path) => {
     if (PUBLIC_ROUTES.includes(path)) return null;
     if (authStore.currentUser) return null;
     return '/login';
   });
-});
+
+  router.render();
+}
+
+init();
 
 document.body.addEventListener('click', (e) => {
-  const target = e.target as HTMLElement;
-  if (target.matches('[data-link]')) {
+  const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-link]');
+  if (link) {
     e.preventDefault();
-    const href = target.getAttribute('href');
+    const href = link.getAttribute('href');
     if (href) router.navigate(href);
   }
 });

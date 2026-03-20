@@ -9,6 +9,7 @@ import { MemberSelect } from "../../../components/common/MemberSelect";
 import { editBoardDialogBtns } from "../../../core/constants/appDialogBtns.config";
 import { editBoardDialogFields } from "../../../core/constants/appDialogFields.config";
 import { isGuest } from "../../../core/store/AuthStore";
+import { buildChangedPayload } from "../../../core/utils/diffPayload";
 import type { Board } from "../../../core/types/board.types";
 
 export class EditBoardDialog extends BaseDialog {
@@ -69,7 +70,7 @@ export class EditBoardDialog extends BaseDialog {
 
   renderMainSection() {
     const main = document.createElement("main");
-    main.classList.add("w-full", "grid", "grid-cols-2", "gap-4");
+    main.classList.add("w-full", "grid", "grid-cols-1", "lg:grid-cols-2", "gap-4");
 
     const firstSection = this.renderFieldSection();
     const secondSection = isGuest()
@@ -128,7 +129,7 @@ export class EditBoardDialog extends BaseDialog {
       this.memberSelect?.setOptions(filtered);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      toastManager.error("Kontakte konnten nicht geladen werden: " + message);
+      toastManager.error("Could not load contacts: " + message);
     }
   }
 
@@ -146,7 +147,7 @@ export class EditBoardDialog extends BaseDialog {
       this.memberSelect?.setOptions(results.filter(r => !selectedIds.has(r.id)));
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      toastManager.error("Suche fehlgeschlagen: " + message);
+      toastManager.error("Search failed: " + message);
     }
   }
 
@@ -169,17 +170,45 @@ export class EditBoardDialog extends BaseDialog {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
-      const title = formData.get("title") as string;
-      const description = formData.get("description") as string;
-      const members = isGuest() ? undefined : this.memberSelect?.getAllMemberIds();
+
+      const original: Record<string, unknown> = {
+        title: this.board.title,
+        description: this.board.description ?? "",
+      };
+      const updated: Record<string, unknown> = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+      };
+
+      if (!isGuest()) {
+        original.members = this.board.members.map(m => Number(m.id));
+        updated.members = this.memberSelect?.getAllMemberIds() ?? [];
+      }
+
+      const payload = buildChangedPayload(original, updated);
+
+      if (Object.keys(payload).length === 0) {
+        toastManager.info("No changes detected.");
+        return;
+      }
+
+      const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
       try {
-        await boardStore.updateBoard(this.board.id, title, description, members);
-        toastManager.success("Board erfolgreich aktualisiert");
+        await boardStore.updateBoard(
+          this.board.id,
+          payload.title as string | undefined,
+          payload.description as string | undefined,
+          payload.members as number[] | undefined,
+        );
+        toastManager.success("Board updated successfully");
         this.close();
         form.reset();
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
-        toastManager.error("Update fehlgeschlagen: " + message);
+        toastManager.error("Update failed: " + message);
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
       }
     });
 

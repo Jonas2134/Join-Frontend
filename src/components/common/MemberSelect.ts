@@ -126,7 +126,7 @@ export class MemberSelect {
 
   private renderMemberChip(member: SelectableMember): HTMLElement {
     const chip = document.createElement("div");
-    chip.classList.add("member-select-chip");
+    chip.classList.add("relative", "flex", "items-center", "gap-1");
 
     const isOwner = this.ownerId != null && member.id === this.ownerId;
 

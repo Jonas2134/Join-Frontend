@@ -3,6 +3,7 @@ export abstract class BaseDropdownMenu {
   protected button: HTMLButtonElement;
   protected isOpen: boolean = false;
   protected onClose: (() => void) | null = null;
+  private boundDocumentClick = (e: Event) => this.handleDocumentClick(e);
 
   constructor(btn: HTMLButtonElement, menuClass?: string) {
     this.button = btn;
@@ -14,7 +15,7 @@ export abstract class BaseDropdownMenu {
   }
 
   protected setupBaseBehavior() {
-    document.addEventListener("click", (e) => this.handleDocumentClick(e));
+    document.addEventListener("click", this.boundDocumentClick);
   }
 
   protected handleDocumentClick(e: Event) {
@@ -74,6 +75,7 @@ export abstract class BaseDropdownMenu {
 
   close() {
     if (!this.isOpen || !this.menu) return;
+    document.removeEventListener("click", this.boundDocumentClick);
     this.menu.remove();
     this.isOpen = false;
     this.onClose?.();

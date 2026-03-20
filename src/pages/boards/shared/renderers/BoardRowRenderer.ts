@@ -51,6 +51,18 @@ export class BoardRow {
     return span;
   }
 
+  renderMeta() {
+    const meta = document.createElement("div");
+    meta.classList.add("board-row-meta");
+    meta.append(
+      this.renderMemberCountSpan(),
+      this.renderRoleSpan(),
+      this.renderDateSpan(this.board.created_at),
+      this.renderDateSpan(this.board.updated_at),
+    );
+    return meta;
+  }
+
   renderMenuRow() {
     const menu = document.createElement("menu");
     menu.classList.add("board-row-menu");
@@ -64,10 +76,7 @@ export class BoardRow {
   render() {
     this.element.append(
       this.renderTitleSpan(),
-      this.renderMemberCountSpan(),
-      this.renderRoleSpan(),
-      this.renderDateSpan(this.board.created_at),
-      this.renderDateSpan(this.board.updated_at),
+      this.renderMeta(),
       this.renderMenuRow(),
     );
     return this.element;

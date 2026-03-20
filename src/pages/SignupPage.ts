@@ -54,14 +54,15 @@ export class SignupPage extends BasePage {
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.name = "remember";
+    checkbox.name = "privacy";
+    checkbox.required = true;
     checkbox.classList.add("checkbox");
 
     checkboxWrapper.appendChild(checkbox);
-    checkboxWrapper.innerHTML += `
+    checkboxWrapper.insertAdjacentHTML("beforeend", `
       I accept the
       <a href="/privacy" data-link>Privacy policy</a>
-    `;
+    `);
     return checkboxWrapper;
   }
 
@@ -112,7 +113,6 @@ export class SignupPage extends BasePage {
 
   async registerSignupFormListener(e: Event, form: HTMLFormElement) {
     e.preventDefault();
-
     const formData = new FormData(form);
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
@@ -120,11 +120,11 @@ export class SignupPage extends BasePage {
     const repeated_password = formData.get("confpassword") as string;
     try {
       await authStore.register(username, email, password, repeated_password);
-      toastManager.success("Registrierung erfolgreich");
+      toastManager.success("Registration successful");
       router.navigate('/login');
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      toastManager.error("Registrierung fehlgeschlagen: " + message);
+      toastManager.error("Registration failed: " + message);
     }
   }
 }

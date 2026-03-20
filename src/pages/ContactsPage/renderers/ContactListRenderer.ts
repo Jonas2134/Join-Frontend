@@ -9,12 +9,12 @@ export class ContactListRenderer {
   renderListPanel(): HTMLElement {
     const panel = document.createElement("div");
     panel.id = "contactsListPanel";
-    panel.classList.add("contacts-list-panel");
+    panel.classList.add("flex", "flex-col", "gap-4");
 
     const searchbar = new InputField(contactSearchField).render();
     const list = document.createElement("ul");
     list.id = "contactsList";
-    list.classList.add("contacts-list");
+    list.classList.add("flex", "flex-col", "gap-1", "overflow-y-auto", "h-full");
 
     panel.append(searchbar, list);
     return panel;
@@ -23,7 +23,7 @@ export class ContactListRenderer {
   renderList(contacts: Contact[], showToggle: boolean): HTMLElement {
     const list = document.createElement("ul");
     list.id = "contactsList";
-    list.classList.add("contacts-list");
+    list.classList.add("flex", "flex-col", "gap-1", "overflow-y-auto", "h-full");
 
     const items = contacts.map(contact => this.renderListItem(contact, showToggle));
     list.append(...items);
@@ -36,13 +36,13 @@ export class ContactListRenderer {
     li.dataset.userId = String(contact.id);
 
     const info = document.createElement("div");
-    info.classList.add("contacts-list-item-info");
+    info.classList.add("flex", "items-center", "gap-3");
 
     const avatar = new Avatar({ size: "sm" }).createAvatar(contact.username);
     avatar.tabIndex = -1;
 
     const name = document.createElement("span");
-    name.classList.add("contacts-list-item-name");
+    name.classList.add("text-base", "font-medium", "text-(--color-dark-blue)");
     name.textContent = contact.username;
 
     info.append(avatar, name);

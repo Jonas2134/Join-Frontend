@@ -1,18 +1,10 @@
 @layer components {
-    .board-columns-list {
-        @apply flex gap-4 h-full overflow-x-auto;
-    }
-
     .board-column, .add-column, .add-column-form {
-        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-column) shrink-0 w-75;
+        @apply flex flex-col max-h-full p-1 border border-(--color-light-gray) rounded-lg bg-white shadow-(--shadow-column) shrink-0 w-65 md:w-75;
     }
 
     .column-header {
         @apply flex justify-between items-center py-2;
-    }
-
-    .column-header-headline {
-        @apply text-lg text-(--color-light-blue) underline line-clamp-2;
     }
 
     .column-progress {
@@ -21,14 +13,6 @@
 
     .column-progress-bar {
         @apply flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden;
-    }
-
-    .column-progress-fill {
-        @apply h-full rounded-full transition-all;
-    }
-
-    .column-progress-text {
-        @apply text-xs text-(--color-blue-gray) whitespace-nowrap;
     }
 
     .task-list {
@@ -43,26 +27,9 @@
         }
     }
 
-    .task-header {
-        @apply flex justify-between items-start gap-2;
-    }
-
-    .task-title {
-        @apply font-medium text-lg flex-1;
-    }
-
-    .task-description {
-        @apply text-xs text-gray-500 mt-1;
-    }
-
-    .task-assignee {
-        @apply flex justify-end mt-2;
-    }
-
     .task-assignee-avatar {
         @apply w-6 h-6 rounded-full bg-(--color-light-blue) text-white text-xs flex items-center justify-center font-medium;
     }
-
 
     .is-dragging {
         @apply scale-105 bg-(--color-light-gray) shadow-(--shadow-large);

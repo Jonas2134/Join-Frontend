@@ -93,7 +93,7 @@ describe("LoginPage", () => {
 
     // Wait for async handlers to resolve
     await vi.waitFor(() => {
-      expect(authStore.login).toHaveBeenCalledWith("testuser", "password123");
+      expect(authStore.login).toHaveBeenCalledWith("testuser", "password123", false);
       expect(router.navigate).toHaveBeenCalledWith("/dashboard");
     });
   });

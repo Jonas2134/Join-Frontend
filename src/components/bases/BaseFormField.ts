@@ -41,7 +41,7 @@ export abstract class BaseFormField<T extends HTMLInputElement | HTMLTextAreaEle
     }
 
     const inputWrapper = document.createElement("div");
-    inputWrapper.classList.add("input-wrapper");
+    inputWrapper.classList.add("flex", "gap-1");
 
     if (this.options.icon) {
       const iconSpan = document.createElement("span");

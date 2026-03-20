@@ -1,4 +1,5 @@
 import Burgermenu from "../../assets/icons/menu.svg?raw"
+import ChevronLeft from "../../assets/icons/chevron-left.svg?raw"
 
 export const burgerMenuBtn = {
   id: "burger-menu-btn",
@@ -6,6 +7,14 @@ export const burgerMenuBtn = {
   type: "button" as const,
   title: "Burgermenu",
   icon: Burgermenu
+}
+
+export const sidebarToggleBtn = {
+  id: "sidebar-toggle-btn",
+  class: "sidebar-toggle",
+  type: "button" as const,
+  title: "Toggle Sidebar",
+  icon: ChevronLeft,
 }
 
 export const burgerMenuListBtns = [

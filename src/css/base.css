@@ -5,20 +5,32 @@
     height: 100%;
   }
   h1 {
-    font-size: var(--text-6xl);
+    font-size: clamp(1.75rem, 4vw, var(--text-6xl));
     font-weight: var(--font-weight-extrabold);
     line-height: var(--text-base--line-height);
     margin: 0;
   }
   h2 {
-    font-size: var(--text-4xl);
+    font-size: clamp(1.5rem, 3.5vw, var(--text-4xl));
     font-weight: var(--font-weight-semibold);
     line-height: var(--text-sm--line-height--line-height);
     margin: 0;
   }
   h3 {
-    font-size: var(--text-3xl);
+    font-size: clamp(1.25rem, 3vw, var(--text-3xl));
     font-weight: var(--font-weight-normal);
+    line-height: 1;
+    margin: 0;
+  }
+  h4 {
+    font-size: clamp(1rem, 2.5vw, var(--text-2xl));
+    font-weight: var(--font-weight-normal);
+    line-height: 1;
+    margin: 0;
+  }
+  h5 {
+    font-size: clamp(0.875rem, 2vw, var(--text-lg));
+    font-weight: var(--font-weight-medium);
     line-height: 1;
     margin: 0;
   }

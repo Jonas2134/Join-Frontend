@@ -13,6 +13,7 @@ export const API_ROUTES = {
   boards: {
     list: "/boards/",
     detail: (id: string) => `/boards/${id}/`,
+    leave: (id: string) => `/boards/${id}/leave/`,
   },
   columns: {
     list: (boardId: string) => `/boards/${boardId}/columns/`,

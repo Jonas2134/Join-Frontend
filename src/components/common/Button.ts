@@ -4,6 +4,7 @@ export interface ButtonOptions {
   type?: 'button' | 'submit';
   title?: string;
   text?: string;
+  shortText?: string;
   icon?: string;
   dataset?: Record<string, string>
 }
@@ -30,7 +31,19 @@ export class Button {
 
     if (this.btnOptions.title) this.btnElement.title = this.btnOptions.title;
 
-    if (this.btnOptions.text) this.btnElement.textContent = this.btnOptions.text;
+    if (this.btnOptions.text && this.btnOptions.shortText) {
+      const full = document.createElement("span");
+      full.classList.add("btn-text-full");
+      full.textContent = this.btnOptions.text;
+
+      const short = document.createElement("span");
+      short.classList.add("btn-text-short");
+      short.textContent = this.btnOptions.shortText;
+
+      this.btnElement.append(full, short);
+    } else if (this.btnOptions.text) {
+      this.btnElement.textContent = this.btnOptions.text;
+    }
 
     if (this.btnOptions.icon) this.btnElement.innerHTML = this.btnOptions.icon;
 
