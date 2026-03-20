@@ -129,7 +129,7 @@ export class EditBoardDialog extends BaseDialog {
       this.memberSelect?.setOptions(filtered);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      toastManager.error("Kontakte konnten nicht geladen werden: " + message);
+      toastManager.error("Could not load contacts: " + message);
     }
   }
 
@@ -147,7 +147,7 @@ export class EditBoardDialog extends BaseDialog {
       this.memberSelect?.setOptions(results.filter(r => !selectedIds.has(r.id)));
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      toastManager.error("Suche fehlgeschlagen: " + message);
+      toastManager.error("Search failed: " + message);
     }
   }
 
@@ -192,6 +192,8 @@ export class EditBoardDialog extends BaseDialog {
         return;
       }
 
+      const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
       try {
         await boardStore.updateBoard(
           this.board.id,
@@ -199,12 +201,14 @@ export class EditBoardDialog extends BaseDialog {
           payload.description as string | undefined,
           payload.members as number[] | undefined,
         );
-        toastManager.success("Board erfolgreich aktualisiert");
+        toastManager.success("Board updated successfully");
         this.close();
         form.reset();
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
-        toastManager.error("Update fehlgeschlagen: " + message);
+        toastManager.error("Update failed: " + message);
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
       }
     });
 

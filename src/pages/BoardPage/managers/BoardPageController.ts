@@ -115,7 +115,7 @@ export class BoardPageController extends BasePageController {
     this.toggleFormInMenuItem(btn, ".set-limit-form", () => this.dropdown?.renderSetLimitForm());
   }
 
-  registerColumnSetLimitFormSubmitListener(e: Event) {
+  async registerColumnSetLimitFormSubmitListener(e: Event) {
     const form = this.findClosestElement<HTMLFormElement>(e.target, ".set-limit-form");
     if (!form) return;
 
@@ -124,7 +124,7 @@ export class BoardPageController extends BasePageController {
     const newLimit = this.getFormValue(form, "task-limit");
 
     if (columnId && newLimit) {
-      this.performStoreOperation(
+      await this.performStoreOperation(
         () => boardStore.updateColumn(columnId, { wip_limit: newLimit } as ColumnUpdate),
         "Update",
       );

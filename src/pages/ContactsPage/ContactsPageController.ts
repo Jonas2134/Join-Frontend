@@ -51,8 +51,12 @@ export class ContactsPageController extends BasePageController {
       }
 
       this.debounceTimer = setTimeout(async () => {
-        const results = await contactStore.searchUsers(query);
-        this.updateList(results, showToggle, "No users found");
+        try {
+          const results = await contactStore.searchUsers(query);
+          this.updateList(results, showToggle, "No users found");
+        } catch {
+          this.updateList([], showToggle, "Search failed");
+        }
       }, 300);
     } else {
       const filtered = contactStore.contacts.filter(c =>

@@ -51,7 +51,7 @@ export class AppLayoutController extends BasePageController {
           this.redirectTo("/");
         } catch (err: unknown) {
           const message = err instanceof Error ? err.message : String(err);
-          toastManager.error("Logout fehlgeschlagen: " + message);
+          toastManager.error("Logout failed: " + message);
         }
       },
     });

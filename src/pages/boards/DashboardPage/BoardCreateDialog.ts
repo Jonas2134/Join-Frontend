@@ -131,7 +131,7 @@ export class BoardCreateDialog extends BaseDialog {
       this.memberSelect?.setOptions(contacts);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      toastManager.error("Kontakte konnten nicht geladen werden: " + message);
+      toastManager.error("Could not load contacts: " + message);
     }
   }
 
@@ -149,7 +149,7 @@ export class BoardCreateDialog extends BaseDialog {
       this.memberSelect?.setOptions(results.filter(r => !selectedIds.has(r.id)));
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      toastManager.error("Suche fehlgeschlagen: " + message);
+      toastManager.error("Search failed: " + message);
     }
   }
 
@@ -181,18 +181,22 @@ export class BoardCreateDialog extends BaseDialog {
     const formData = new FormData(form);
     const members = isGuest() ? undefined : this.memberSelect?.getAllMemberIds();
 
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
     try {
       await boardStore.createBoard(
         formData.get("title") as string,
         formData.get("description") as string,
         members,
       );
-      toastManager.success("Board erfolgreich erstellt");
+      toastManager.success("Board created successfully");
       this.close();
       form.reset();
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      toastManager.error("Erstellung fehlgeschlagen: " + message);
+      toastManager.error("Creation failed: " + message);
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
     }
   }
 }

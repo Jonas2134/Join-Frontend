@@ -59,10 +59,10 @@ export class SignupPage extends BasePage {
     checkbox.classList.add("checkbox");
 
     checkboxWrapper.appendChild(checkbox);
-    checkboxWrapper.innerHTML += `
+    checkboxWrapper.insertAdjacentHTML("beforeend", `
       I accept the
       <a href="/privacy" data-link>Privacy policy</a>
-    `;
+    `);
     return checkboxWrapper;
   }
 
