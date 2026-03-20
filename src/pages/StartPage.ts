@@ -149,15 +149,22 @@ export class StartPage extends BasePage {
     const links = document.createElement("div");
     links.classList.add("flex", "gap-4", "text-sm");
 
-    const githubLink = document.createElement("a");
-    githubLink.href = "#";
-    githubLink.textContent = "GitHub";
+    const frontGithubLink = document.createElement("a");
+    frontGithubLink.href = "https://github.com/Jonas2134/Join-Frontend";
+    frontGithubLink.target = "_blank";
+    frontGithubLink.textContent = "Frontend-GitHub";
+
+    const backGithubLink = document.createElement("a");
+    backGithubLink.href = "https://github.com/Jonas2134/Join-Backend";
+    backGithubLink.target = "_blank";
+    backGithubLink.textContent = "Backend-GitHub";
 
     const portfolioLink = document.createElement("a");
-    portfolioLink.href = "#";
-    portfolioLink.textContent = "Portfolio";
+    portfolioLink.href = "https://portfolio.jonas-stiefer.com";
+    portfolioLink.target = "_blank";
+    portfolioLink.textContent = "My Portfolio";
 
-    links.append(githubLink, portfolioLink);
+    links.append(frontGithubLink, backGithubLink, portfolioLink);
 
     const copy = document.createElement("small");
     copy.innerHTML = "&copy; 2025 My App";
