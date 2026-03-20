@@ -167,7 +167,7 @@ export class StartPage extends BasePage {
     links.append(frontGithubLink, backGithubLink, portfolioLink);
 
     const copy = document.createElement("small");
-    copy.innerHTML = "&copy; 2025 My App";
+    copy.innerHTML = "&copy; 2026 Join";
 
     footer.append(note, links, copy);
     return footer;
