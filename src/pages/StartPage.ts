@@ -150,7 +150,7 @@ export class StartPage extends BasePage {
     const links = this.renderFooterLinks();
 
     const copy = document.createElement("small");
-    copy.textContent = "&copy; 2026 Join";
+    copy.textContent = "\u00A9 2026 Join";
 
     footer.append(note, links, copy);
     return footer;

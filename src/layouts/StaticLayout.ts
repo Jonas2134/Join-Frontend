@@ -31,7 +31,7 @@ export class StaticLayout extends BaseLayout {
     footer.classList.add("static-footer");
 
     const copy = document.createElement("small");
-    copy.textContent = "&copy; 2026 Join";
+    copy.textContent = "\u00A9 2026 Join";
 
     footer.appendChild(copy);
     return footer;
