@@ -29,7 +29,11 @@ export class StaticLayout extends BaseLayout {
   private createFooter(): HTMLElement {
     const footer = document.createElement("footer");
     footer.classList.add("static-footer");
-    footer.innerHTML = `<small>&copy; 2025 My App</small>`;
+
+    const copy = document.createElement("small");
+    copy.textContent = "&copy; 2026 Join";
+
+    footer.appendChild(copy);
     return footer;
   }
 

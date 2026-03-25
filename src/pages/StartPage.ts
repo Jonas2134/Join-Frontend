@@ -1,6 +1,28 @@
 import { BasePage } from "../components/bases/BasePage";
 import LogoRaw from "/logo.svg?raw";
 
+interface LinkConfig {
+  href: string;
+  text: string;
+  classes?: string[];
+  attributes?: Record<string, string>;
+}
+
+const FEATURES = [
+  {
+    title: "Boards",
+    text: "Create boards to organize your projects and keep an overview of all your work.",
+  },
+  {
+    title: "Tasks",
+    text: "Break down your work into tasks, set priorities, and track progress through columns.",
+  },
+  {
+    title: "Collaboration",
+    text: "Invite team members, assign tasks, and work together towards your goals.",
+  },
+];
+
 export class StartPage extends BasePage {
   private element: HTMLElement;
 
@@ -13,6 +35,7 @@ export class StartPage extends BasePage {
   // ============================================
   // Logo helper
   // ============================================
+  
 
   private createLogo(classes: string[]): HTMLElement {
     const parser = new DOMParser();
@@ -34,23 +57,21 @@ export class StartPage extends BasePage {
     header.classList.add("start-header");
 
     const logo = this.createLogo(["w-[70px]", "md:w-[95px]", "text-(--color-light-blue)"]);
+    const nav = this.renderHeaderNav();
+    
+    header.append(logo, nav);
+    return header;
+  }
 
+  private renderHeaderNav(): HTMLElement {
     const nav = document.createElement("nav");
     nav.classList.add("flex", "gap-6", "text-sm");
 
-    const privacyLink = document.createElement("a");
-    privacyLink.href = "/privacy";
-    privacyLink.textContent = "Privacy Policy";
-    privacyLink.setAttribute("data-link", "");
-
-    const legalLink = document.createElement("a");
-    legalLink.href = "/legal";
-    legalLink.textContent = "Legal Notice";
-    legalLink.setAttribute("data-link", "");
+    const privacyLink = this.createLink({ href: "/privacy", text: "Privacy Policy", attributes: { "data-link": "" } });
+    const legalLink = this.createLink({ href: "/legal", text: "Legal Notice", attributes: { "data-link": "" } });
 
     nav.append(privacyLink, legalLink);
-    header.append(logo, nav);
-    return header;
+    return nav;
   }
 
   // ============================================
@@ -68,27 +89,23 @@ export class StartPage extends BasePage {
 
     const description = document.createElement("p");
     description.classList.add("text-lg", "text-(--color-blue-gray)", "max-w-xl");
-    description.textContent =
-      "Organize your work with boards, track tasks from idea to completion, and collaborate with your team — all in one place.";
+    description.textContent = "Organize your work with boards, track tasks from idea to completion, and collaborate with your team — all in one place.";
 
+    const cta = this.renderCtaLinks();
+    
+    section.append(logo, headline, description, cta);
+    return section;
+  }
+
+  private renderCtaLinks(): HTMLElement {
     const cta = document.createElement("div");
     cta.classList.add("flex", "gap-6", "mt-2");
 
-    const loginLink = document.createElement("a");
-    loginLink.href = "/login";
-    loginLink.textContent = "Login";
-    loginLink.classList.add("btn", "btn-blue");
-    loginLink.setAttribute("data-link", "");
-
-    const signupLink = document.createElement("a");
-    signupLink.href = "/signup";
-    signupLink.textContent = "Sign up";
-    signupLink.classList.add("btn", "btn-white");
-    signupLink.setAttribute("data-link", "");
+    const loginLink = this.createLink({ href: "/login", text: "Login", classes: ["btn", "btn-blue"], attributes: { "data-link": "" } });
+    const signupLink = this.createLink({ href: "/signup", text: "Sign up", classes: ["btn", "btn-white"], attributes: { "data-link": "" } });
 
     cta.append(loginLink, signupLink);
-    section.append(logo, headline, description, cta);
-    return section;
+    return cta;
   }
 
   // ============================================
@@ -99,22 +116,7 @@ export class StartPage extends BasePage {
     const section = document.createElement("section");
     section.classList.add("start-features");
 
-    const features = [
-      {
-        title: "Boards",
-        text: "Create boards to organize your projects and keep an overview of all your work.",
-      },
-      {
-        title: "Tasks",
-        text: "Break down your work into tasks, set priorities, and track progress through columns.",
-      },
-      {
-        title: "Collaboration",
-        text: "Invite team members, assign tasks, and work together towards your goals.",
-      },
-    ];
-
-    for (const feature of features) {
+    for (const feature of FEATURES) {
       const card = document.createElement("div");
       card.classList.add("start-feature-card");
 
@@ -143,34 +145,44 @@ export class StartPage extends BasePage {
 
     const note = document.createElement("p");
     note.classList.add("text-sm", "text-(--color-blue-gray)", "italic", "text-center");
-    note.textContent =
-      "This is a portfolio project and not a commercial application.";
+    note.textContent = "This is a portfolio project and not a commercial application.";
 
-    const links = document.createElement("div");
-    links.classList.add("flex", "gap-4", "text-sm");
-
-    const frontGithubLink = document.createElement("a");
-    frontGithubLink.href = "https://github.com/Jonas2134/Join-Frontend";
-    frontGithubLink.target = "_blank";
-    frontGithubLink.textContent = "Frontend-GitHub";
-
-    const backGithubLink = document.createElement("a");
-    backGithubLink.href = "https://github.com/Jonas2134/Join-Backend";
-    backGithubLink.target = "_blank";
-    backGithubLink.textContent = "Backend-GitHub";
-
-    const portfolioLink = document.createElement("a");
-    portfolioLink.href = "https://portfolio.jonas-stiefer.com";
-    portfolioLink.target = "_blank";
-    portfolioLink.textContent = "My Portfolio";
-
-    links.append(frontGithubLink, backGithubLink, portfolioLink);
+    const links = this.renderFooterLinks();
 
     const copy = document.createElement("small");
-    copy.innerHTML = "&copy; 2026 Join";
+    copy.textContent = "&copy; 2026 Join";
 
     footer.append(note, links, copy);
     return footer;
+  }
+
+  private renderFooterLinks(): HTMLElement {
+    const links = document.createElement("nav");
+    links.classList.add("flex", "gap-4", "text-sm");
+
+    const frontGithubLink = this.createLink({ href: "https://github.com/Jonas2134/Join-Frontend", text: "Frontend-GitHub", attributes: { target: "_blank" } });
+    const backGithubLink = this.createLink({ href: "https://github.com/Jonas2134/Join-Backend", text: "Backend-GitHub", attributes: { target: "_blank" } });
+    const portfolioLink = this.createLink({ href: "https://portfolio.jonas-stiefer.com", text: "My Portfolio", attributes: { target: "_blank" } });
+
+    links.append(frontGithubLink, backGithubLink, portfolioLink);
+    return links;
+  }
+
+  // ============================================
+  // Utility function
+  // ============================================
+
+  private createLink({ href, text, classes, attributes }: LinkConfig): HTMLAnchorElement {
+    const link = document.createElement("a");
+    link.href = href;
+    link.textContent = text;
+    if (classes) link.classList.add(...classes);
+    if (attributes) {
+      for (const [key, value] of Object.entries(attributes)) {
+        link.setAttribute(key, value);
+      }
+    }
+    return link;
   }
 
   // ============================================

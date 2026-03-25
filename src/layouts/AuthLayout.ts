@@ -17,6 +17,13 @@ export class AuthLayout extends BaseLayout {
     header.classList.add("auth-header");
 
     const logo = this.createLogo(["w-[70px]", "md:w-[95px]", "text-(--color-light-blue)"]);
+    const nav = this.renderHeaderNav();
+
+    header.append(logo, nav);
+    return header;
+  }
+
+  private renderHeaderNav(): HTMLElement {
     const nav = document.createElement("nav");
     nav.classList.add("flex", "gap-1");
 
@@ -29,14 +36,17 @@ export class AuthLayout extends BaseLayout {
     link.setAttribute("data-link", "");
 
     nav.append(label, link);
-    header.append(logo, nav);
-    return header;
+    return nav;
   }
 
   private createFooter(): HTMLElement {
     const footer = document.createElement("footer");
     footer.classList.add("auth-footer");
-    footer.innerHTML = `<small>&copy; 2025 My App</small>`;
+
+    const copy = document.createElement("small");
+    copy.textContent = "&copy; 2026 Join";
+
+    footer.appendChild(copy);
     return footer;
   }
 
