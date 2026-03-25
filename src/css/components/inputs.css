@@ -10,4 +10,8 @@
 	.form-input, .form-textarea {
     @apply w-full;
   }
+
+  .password-toggle-btn {
+    @apply bg-transparent border-none cursor-pointer flex-shrink-0 p-0;
+  }
 }
